@@ -15,77 +15,121 @@ const dayNames = {
     sunday: 'НД'
 }
 const notAvailableInstructor = 'Відсутній'
+const usersSchedules = {}
 
-const scheduleDefaultMarkup = {
-    reply_markup: JSON.stringify({
-        inline_keyboard: [
-            // [
-            //     {text: dayNames.monday, callback_data: dayNames.monday},
-            //     {text: dayNames.tuesday, callback_data: dayNames.tuesday},
-            //     {text: dayNames.wednesday, callback_data: dayNames.wednesday}
-            // ],
-            // [
-            //     {text: dayNames.thursday, callback_data: dayNames.thursday},
-            //     {text: dayNames.friday, callback_data: dayNames.friday},
-            //     {text: dayNames.saturday, callback_data: dayNames.saturday}
-            // ],
-            // [
-            //     {text: dayNames.sunday, callback_data: dayNames.sunday}
-            // ],
-            [
-                {text: 'Go to schedule', callback_data: dayNames.wednesday, url: 'https://t.me/testkolesobot'}
-            ]
-        ]
-    })
-}
+const getBtnMarkup = (text, callbackData, showTick = false) => {
+    const btnText = text + (showTick === true ? ' ✅' : '')
 
-const scheduleTestMarkup = {
-    inline_keyboard: [
-        [
-            {text: dayNames.monday + ' (Вибрано)', callback_data: dayNames.monday},
-            {text: dayNames.tuesday, callback_data: dayNames.tuesday},
-            {text: dayNames.wednesday, callback_data: dayNames.wednesday}
-        ],
-        [
-            {text: dayNames.thursday, callback_data: dayNames.thursday},
-            {text: dayNames.friday, callback_data: dayNames.friday},
-            {text: dayNames.saturday, callback_data: dayNames.saturday}
-        ],
-        [
-            {text: dayNames.sunday, callback_data: dayNames.sunday}
-        ],
-        [
-            {text: notAvailableInstructor, callback_data: notAvailableInstructor}
-        ]
-    ]
+    return {text: btnText, callback_data: callbackData}
 }
 
 const start = function () {
-    bot.command('schedule', (ctx) => sendSchedule(ctx))
-    bot.on('callback_query', async (ctx) => {
-        const chatId = ctx.update.callback_query.message.chat.id
-        const messageId = ctx.update.callback_query.message.message_id
-        console.log(chatId, messageId)
-        console.log(ctx.update.callback_query)
-        // console.log(bot.telegram)
-        // Explicit usage
-        // console.log(ctx)
-        // console.log(ctx.update.callback_query.from.username, "ou hello")
-        // console.log(ctx.update.callback_query.data) //нд
-        // await ctx.telegram.answerCbQuery(ctx.callbackQuery.id);
-        // Using context shortcut
-
-        // tg.editMessageReplyMarkup(chatId, messageId, null, scheduleTestMarkup)
-        await ctx.answerCbQuery();
-        // tg.deleteMessage(chatId, messageId)
-
-    });
+    bot.command('schedule', sendSchedule)
+    bot.on('callback_query', onDayPick);
     bot.launch();
 }
 
-const sendSchedule = async function (ctx) {
-    return ctx.telegram.sendMessage('-1001613404825', 'Виберіть дні в які ви зможете викладати', scheduleDefaultMarkup)
+const onDayPick = async (ctx) => {
+    const chatId = ctx.update.callback_query.message.chat.id
+    const messageId = ctx.update.callback_query.message.message_id
+    const username = ctx.update.callback_query.from.username
+    const userSchedule = getUserSchedule(username)
+    const data = ctx.update.callback_query.data
+    // console.log(ctx.update.callback_query.data)
+    userSchedule[data] = !userSchedule[data]
+
+    if(data === notAvailableInstructor) {
+        clearAllDaysIfInstructorUnavailable(username)
+    }else {
+        makeInstructorAvailableIfDayChosen(username)
+    }
+
+    const updatedUserMarkup = JSON.parse(getUserReplyMarkup(userSchedule).reply_markup)
+// console.log(updatedUserMarkup)
+    await tg.editMessageReplyMarkup(chatId, messageId, null, updatedUserMarkup)
+    await ctx.answerCbQuery();
 }
 
+const makeInstructorAvailableIfDayChosen = (username) => {
+    const userSchedule = getUserSchedule(username)
+
+    userSchedule[notAvailableInstructor] = false
+}
+
+const clearAllDaysIfInstructorUnavailable = (username) => {
+    const userSchedule = getUserSchedule(username)
+
+    if(userSchedule[notAvailableInstructor] === true) {
+        for (const userScheduleKey in userSchedule) {
+            if(userScheduleKey === notAvailableInstructor) continue
+
+            userSchedule[userScheduleKey] = false
+        }
+    }
+}
+
+const getUserReplyMarkup = (userSchedule) => {
+    const {monday, tuesday, wednesday, thursday, friday, saturday, sunday} = dayNames
+
+    return {
+        reply_markup: JSON.stringify({
+            inline_keyboard: [
+                [
+                    getBtnMarkup(monday, monday, userSchedule[monday]),
+                    getBtnMarkup(tuesday, tuesday, userSchedule[tuesday]),
+                    getBtnMarkup(wednesday, wednesday, userSchedule[wednesday])
+                ],
+                [
+                    getBtnMarkup(thursday, thursday, userSchedule[thursday]),
+                    getBtnMarkup(friday, friday, userSchedule[friday]),
+                    getBtnMarkup(saturday, saturday, userSchedule[saturday])
+                ],
+                [
+                    getBtnMarkup(sunday, sunday, userSchedule[sunday])
+                ],
+                [
+                    getBtnMarkup(notAvailableInstructor, notAvailableInstructor, userSchedule[notAvailableInstructor])
+                ]
+            ]
+        })
+    }
+}
+
+const sendSchedule = async function (ctx) {
+    const userName = ctx.from.username
+    writeUserEmptySchedule(userName)
+
+    const userSchedule = getUserSchedule(userName)
+    const userMarkup = getUserReplyMarkup(userSchedule)
+
+    return ctx.telegram.sendMessage(ctx.update.message.chat.id, 'Виберіть дні в які ви зможете викладати', userMarkup)
+}
+
+const writeUserEmptySchedule = (username) => {
+    const emptySchedule = getUserEmptySchedule()
+
+    usersSchedules[username] = emptySchedule
+}
+
+const getUserSchedule = (userName) => {
+    return usersSchedules[userName]
+}
+
+const getUserEmptySchedule = () => {
+    return {
+        [dayNames.monday]: false,
+        [dayNames.tuesday]: false,
+        [dayNames.wednesday]: false,
+        [dayNames.thursday]: false,
+        [dayNames.friday]: false,
+        [dayNames.saturday]: false,
+        [dayNames.sunday]: false,
+        [notAvailableInstructor]: false
+    }
+}
+
+const sendScheduleMessageToChannel = async function() {
+    // return ctx.telegram.sendMessage('-1001613404825', 'Виберіть дні в які ви зможете викладати', scheduleDefaultMarkup)
+}
 
 start()
