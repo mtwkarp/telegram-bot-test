@@ -19,8 +19,13 @@
   },
   "homepage": "https://github.com/MatthewKarpenko/telegram-bot-test#readme",
   "dependencies": {
+    "@google-cloud/local-auth": "^2.1.1",
+    "fs": "^0.0.1-security",
+    "googleapis": "^108.0.0",
     "node-telegram-bot-api": "^0.57.0",
     "nodemon": "^2.0.16",
+    "path": "^0.12.7",
+    "process": "^0.11.10",
     "telegraf": "^4.9.2",
     "telegram": "^2.11.7"
   }
