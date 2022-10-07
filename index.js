@@ -13,7 +13,8 @@ const bot = new Telegraf(token);
 const tg = new Telegram(token)
 
 let auth = null
-
+let sheet = null
+let previouslySentReplyMarkup = {}
 const usersSchedules = {}
 
 const getBtnMarkup = (text, callbackData, showTick = false) => {
@@ -26,6 +27,7 @@ const start = async function () {
     bot.command('schedule', sendSchedule)
     bot.on('callback_query', onDayPick);
     auth = await authorize()
+    sheet = google.sheets({version: 'v4', auth});
     bot.launch();
 }
 
@@ -35,26 +37,38 @@ const onDayPick = async (ctx) => {
     const username = ctx.update.callback_query.from.username
     const userSchedule = getUserSchedule(username)
     const data = ctx.update.callback_query.data
-
     userSchedule[data] = !userSchedule[data]
 
-    const userFullName = await getUserNameByNickname(auth, username)
-    const index = await getUserRowIndexInAvailabilitySheet(auth, userFullName) + 1
+    // const userFullName = await getUserNameByNickname(sheet, username)//2 requests
+    // const index = await getUserRowIndexInAvailabilitySheet(sheet, userFullName) + 1 //1 request
 
     if(data === notAvailableInstructor) {
         clearAllDaysIfInstructorUnavailable(username)
-        clearAllSelectedDaysByInstructor(auth, index)
     }else {
         makeInstructorAvailableIfDayChosen(username)
-        normalizeUnavailableCheckbox(auth, index)
     }
 
     const updatedUserMarkup = JSON.parse(getUserReplyMarkup(userSchedule).reply_markup)
 
-    toggleDayOfTheWeek(auth, index, dayNamesByCellsLettersInSheet[data])
+    const markupEqualityCheck = JSON.stringify(updatedUserMarkup) === JSON.stringify(previouslySentReplyMarkup)
+    previouslySentReplyMarkup = JSON.parse(getUserReplyMarkup(userSchedule).reply_markup)
+    if(markupEqualityCheck === false) {
+        await tg.editMessageReplyMarkup(chatId, messageId, null, updatedUserMarkup)
+    }
+    await ctx.answerCbQuery();
 
-    tg.editMessageReplyMarkup(chatId, messageId, null, updatedUserMarkup)
-    ctx.answerCbQuery();
+
+    // if(data === notAvailableInstructor) {
+    //     // await clearAllDaysIfInstructorUnavailable(username)
+    //     await clearAllSelectedDaysByInstructor(sheet, index)//1 request
+    // }else {
+    //     // makeInstructorAvailableIfDayChosen(username)
+    //     await normalizeUnavailableCheckbox(sheet, index)//2 requests
+    // }
+    //
+    // await toggleDayOfTheWeek(sheet, index, dayNamesByCellsLettersInSheet[data])//2 requests
+
+
 }
 
 
@@ -96,14 +110,14 @@ const getUserReplyMarkup = (userSchedule) => {
                 ],
                 [
                     getBtnMarkup(friday, friday, userSchedule[friday]),
+                    getBtnMarkup(notAvailableInstructor, notAvailableInstructor, userSchedule[notAvailableInstructor])
 
                     // getBtnMarkup(sunday, sunday, userSchedule[sunday])
                 ],
                 [
 
-                    getBtnMarkup(notAvailableInstructor, notAvailableInstructor, userSchedule[notAvailableInstructor])
 
-                    // getBtnMarkup(notAvailableInstructor, notAvailableInstructor, userSchedule[notAvailableInstructor])
+                    getBtnMarkup('ПІДТВЕРДИТИ', 'ПІДТВЕРДИТИ', 'ПІДТВЕРДИТИ')
                 ]
             ]
         })
@@ -196,3 +210,4 @@ async function authorize() {
 }
 
 start()
+// quota exceeded for quota metric 'Read requests' and limit 'Read requests per minute per user' of service 'sheets.googleapis.com' for consumer 'project_number:347471058344'.

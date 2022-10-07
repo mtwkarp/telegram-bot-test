@@ -1,13 +1,14 @@
 const {google} = require("googleapis");
 const {SPREADSHEETID} = require('../constants/spreadsheetsConstants')
 const {dayNames, dayNamesByCellsLettersInSheet, notAvailableInstructor} = require('../constants/spreadsheetsConstants')
-const namesLetter = 'A'
-const nicknameLetter = 'B'
 
-async function getUserNameByNickname (auth, nickname) {
 
-    const sheets = google.sheets({version: 'v4', auth});
-    const namesData = await sheets.spreadsheets.values.get({
+
+async function getUserNameByNickname (sheet, nickname) {
+    const namesLetter = 'A'
+    const nicknameLetter = 'B'
+    // const sheet = google.sheets({version: 'v4', auth});
+    const namesData = await sheet.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
         range: `Список інструкторів!${namesLetter}:${namesLetter}`,
     });
@@ -19,7 +20,7 @@ async function getUserNameByNickname (auth, nickname) {
         return;
     }
 
-    const nicknamesData = await sheets.spreadsheets.values.get({
+    const nicknamesData = await sheet.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
         range: `Список інструкторів!${nicknameLetter}:${nicknameLetter}`,
     });
@@ -48,37 +49,9 @@ async function getUserNameByNickname (auth, nickname) {
     return name
 }
 
-const testWrite = async () => {
-    const service = google.sheets({version: 'v4', auth});
-    let values = [
-        [
-            'E41:E41'
-        ],
-        // Additional rows ...
-    ];
-    const resource = {
-        values,
-    };
-    try {
-        const result = await service.spreadsheets.values.update({
-            SPREADSHEETID,
-            range: 'Доступність інструкторів!E45',
-            valueInputOption: 'USER_ENTERED',
-            resource: { range: "Доступність інструкторів!E45", majorDimension: "ROWS", values: [["b"]] },
-            auth
-        });
-        console.log('%d cells updated.', result.data.updatedCells);
-        return result;
-    } catch (err) {
-        console.log('blyat')
-        // TODO (Developer) - Handle exception
-        throw err;
-    }
-}
-
-async function getUserRowIndexInAvailabilitySheet(auth, userFullName) {
-    const sheets = google.sheets({version: 'v4', auth});
-    const namesData = await sheets.spreadsheets.values.get({
+async function getUserRowIndexInAvailabilitySheet(sheet, userFullName) {
+    // const sheet = google.sheets({version: 'v4', auth});
+    const namesData = await sheet.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
         range: `Доступність інструкторів!A:A`,
     });
@@ -98,11 +71,11 @@ async function getUserRowIndexInAvailabilitySheet(auth, userFullName) {
     return rowIndex
 }
 
-async function toggleDayOfTheWeek(auth, rowIndex, dayLetter) {
-    const sheets = google.sheets({version: 'v4', auth});
+async function toggleDayOfTheWeek(sheet, rowIndex, dayLetter) {
+    // const sheet = google.sheets({version: 'v4', auth});
     const cellIndex = dayLetter + rowIndex;
     const range = `Доступність інструкторів!${cellIndex}`
-    const cellData = await sheets.spreadsheets.values.get({
+    const cellData = await sheet.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
         range,
     });
@@ -112,13 +85,11 @@ async function toggleDayOfTheWeek(auth, rowIndex, dayLetter) {
     const finalCheckboxValue = cellValue === "FALSE" ? "TRUE" : "FALSE";
 
     try {
-        await sheets.spreadsheets.values.update({
+        await sheet.spreadsheets.values.update({
             spreadsheetId: SPREADSHEETID,
             range,
             valueInputOption: 'USER_ENTERED',
-            resource: { range, majorDimension: "ROWS", values: [[finalCheckboxValue]] },
-            auth
-        });
+            resource: { range, majorDimension: "ROWS", values: [[finalCheckboxValue]] }});
     }catch (err) {
         console.log('blyat')
         // TODO (Developer) - Handle exception
@@ -128,14 +99,14 @@ async function toggleDayOfTheWeek(auth, rowIndex, dayLetter) {
     // console.log(cellValue.data.values)
 }
 
-async function clearAllSelectedDaysByInstructor(auth, rowIndex) {
-    const sheets = google.sheets({version: 'v4', auth});
+async function clearAllSelectedDaysByInstructor(sheet, rowIndex) {
+    // const sheet = google.sheets({version: 'v4', auth});
     const mondayCell = dayNamesByCellsLettersInSheet[dayNames.monday] + rowIndex
     const fridayCell = dayNamesByCellsLettersInSheet[dayNames.friday] + rowIndex
     const range = `Доступність інструкторів!${mondayCell}:${fridayCell}`
 
     try {
-        await sheets.spreadsheets.values.update({
+        await sheet.spreadsheets.values.update({
             spreadsheetId: SPREADSHEETID,
             range,
             valueInputOption: 'USER_ENTERED',
@@ -146,7 +117,7 @@ async function clearAllSelectedDaysByInstructor(auth, rowIndex) {
                     ['FALSE'],
                     ['FALSE']
                 ] },
-            auth
+            // auth
         });
     }catch (err) {
         console.log('blyat')
@@ -154,11 +125,11 @@ async function clearAllSelectedDaysByInstructor(auth, rowIndex) {
     }
 }
 
-async function normalizeUnavailableCheckbox(auth, rowIndex) {
-    const sheets = google.sheets({version: 'v4', auth});
+async function normalizeUnavailableCheckbox(sheet, rowIndex) {
+    // const sheet = google.sheets({version: 'v4', auth});
     const cellIndex = dayNamesByCellsLettersInSheet[notAvailableInstructor] + rowIndex;
     const range = `Доступність інструкторів!${cellIndex}`;
-    const cellData = await sheets.spreadsheets.values.get({
+    const cellData = await sheet.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
         range,
     });
@@ -168,12 +139,11 @@ async function normalizeUnavailableCheckbox(auth, rowIndex) {
     if(cellValue === 'FALSE') return
 
     try {
-        await sheets.spreadsheets.values.update({
+        await sheet.spreadsheets.values.update({
             spreadsheetId: SPREADSHEETID,
             range,
             valueInputOption: 'USER_ENTERED',
             resource: { range, majorDimension: "COLUMNS", values: [['FALSE']] },
-            auth
         });
     }catch (err) {
         console.log('blyat')

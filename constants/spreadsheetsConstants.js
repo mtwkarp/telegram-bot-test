@@ -1,6 +1,6 @@
 const SPREADSHEETID = '19bq0nUJQBanrYNviq_FRTGMsztjhGcXjgbxrFqdCwOQ'
 
-const notAvailableInstructor = 'Відсутній'
+const notAvailableInstructor = 'Відсутній(ня)'
 
 const dayNames = {
     monday: 'ПН',
