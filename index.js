@@ -38,7 +38,7 @@ const onDayPick = async (ctx) => {
     const userSchedule = getUserSchedule(username)
     const data = ctx.update.callback_query.data
     userSchedule[data] = !userSchedule[data]
-
+const hello = 1
     // const userFullName = await getUserNameByNickname(sheet, username)//2 requests
     // const index = await getUserRowIndexInAvailabilitySheet(sheet, userFullName) + 1 //1 request
 
