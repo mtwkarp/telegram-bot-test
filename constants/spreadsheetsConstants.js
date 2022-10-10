@@ -2,6 +2,8 @@ const SPREADSHEETID = '19bq0nUJQBanrYNviq_FRTGMsztjhGcXjgbxrFqdCwOQ'
 
 const notAvailableInstructor = 'Відсутній(ня)'
 
+const confirmScheduleBtnText = 'ПІДТВЕРДИТИ'
+
 const dayNames = {
     monday: 'ПН',
     tuesday: 'ВТ',
@@ -18,7 +20,9 @@ const dayNamesByCellsLettersInSheet = {
     [dayNames.wednesday]: 'E',
     [dayNames.thursday]: 'F',
     [dayNames.friday]: 'G',
-    [notAvailableInstructor]: 'H'
+    [dayNames.saturday]: 'H',
+    [dayNames.sunday]: 'I',
+    [notAvailableInstructor]: 'J'
 }
 
 
@@ -26,5 +30,6 @@ module.exports = {
     SPREADSHEETID,
     dayNames,
     dayNamesByCellsLettersInSheet,
-    notAvailableInstructor
+    notAvailableInstructor,
+    confirmScheduleBtnText
 }
