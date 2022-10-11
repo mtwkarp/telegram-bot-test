@@ -8,7 +8,9 @@ class BotCmdHandler {
         this.commands = {
             // schedule: {command: 'Розклад', description: 'Надіслати розклад'} // example
         }
-        this.activeMessageId = ''
+        this.activeUserMessages = {
+            //[userid]: activeMessageId
+        }
 
     }
 

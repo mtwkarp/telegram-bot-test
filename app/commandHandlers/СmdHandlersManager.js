@@ -1,4 +1,4 @@
-const ScheduleCmdHandler = require('./ScheduleCmdHandler.js')
+const ScheduleCmdHandler = require('./scheduleCommand/ScheduleCmdHandler.js')
 
 class CmdHandlersManager {
     constructor() {
@@ -36,16 +36,17 @@ class CmdHandlersManager {
     }
 
     onCallbackQuery(ctx) {
+        const userId = ctx.update.callback_query.from.id
         const messageId = ctx.update.callback_query.message.message_id
-        const currentMessageHandler = this.findCurrentHandlerByMessageId(messageId)
+        const currentMessageHandler = this.findCurrentHandlerByMessageId(messageId, userId)
 
         if(currentMessageHandler === undefined) return
 
         currentMessageHandler.onCallbackQuery(ctx)
     }
 
-    findCurrentHandlerByMessageId(messageId) {
-        return this.cmdHandlers.find(handler => handler.activeMessageId === messageId)
+    findCurrentHandlerByMessageId(messageId, userId) {
+        return this.cmdHandlers.find(handler => handler.activeUserMessages[userId] === messageId)
     }
 }
 

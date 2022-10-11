@@ -15,8 +15,8 @@ class GoogleServicesManager {
     constructor() {
         this.authenticationObj = null
         this.servicesGetterFuncs = {
-            [sheets_service_name]: this.sheetsService,
-            [drive_service_name]: this.driveService
+            [sheets_service_name]: this.sheetsService.bind(this),
+            [drive_service_name]: this.driveService.bind(this)
         }
     }
 
@@ -37,7 +37,6 @@ class GoogleServicesManager {
         if (cl.credentials) {
             await this.saveCredentials(cl);
         }
-        console.log('hello', cl)
         this.authenticationObj = cl
     }
 
@@ -83,14 +82,14 @@ class GoogleServicesManager {
     getService(serviceName) {
         if(this.servicesGetterFuncs[serviceName] === undefined) return
 
-        return this.servicesGetterFuncs[serviceName]
+        return this.servicesGetterFuncs[serviceName]()
     }
 
-    get sheetsService() {
+    sheetsService() {
         return new SheetService(this.authenticationObj)
     }
 
-    get driveService() {
+    driveService() {
 
     }
 

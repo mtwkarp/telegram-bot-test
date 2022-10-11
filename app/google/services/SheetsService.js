@@ -11,7 +11,6 @@ class SheetsService extends GoogleService {
     }
 
     initService(authenticationObj) {
-        console.log(authenticationObj)
         this.spreadsheet = google.sheets({version: 'v4', auth: authenticationObj});
     }
 }
