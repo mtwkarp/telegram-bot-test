@@ -5,7 +5,7 @@ const replyMessages = require('../../constants/replyMessages.js')
 const ScheduleSheetsManager = require('./ScheduleSheetsManager.js')
 const ScheduleViewManager = require('./ScheduleViewManager.js')
 const cron = require('node-cron');
-
+const {openScheduleTime, closeScheduleTime} = require('../../constants/timeConstants.js')
 
 class ScheduleCmdHandler extends BotCmdHandler{
     constructor(bot, services) {
@@ -20,10 +20,12 @@ class ScheduleCmdHandler extends BotCmdHandler{
 
         this.previouslySentReplyMarkup = {} //example: {[userId]: reply_markup {} (from scheduleViewManager.getUserReplyMarkup)}
         this.usersSchedules = {}
+        this.asmUserIdsCache = {}//exmaple: {[userTelegramId]: true}
+
 
         this.scheduleConfirmed = false
         this.scheduleOpen = true
-        this.setScheduleAvailabilityTime()
+        // this.setScheduleAvailabilityTime()
     }
 
 // # ┌────────────── second (optional)
@@ -36,17 +38,13 @@ class ScheduleCmdHandler extends BotCmdHandler{
 // # │ │ │ │ │ │
 // # * * * * * *
     setScheduleAvailabilityTime() {
-        const scheduleOpenTime = '0 03 16 * * Tuesday',
-         scheduleCloseTime = '0 04 16 * * Tuesday',
-         config = {
+        const config = {
             scheduled: true,
             timezone: "Europe/Kiev"
         };
-        // const isTimeExpressionValid = cron.validate(scheduleOpenTime)
 
-        cron.schedule(scheduleOpenTime, this.openSchedule.bind(this), config);
-
-        cron.schedule(scheduleCloseTime, this.closeSchedule.bind(this), config);
+        cron.schedule(openScheduleTime, this.openSchedule.bind(this), config);
+        cron.schedule(closeScheduleTime, this.closeSchedule.bind(this), config);
     }
 
     openSchedule() {
@@ -60,7 +58,7 @@ class ScheduleCmdHandler extends BotCmdHandler{
     }
 
     initCommand() {
-        this.bot.command(this.commands.schedule.command, (ctx) => this.sendScheduleMarkup(ctx))
+        this.bot.command(this.commands.schedule.command, (ctx) => this.requestScheduleMarkup(ctx))
     }
 
     onCallbackQuery(ctx) {
@@ -68,18 +66,45 @@ class ScheduleCmdHandler extends BotCmdHandler{
     }
 
     notifyUserAboutClosedSchedule(ctx) {
-        const chatId = ctx.update.callback_query.message.chat.id;
+        let chatId = null
+
+        if(ctx.update.callback_query) {
+            chatId = ctx.update.callback_query.message.chat.id;
+        }else {
+            chatId = ctx.update.message.chat.id;
+        }
 
         ctx.telegram.sendMessage(chatId, replyMessages.schedule.scheduleClosed)
     }
-x
-    async sendScheduleMarkup (ctx) {
+
+    notifyUserToFillSchedule(ctx) {
+        const chatId = ctx.update.callback_query.message.chat.id
+        ctx.telegram.sendMessage(chatId, replyMessages.schedule.scheduleMustBeFilledBeforeSending)
+    }
+
+    notifyNotASMUserInstructor(ctx) {
+        const chatId = ctx.update.message.chat.id;
+
+        ctx.telegram.sendMessage(chatId, replyMessages.schedule.userNotASMInstructor)
+    }
+
+    async requestScheduleMarkup(ctx) {
         if(this.scheduleOpen === false) {
             this.notifyUserAboutClosedSchedule(ctx)
 
             return
         }
 
+        if(await this.checkIfUserIsASMInstructor(ctx) === false) {
+            this.notifyNotASMUserInstructor(ctx)
+
+            return
+        }
+
+        this.sendScheduleMarkup(ctx)
+    }
+x
+    async sendScheduleMarkup (ctx) {
         const userId = ctx.from.id
         this.writeUserEmptySchedule(userId)
 
@@ -114,6 +139,20 @@ x
     }
 
     async confirmSchedule(ctx) {
+        if(this.scheduleOpen === false) {
+            this.notifyUserAboutClosedSchedule(ctx)
+
+            return
+        }
+
+        const userSchedule = this.getUserSchedule(ctx.update.callback_query.from.id)
+
+        if(this.checkIfScheduleFilled(userSchedule) === false) {
+            this.notifyUserToFillSchedule(ctx)
+
+            return
+        }
+
         this.scheduleConfirmed = true
 
         this.updateScheduleMarkupAfterConfirm(ctx)
@@ -209,7 +248,31 @@ x
         this.scheduleSheetsManager.sendConfirmedScheduleToSpreadsheet(ctx, this.getUserSchedule(userId))
     }
 
+    checkIfScheduleFilled(userSchedule) {
+        for (const dayKey in userSchedule) {
+            if(userSchedule[dayKey] === true) return true
+        }
 
+        return false
+    }
+
+    async checkIfUserIsASMInstructor(ctx) {
+        const userId = ctx.from.id
+
+        if(this.asmUserIdsCache[userId] === true) {
+            return true
+        }
+
+        const isUserAsmInstructor = await this.scheduleSheetsManager.checkASMInstructorIdExistence(userId)
+
+        if(isUserAsmInstructor === true) {
+            this.asmUserIdsCache[userId] = true
+        }
+
+        console.log(this.asmUserIdsCache)
+
+        return isUserAsmInstructor
+    }
 
     static _SERVICES = [sheets_service_name]
 }

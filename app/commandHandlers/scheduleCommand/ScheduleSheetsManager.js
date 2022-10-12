@@ -78,7 +78,6 @@ class ScheduleSheetsManager {
 
     async getFullNameByTelegramId (userId) {
         const namesLetter = 'A'
-        const userIdLetter = 'C'
 
         const namesData = await this.spreadsheet.spreadsheets.values.get({
             spreadsheetId: SPREADSHEETID,
@@ -92,12 +91,7 @@ class ScheduleSheetsManager {
             return;
         }
 
-        const usersIdData = await this.spreadsheet.spreadsheets.values.get({
-            spreadsheetId: SPREADSHEETID,
-            range: `Список інструкторів!${userIdLetter}:${userIdLetter}`,
-        });
-
-        const userIds = usersIdData.data.values;
+        const userIds = await this.getAsmInstructorsIds();
 
         if (!userIds || userIds.length === 0) {
             console.log('No nicknames data found.');
@@ -107,11 +101,11 @@ class ScheduleSheetsManager {
         let name = ''
 
         for (let i = 0; i < userIds.length; i++) {
-            const resultNickname = userIds[i][0]
+            const resultId = userIds[i][0]
 
-            if(resultNickname === undefined) continue
+            if(resultId === undefined) continue
 
-            if(resultNickname === userId.toString()) {
+            if(resultId === userId.toString()) {
                 name = instructorsNames[i][0]
                 break
             }
@@ -141,6 +135,39 @@ class ScheduleSheetsManager {
         }
 
         return rowIndex
+    }
+
+    async checkASMInstructorIdExistence(userId) {
+        const userIdString = userId.toString()
+
+        const userIds = await this.getAsmInstructorsIds()
+
+        if(userIds === undefined) return false
+
+        for (let i = 0; i < userIds.length; i++) {
+            const resultId = userIds[i][0]
+
+            if(resultId === undefined) continue
+
+            if(resultId === userIdString) {
+                return true
+            }
+        }
+
+        return false
+    }
+
+    async getAsmInstructorsIds() {
+        const userIdLetter = 'C'
+
+        const usersIdData = await this.spreadsheet.spreadsheets.values.get({
+            spreadsheetId: SPREADSHEETID,
+            range: `Список інструкторів!${userIdLetter}:${userIdLetter}`,
+        });
+
+        const userIds = usersIdData.data.values;
+
+        return userIds
     }
 }
 
