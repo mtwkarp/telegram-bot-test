@@ -1,11 +1,7 @@
-
 class GoogleServiceInterface {
-    constructor(authenticationObj) {
-    }
+  constructor(authenticationObj) {}
 
-    initService(authenticationObj) {
-
-    }
+  initService(authenticationObj) {}
 }
 
-module.exports = GoogleServiceInterface
+module.exports = GoogleServiceInterface;

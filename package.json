@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prettify": "prettier --write ./app/.",
+    "dev": "mode=development nodemon index.js",
+    "production": "mode=production node ./build/build.js",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,9 @@
   "homepage": "https://github.com/MatthewKarpenko/telegram-bot-test#readme",
   "dependencies": {
     "@google-cloud/local-auth": "^2.1.1",
+    "babel-loader": "^8.2.5",
+    "clean-webpack-plugin": "^4.0.0",
+    "dotenv": "^16.0.3",
     "fs": "^0.0.1-security",
     "googleapis": "^108.0.0",
     "node-cron": "^3.0.2",
@@ -27,7 +31,9 @@
     "nodemon": "^2.0.16",
     "path": "^0.12.7",
     "process": "^0.11.10",
-    "telegraf": "^4.9.2"
+    "telegraf": "^4.9.2",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
   },
   "devDependencies": {
     "prettier": "^2.7.1"

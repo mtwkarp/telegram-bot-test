@@ -1,8 +1,8 @@
-const Bot = require('./app/Bot.js')
+const Bot = require("./app/Bot.js");
 
-const KolesoBot = new Bot()
+const KolesoBot = new Bot();
 try {
-    KolesoBot.initBot()
-}catch (err) {
-    console.log(err)
+  KolesoBot.initBot();
+} catch (err) {
+  console.log(err);
 }

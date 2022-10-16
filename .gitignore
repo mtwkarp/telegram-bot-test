@@ -102,3 +102,7 @@ dist
 
 # TernJS port file
 .tern-port
+
+#google api sensitive data
+credentials.json
+token.json

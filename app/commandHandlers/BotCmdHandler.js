@@ -1,28 +1,22 @@
-
 class BotCmdHandler {
-    //services = { sheets: {}, drive: {} }
-    constructor(bot, services) {
-        this.bot = bot
-        this.services = services
-        this.messageIds = []
-        this.commands = {
-            // schedule: {command: 'Розклад', description: 'Надіслати розклад'} // example
-        }
-        this.activeUserMessages = {
-            //[userid]: activeMessageId
-        }
+  //services = { sheets: {}, drive: {} }
+  constructor(bot, services) {
+    this.bot = bot;
+    this.services = services;
+    this.messageIds = [];
+    this.commands = {
+      // schedule: {command: 'Розклад', description: 'Надіслати розклад'} // example
+    };
+    this.activeUserMessages = {
+      //[userid]: activeMessageId
+    };
+  }
 
-    }
+  initCommand() {}
 
-    initCommand() {
+  onCallbackQuery(ctx) {}
 
-    }
-
-    onCallbackQuery(ctx) {
-
-    }
-
-    static _SERVICES = []
+  static _SERVICES = [];
 }
 
-module.exports = BotCmdHandler
+module.exports = BotCmdHandler;

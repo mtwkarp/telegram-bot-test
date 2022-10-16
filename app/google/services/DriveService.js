@@ -1,9 +1,9 @@
-const GoogleService = require('./GoogleServiceInterface.js')
+const GoogleService = require("./GoogleServiceInterface.js");
 
 class DriveService extends GoogleService {
-    constructor(authenticationObj) {
-        super(authenticationObj);
-    }
+  constructor(authenticationObj) {
+    super(authenticationObj);
+  }
 }
 
-module.exports = DriveService
+module.exports = DriveService;
