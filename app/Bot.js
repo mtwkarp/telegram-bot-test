@@ -2,12 +2,13 @@ const GoogleServicesManager = require("./google/GoogleServicesManager.js");
 const CmdHandlersManager = require("./commandHandlers/СmdHandlersManager.js");
 const { Telegraf } = require("telegraf");
 const dotenv = require("dotenv");
-const token = "5578721046:AAFL3QeNl7tpunNcic5_nRDGodArhNgnpD4";
 
 class Bot {
   constructor() {
+    this.loadEnvironmentVariables();
+
     this.googleServicesManager = new GoogleServicesManager();
-    this.bot = new Telegraf(token);
+    this.bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
     this.cmdHandlersManager = new CmdHandlersManager();
   }
 
@@ -20,7 +21,6 @@ class Bot {
   }
 
   async initBot() {
-    this.loadEnvironmentVariables();
     await this.initGoogleServices();
 
     this.initCommandHandlers();

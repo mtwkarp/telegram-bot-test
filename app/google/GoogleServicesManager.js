@@ -7,13 +7,12 @@ const {
   sheets_service_name,
   drive_service_name,
 } = require("../constants/googleServicesNames.js");
-const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 const SheetService = require("./services/SheetsService.js");
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
 // const TOKEN_PATH = path.join(process.cwd(), "app/token.json");
-// const CREDENTIALS_PATH = path.join(process.cwd(), "app/credentials.json");
+const CREDENTIALS_PATH = path.join(process.cwd(), "app/credentials.json");
 class GoogleServicesManager {
   constructor() {
     this.authenticationObj = null;
@@ -35,7 +34,7 @@ class GoogleServicesManager {
       return;
     }
     cl = await authenticate({
-      scopes: SCOPES,
+      scopes: ["https://www.googleapis.com/auth/spreadsheets"],
       keyfilePath: CREDENTIALS_PATH,
     });
     if (cl.credentials) {
