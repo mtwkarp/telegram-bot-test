@@ -11,7 +11,7 @@ const SheetService = require("./services/SheetsService.js");
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
-// const TOKEN_PATH = path.join(process.cwd(), "app/token.json");
+const TOKEN_PATH = path.join(process.cwd(), "app/token.json");
 const CREDENTIALS_PATH = path.join(process.cwd(), "app/credentials.json");
 class GoogleServicesManager {
   constructor() {
@@ -27,9 +27,12 @@ class GoogleServicesManager {
   }
 
   async authorize() {
-    let cl = await this.loadSavedCredentialsIfExist();
+    let cl
+
+    cl = await this.loadSavedCredentialsIfExist();
     // console.log(process.env)
     if (cl) {
+      // console.log(cl)
       this.authenticationObj = cl;
       return;
     }
@@ -66,6 +69,7 @@ class GoogleServicesManager {
         client_id: process.env.GOOGLE_API_CLIENT_ID,
         client_secret: process.env.GOOGLE_API_CLIENT_SECRET,
         refresh_token: process.env.GOOGLE_API_REFRESH_TOKEN,
+        redirect_uris: ["http://localhost"]
       });
     } catch (err) {
       return null;
