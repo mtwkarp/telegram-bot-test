@@ -1,18 +1,10 @@
-const { authenticate } = require("@google-cloud/local-auth");
 const { google } = require("googleapis");
-const path = require("path");
-const process = require("process");
-const fs = require("fs").promises;
 const {
   sheets_service_name,
   drive_service_name,
 } = require("../constants/googleServicesNames.js");
 const SheetService = require("./services/SheetsService.js");
-// The file token.json stores the user's access and refresh tokens, and is
-// created automatically when the authorization flow completes for the first
-// time.
-const TOKEN_PATH = path.join(process.cwd(), "app/token.json");
-const CREDENTIALS_PATH = path.join(process.cwd(), "app/credentials.json");
+
 class GoogleServicesManager {
   constructor() {
     this.authenticationObj = null;
@@ -27,53 +19,12 @@ class GoogleServicesManager {
   }
 
   async authorize() {
-    let cl
+    const auth = await new google.auth.GoogleAuth({
+      keyFile: process.env.SERVICE_ACCOUNT_CREDENTIALS_PATH,
+      scopes: ["https://www.googleapis.com/auth/spreadsheets"]
+    })
 
-    cl = await this.loadSavedCredentialsIfExist();
-    // console.log(process.env)
-    if (cl) {
-      // console.log(cl)
-      this.authenticationObj = cl;
-      return;
-    }
-    cl = await authenticate({
-      scopes: ["https://www.googleapis.com/auth/spreadsheets"],
-      keyfilePath: CREDENTIALS_PATH,
-    });
-    if (cl.credentials) {
-      await this.saveCredentials(cl);
-    }
-    this.authenticationObj = cl;
-  }
-
-  async saveCredentials(client) {
-    const content = await fs.readFile(CREDENTIALS_PATH);
-    const keys = JSON.parse(content);
-    const key = keys.installed || keys.web;
-    const payload = JSON.stringify({
-      type: "authorized_user",
-      client_id: key.client_id,
-      client_secret: key.client_secret,
-      refresh_token: client.credentials.refresh_token,
-    });
-    await fs.writeFile(TOKEN_PATH, payload);
-  }
-
-  async loadSavedCredentialsIfExist() {
-    try {
-      // const content = await fs.readFile(TOKEN_PATH);
-      // const credentials = JSON.parse(content);
-      // const content = await fs.readFile(TOKEN_PATH);
-      return google.auth.fromJSON({
-        type: process.env.GOOGLE_API_TYPE,
-        client_id: process.env.GOOGLE_API_CLIENT_ID,
-        client_secret: process.env.GOOGLE_API_CLIENT_SECRET,
-        refresh_token: process.env.GOOGLE_API_REFRESH_TOKEN,
-        redirect_uris: ["http://localhost"]
-      });
-    } catch (err) {
-      return null;
-    }
+    this.authenticationObj = auth;
   }
 
   getServicesObjByNames(names = []) {

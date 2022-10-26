@@ -13,11 +13,11 @@ class Bot {
   }
 
   loadEnvironmentVariables() {
-    if (process.env.mode === "development") {
+    // if (process.env.mode === "development") {
       dotenv.config();
-    } else if (process.env.mode === "production") {
-      dotenv.config();
-    }
+    // } else if (process.env.mode === "production") {
+    //   dotenv.config();
+    // }
   }
 
   async initBot() {

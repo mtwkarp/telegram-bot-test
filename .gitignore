@@ -104,5 +104,4 @@ dist
 .tern-port
 
 #google api sensitive data
-credentials.json
-token.json
+service-account.json
