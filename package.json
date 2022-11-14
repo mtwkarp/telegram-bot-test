@@ -1,0 +1,42 @@
+{
+  "name": "telegram-bot-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "mode=development nodemon index.js",
+    "production": "mode=production node ./build/build.js",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MatthewKarpenko/telegram-bot-test.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MatthewKarpenko/telegram-bot-test/issues"
+  },
+  "homepage": "https://github.com/MatthewKarpenko/telegram-bot-test#readme",
+  "dependencies": {
+    "@google-cloud/local-auth": "^2.1.1",
+    "babel-loader": "^8.2.5",
+    "clean-webpack-plugin": "^4.0.0",
+    "dotenv": "^16.0.3",
+    "eslint-config-google": "^0.14.0",
+    "fs": "^0.0.1-security",
+    "googleapis": "^108.0.0",
+    "node-cron": "^3.0.2",
+    "node-telegram-bot-api": "^0.57.0",
+    "nodemon": "^2.0.16",
+    "path": "^0.12.7",
+    "process": "^0.11.10",
+    "telegraf": "^4.9.2",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.26.0",
+    "prettier": "^2.7.1"
+  }
+}
