@@ -1,0 +1,16 @@
+    1. const basesTranslation = {
+      ['blood']: 'кров🩸',
+      ['lungs']: 'легені🫁',
+      ['heart']: 'серце❤',
+      ['evacuation']: 'евакуація🚑'
+    };
+
+    2. Sheets names
+
+    3. Reply messages.
+
+    4. SpreadSheets constants
+
+    5. Time constants
+
+    Чи можливе дистанційне оновлення конфігу ?

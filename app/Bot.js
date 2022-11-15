@@ -2,6 +2,7 @@ const GoogleServicesManager = require('./google/GoogleServicesManager.js');
 const CmdHandlersManager = require('./commandHandlers/СmdHandlersManager.js');
 const { Telegraf } = require('telegraf');
 const dotenv = require('dotenv');
+const FireStoreTest = require('./FireStoreTest.js')
 
 class Bot {
   constructor() {
@@ -43,6 +44,7 @@ class Bot {
     this.bot.launch();
 
     console.log('Successful init');
+    // new FireStoreTest()
   }
 
   async initGoogleServices() {

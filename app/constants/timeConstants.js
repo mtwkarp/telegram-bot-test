@@ -18,16 +18,11 @@ const privateMsgScheduleReminder2 = '0 0 12 * * Sunday';
 
 const everyDayTeachingReminder = '0 0 18 * * Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday';
 const everyDayFullScheduleReminder = '0 0 20 * * Monday,Tuesday,Wednesday,Thursday,Friday,Saturday';
-// const everyDayFullScheduleReminder = '0 05 19 * * Monday,Tuesday,Wednesday,Thursday,Friday,Saturday';
 
 const timeConfig = {
   scheduled: true,
   timezone: 'Europe/Kiev'
 };
-
-// const channelScheduleReminder = "40 53 16 * * Friday"
-// const privateMsgScheduleReminder1 = "45 53 16 * * Friday"
-// const privateMsgScheduleReminder2 = "50 53 16 * * Friday"
 
 module.exports = {
   openScheduleTime,
