@@ -5,7 +5,6 @@ const cron = require('node-cron');
 class EveryDayScheduleMessenger extends MessengerModule {
   constructor(tg, scheduleSheetsManager) {
     super(tg, scheduleSheetsManager);
-    // this.sendFullNextDaySchedule()
   }
 
   setScheduledMessages() {

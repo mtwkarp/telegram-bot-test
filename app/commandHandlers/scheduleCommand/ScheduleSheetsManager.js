@@ -234,10 +234,9 @@ class ScheduleSheetsManager {
     })).data.values;
 
     const finalList = [];
-    // console.log(allInstructorsInfo)
+
     for (let i = 0; i < namesArr.length; i++) {
       const requestedName = namesArr[i];
-      // console.log(requestedName)
 
       for (let j = 0; j < allInstructorsInfo.length; j++) {
         const name = allInstructorsInfo[j][0];
