@@ -8,14 +8,6 @@ class MessengerModule {
   setScheduledMessages() {
 
   }
-
-  async checkIfNextDayWorkable() {
-    const nextDayStatus = await this.scheduleSheetsManager.getNextDayWorkStatusInfo();
-
-    if (nextDayStatus === 'FALSE') return false;
-
-    if (nextDayStatus === 'TRUE') return true;
-  }
 }
 
 module.exports = MessengerModule;

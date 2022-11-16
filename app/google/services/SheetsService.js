@@ -6,6 +6,7 @@ class SheetsService extends GoogleService {
     super(authenticationObj);
 
     this.spreadsheet = null;
+    this.values = null;
 
     this.initService(authenticationObj);
   }
@@ -15,6 +16,8 @@ class SheetsService extends GoogleService {
       version: 'v4',
       auth: authenticationObj
     });
+
+    this.values = this.spreadsheet.spreadsheets.values
   }
 }
 

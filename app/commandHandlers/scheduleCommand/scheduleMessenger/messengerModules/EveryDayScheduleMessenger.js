@@ -12,7 +12,7 @@ class EveryDayScheduleMessenger extends MessengerModule {
   }
 
   async sendFullNextDaySchedule() {
-    const isDayWorkable = await this.checkIfNextDayWorkable();
+    const isDayWorkable = await this.scheduleSheetsManager.isNextDayWorkable();
 
     if (isDayWorkable === false) return;
 
