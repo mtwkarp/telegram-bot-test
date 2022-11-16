@@ -1,7 +1,6 @@
 const BotCmdHandler = require('../BotCmdHandler');
 const replyMessages = require('../../constants/replyMessages');
 const { sheets_service_name } = require('../../constants/googleServicesNames');
-const { SPREADSHEETID } = require('../../constants/spreadsheetsConstants');
 const GoogleServicesManager = require('../../google/GoogleServicesManager.js')
 
 class StartCmdHandler extends BotCmdHandler {
@@ -35,7 +34,7 @@ class StartCmdHandler extends BotCmdHandler {
     const idsLetter = 'C';
 
     const idsData = await this.spreadsheet.spreadsheets.values.get({
-      spreadsheetId: SPREADSHEETID,
+      spreadsheetId: process.env.SCHEDULE_SPREADSHEET_ID,
       range: `Список інструкторів!${idsLetter}:${idsLetter}`
     });
     const flattenIdsData = idsData.data.values
@@ -63,7 +62,7 @@ class StartCmdHandler extends BotCmdHandler {
 
     try {
       await this.spreadsheet.spreadsheets.values.update({
-        spreadsheetId: SPREADSHEETID,
+        spreadsheetId: process.env.SCHEDULE_SPREADSHEET_ID,
         range: writeRange,
         valueInputOption: 'RAW',
         resource: {

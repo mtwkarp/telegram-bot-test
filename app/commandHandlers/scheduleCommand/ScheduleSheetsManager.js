@@ -2,7 +2,6 @@ const {
   dayNamesByCellsLettersInSheet,
   dayNames,
   notAvailableInstructor,
-  SPREADSHEETID,
   baseInstructorsByLetters,
   fullScheduleByDayLetters
 } = require('../../constants/spreadsheetsConstants');
@@ -36,7 +35,7 @@ class ScheduleSheetsManager {
     try {
       await this.spreadsheet.spreadsheets.values
           .update({
-            spreadsheetId: SPREADSHEETID,
+            spreadsheetId: process.env.SCHEDULE_SPREADSHEET_ID,
             range,
             valueInputOption: 'USER_ENTERED',
             resource: {
@@ -68,11 +67,12 @@ class ScheduleSheetsManager {
             dayNamesByCellsLettersInSheet[dayNames.monday] + rowIndex;
     const notAvailableCell =
             dayNamesByCellsLettersInSheet[notAvailableInstructor] + rowIndex;
+    console.log(mondayCell, notAvailableCell)
     const range = `Доступність інструкторів!${mondayCell}:${notAvailableCell}`;
 
     try {
       await this.spreadsheet.spreadsheets.values.update({
-        spreadsheetId: SPREADSHEETID,
+        spreadsheetId: process.env.SCHEDULE_SPREADSHEET_ID,
         range,
         valueInputOption: 'USER_ENTERED',
         resource: {
@@ -100,7 +100,7 @@ class ScheduleSheetsManager {
     const namesLetter = 'A';
 
     const namesData = await this.spreadsheet.spreadsheets.values.get({
-      spreadsheetId: SPREADSHEETID,
+      spreadsheetId: process.env.SCHEDULE_SPREADSHEET_ID,
       range: `Список інструкторів!${namesLetter}:${namesLetter}`
     });
 
@@ -138,7 +138,7 @@ class ScheduleSheetsManager {
 
   async getUserRowIndexInAvailabilitySheet(userFullName) {
     const namesData = await this.spreadsheet.spreadsheets.values.get({
-      spreadsheetId: SPREADSHEETID,
+      spreadsheetId: process.env.SCHEDULE_SPREADSHEET_ID,
       range: 'Доступність інструкторів!A:A'
     });
     const namesList = namesData.data.values;
@@ -181,7 +181,7 @@ class ScheduleSheetsManager {
     const userIdLetter = 'C';
 
     const usersIdData = await this.spreadsheet.spreadsheets.values.get({
-      spreadsheetId: SPREADSHEETID,
+      spreadsheetId: process.env.SCHEDULE_SPREADSHEET_ID,
       range: `Список інструкторів!${userIdLetter}:${userIdLetter}`
     });
 
@@ -196,14 +196,14 @@ class ScheduleSheetsManager {
 
     const noResponseInstructors =
             await this.spreadsheet.spreadsheets.values.get({
-              spreadsheetId: SPREADSHEETID,
+              spreadsheetId: process.env.SCHEDULE_SPREADSHEET_ID,
               range: `Доступність інструкторів!${noResponseInstructorsColumn}${rowStart}:${noResponseInstructorsColumn}1000`
             });
 
     const noResponseInstructorsNames = noResponseInstructors.data.values.flat();
 
     const allInstructorsInfo = (await this.spreadsheet.spreadsheets.values.get({
-      spreadsheetId: SPREADSHEETID,
+      spreadsheetId: process.env.SCHEDULE_SPREADSHEET_ID,
       range: 'Список інструкторів!$A:D'
     })).data.values;
 
@@ -231,7 +231,7 @@ class ScheduleSheetsManager {
 
   async getInstructorsIdsByNames(namesArr=[]) {
     const allInstructorsInfo = (await this.spreadsheet.spreadsheets.values.get({
-      spreadsheetId: SPREADSHEETID,
+      spreadsheetId: process.env.SCHEDULE_SPREADSHEET_ID,
       range: 'Список інструкторів!$A:D'
     })).data.values;
 
@@ -265,7 +265,7 @@ class ScheduleSheetsManager {
     const baseNamesByNumbers = {[0]: 'blood', [1]: 'lungs', [2]: 'heart', [3]: 'evacuation'};
 
     const instructorsByBase = (await this.spreadsheet.spreadsheets.values.get({
-      spreadsheetId: SPREADSHEETID,
+      spreadsheetId: process.env.SCHEDULE_SPREADSHEET_ID,
       range: `Інструктори по базах (РОЗКЛАД)!${sheetLetters['blood']}3:${sheetLetters['evacuation']}100`
     })).data.values;
 
@@ -306,7 +306,7 @@ class ScheduleSheetsManager {
     const nextDayScheduleLetter = fullScheduleByDayLetters[DateHelper.nextDayName];
 
     const nextDaySchedule = (await this.spreadsheet.spreadsheets.values.get({
-      spreadsheetId: SPREADSHEETID,
+      spreadsheetId: process.env.SCHEDULE_SPREADSHEET_ID,
       range: `Рендер розклад!${nextDayScheduleLetter}3:${nextDayScheduleLetter}100`
     })).data.values;
 
@@ -317,7 +317,7 @@ class ScheduleSheetsManager {
     const nextDayScheduleLetter = fullScheduleByDayLetters[DateHelper.nextDayName];
 
     const nextDayWorkStatus = (await this.spreadsheet.spreadsheets.values.get({
-      spreadsheetId: SPREADSHEETID,
+      spreadsheetId: process.env.SCHEDULE_SPREADSHEET_ID,
       range: `Рендер розклад!${nextDayScheduleLetter}2`
     })).data.values;
 
@@ -328,7 +328,7 @@ class ScheduleSheetsManager {
     const nextDayScheduleLetter = fullScheduleByDayLetters[DateHelper.nextDayName];
 
     const nextDayWorkStatus = (await this.spreadsheet.spreadsheets.values.get({
-      spreadsheetId: SPREADSHEETID,
+      spreadsheetId: process.env.SCHEDULE_SPREADSHEET_ID,
       range: `Рендер розклад!${nextDayScheduleLetter}2`
     })).data.values;
 

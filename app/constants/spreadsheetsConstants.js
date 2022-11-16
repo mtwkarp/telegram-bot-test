@@ -1,5 +1,3 @@
-const SPREADSHEETID = '19bq0nUJQBanrYNviq_FRTGMsztjhGcXjgbxrFqdCwOQ';
-
 const notAvailableInstructor = 'Відсутній(ня)';
 
 const confirmScheduleBtnText = 'ПІДТВЕРДИТИ';
@@ -83,7 +81,6 @@ const fullScheduleByDayLetters = {
 const numberOfRowsInRenderedSchedule = 14;
 
 module.exports = {
-  SPREADSHEETID,
   dayNames,
   dayNamesByCellsLettersInSheet,
   notAvailableInstructor,

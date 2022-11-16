@@ -2,7 +2,7 @@ const GoogleServicesManager = require('./google/GoogleServicesManager.js');
 const CmdHandlersManager = require('./commandHandlers/СmdHandlersManager.js');
 const { Telegraf } = require('telegraf');
 const dotenv = require('dotenv');
-const FireStoreTest = require('./FireStoreTest.js')
+// const FireStoreTest = require('./FireStoreTest.js')
 
 class Bot {
   constructor() {
@@ -13,20 +13,24 @@ class Bot {
 
   loadEnvironmentVariables() {
     let tgToken = null,
-        tgChannelId = null;
+        tgChannelId = null,
+        scheduleSpreadsheetId = null;
 
     dotenv.config();
 
     if (process.env.mode === 'development') {
       tgToken = process.env.TELEGRAM_BOT_TOKEN_DEVELOPMENT;
       tgChannelId = process.env.TELEGRAM_CHANNEL_ID_DEVELOPMENT
+      scheduleSpreadsheetId = process.env.SCHEDULE_SPREADSHEET_ID_DEVELOPMENT
     } else {
       tgToken = process.env.TELEGRAM_BOT_TOKEN_PRODUCTION;
       tgChannelId = process.env.TELEGRAM_CHANNEL_ID_PRODUCTION
+      scheduleSpreadsheetId = process.env.SCHEDULE_SPREADSHEET_ID_PRODUCTION
     }
 
     process.env.TELEGRAM_BOT_TOKEN = tgToken
     process.env.TELEGRAM_CHANNEL_ID = tgChannelId
+    process.env.SCHEDULE_SPREADSHEET_ID = scheduleSpreadsheetId
   }
 
   createTelegramBot() {
