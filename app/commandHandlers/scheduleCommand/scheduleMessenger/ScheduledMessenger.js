@@ -2,10 +2,11 @@ const { Telegram } = require('telegraf');
 const EveryDayScheduleMessenger = require('./messengerModules/EveryDayScheduleMessenger.js');
 const ScheduleEnrolmentMessenger = require('./messengerModules/ScheduleEnrolmentMessenger.js');
 const NextDayInstructorReminderMessenger = require('./messengerModules/NextDayInstructorReminderMessenger.js');
+const ScheduleSheetsManager = require('../ScheduleSheetsManager.js')
 
 class ScheduledMessenger {
-  constructor(scheduleSheetsManager) {
-    this.scheduleSheetsManager = scheduleSheetsManager;
+  constructor() {
+    this.scheduleSheetsManager = new ScheduleSheetsManager();
 
     this.messengerModules = [];
     this.tg = new Telegram(process.env.TELEGRAM_BOT_TOKEN);

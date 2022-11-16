@@ -10,10 +10,10 @@ const UserData = require('./UserData.js');
 const ScheduledMessenger = require('./scheduleMessenger/ScheduledMessenger.js');
 
 class ScheduleCmdHandler extends BotCmdHandler {
-  constructor(bot, services) {
-    super(bot, services);
+  constructor(bot) {
+    super(bot);
 
-    this.scheduleSheetsManager = new ScheduleSheetsManager(this.services.sheets);
+    this.scheduleSheetsManager = new ScheduleSheetsManager();
     this.scheduleViewManager = new ScheduleViewManager();
     this.scheduledMessenger = new ScheduledMessenger(this.scheduleSheetsManager);
 
@@ -286,8 +286,6 @@ class ScheduleCmdHandler extends BotCmdHandler {
 
     return isUserAsmInstructor;
   }
-
-  static _SERVICES = [sheets_service_name];
 }
 
 module.exports = ScheduleCmdHandler;

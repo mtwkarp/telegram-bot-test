@@ -36,30 +36,14 @@ class Bot {
   async initBot() {
     this.loadEnvironmentVariables();
     this.createTelegramBot();
-    await this.initGoogleServices();
 
-    this.initCommandHandlers();
-    this.initCommands();
+    await this.googleServicesManager.authorize()
+    this.cmdHandlersManager.init(this.bot)
     this.subscribeForEvents();
     this.bot.launch();
 
     console.log('Successful init');
     // new FireStoreTest()
-  }
-
-  async initGoogleServices() {
-    await this.googleServicesManager.init();
-  }
-
-  initCommandHandlers() {
-    this.cmdHandlersManager.initCommandHandlers(
-        this.bot,
-        this.googleServicesManager
-    );
-  }
-
-  initCommands() {
-    this.cmdHandlersManager.initCommands(this.bot);
   }
 
   subscribeForEvents() {

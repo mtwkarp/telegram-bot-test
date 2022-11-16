@@ -12,10 +12,7 @@ class GoogleServicesManager {
       [sheets_service_name]: this.sheetsService.bind(this),
       [drive_service_name]: this.driveService.bind(this)
     };
-  }
-
-  async init() {
-    await this.authorize();
+    GoogleServicesManager.#instance = this
   }
 
   async authorize() {
@@ -52,7 +49,13 @@ class GoogleServicesManager {
     return new SheetService(this.authenticationObj);
   }
 
+  static #instance = null
+
   driveService() {}
+
+  static getGoogleServiceByName(serviceName) {
+    return GoogleServicesManager.#instance.getService(serviceName)
+  }
 }
 
 module.exports = GoogleServicesManager;

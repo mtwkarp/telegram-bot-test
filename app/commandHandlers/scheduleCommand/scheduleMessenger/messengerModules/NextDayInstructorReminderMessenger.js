@@ -7,12 +7,13 @@ const replyMessages = require("../../../../constants/replyMessages");
 class NextDayInstructorReminderMessenger extends MessengerModule {
     constructor(tg, scheduleSheetsManager) {
         super(tg, scheduleSheetsManager);
+        // this.sendTomorrowInstructorsReminders()
     }
 
     setScheduledMessages() {
         cron.schedule(everyDayTeachingReminder, this.sendTomorrowInstructorsReminders.bind(this), timeConfig);
     }
-
+//refactor
     async sendTomorrowInstructorsReminders() {
         const isDayWorkable = await this.scheduleSheetsManager.isNextDayWorkable();
 

@@ -2,8 +2,8 @@ const BotCmdHandler = require('../BotCmdHandler');
 const replyMessages = require('../../constants/replyMessages');
 
 class CommandsInfoHandler extends BotCmdHandler {
-  constructor(bot, services) {
-    super(bot, services);
+  constructor(bot) {
+    super(bot);
     this.commands = {
       commandsInfo: {command: 'commandsinfo', description: 'Інформація по доступних командах бота.'}
     };

@@ -7,10 +7,12 @@ const {
   fullScheduleByDayLetters
 } = require('../../constants/spreadsheetsConstants');
 const DateHelper = require('../../helpers/DateHelper.js');
+const GoogleServicesManager = require('../../google/GoogleServicesManager.js')
+const {sheets_service_name} = require("../../constants/googleServicesNames");
 
 class ScheduleSheetsManager {
-  constructor(sheets) {
-    this.spreadsheet = sheets.spreadsheet;
+  constructor() {
+    this.spreadsheet = GoogleServicesManager.getGoogleServiceByName(sheets_service_name).spreadsheet;
   }
 
   async sendConfirmedScheduleToSpreadsheet(ctx, userSchedule) {
@@ -314,23 +316,23 @@ class ScheduleSheetsManager {
   async getNextDayWorkStatusInfo() {
     const nextDayScheduleLetter = fullScheduleByDayLetters[DateHelper.nextDayName];
 
-    const nextDayWorStatus = (await this.spreadsheet.spreadsheets.values.get({
+    const nextDayWorkStatus = (await this.spreadsheet.spreadsheets.values.get({
       spreadsheetId: SPREADSHEETID,
       range: `Рендер розклад!${nextDayScheduleLetter}2`
     })).data.values;
 
-    return nextDayWorStatus[0][0];
+    return nextDayWorkStatus[0][0];
   }
 
   async isNextDayWorkable() {
     const nextDayScheduleLetter = fullScheduleByDayLetters[DateHelper.nextDayName];
 
-    const nextDayWorStatus = (await this.spreadsheet.spreadsheets.values.get({
+    const nextDayWorkStatus = (await this.spreadsheet.spreadsheets.values.get({
       spreadsheetId: SPREADSHEETID,
       range: `Рендер розклад!${nextDayScheduleLetter}2`
     })).data.values;
 
-    if (nextDayWorStatus[0][0] === 'FALSE') return false;
+    if (nextDayWorkStatus[0][0] === 'FALSE') return false;
 
     return true;
   }

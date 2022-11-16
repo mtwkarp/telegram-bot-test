@@ -2,11 +2,12 @@ const BotCmdHandler = require('../BotCmdHandler');
 const replyMessages = require('../../constants/replyMessages');
 const { sheets_service_name } = require('../../constants/googleServicesNames');
 const { SPREADSHEETID } = require('../../constants/spreadsheetsConstants');
+const GoogleServicesManager = require('../../google/GoogleServicesManager.js')
 
 class StartCmdHandler extends BotCmdHandler {
-  constructor(bot, services) {
-    super(bot, services);
-    this.spreadsheet = services.sheets.spreadsheet;
+  constructor(bot) {
+    super(bot);
+    this.spreadsheet = GoogleServicesManager.getGoogleServiceByName(sheets_service_name).spreadsheet;
     this.subscribeForStartMessage();
   }
 
@@ -26,7 +27,7 @@ class StartCmdHandler extends BotCmdHandler {
 
     this.writeUserChatIdToSheets(ctx);
   }
-
+//refactor
   async writeUserChatIdToSheets(ctx) {
     const userId = ctx.update.message.from.id;
     const chatId = ctx.update.message.chat.id;
@@ -74,8 +75,6 @@ class StartCmdHandler extends BotCmdHandler {
       throw err;
     }
   }
-
-  static _SERVICES = [sheets_service_name];
 }
 
 module.exports = StartCmdHandler;
