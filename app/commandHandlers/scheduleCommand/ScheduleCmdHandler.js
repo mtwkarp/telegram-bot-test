@@ -114,7 +114,7 @@ class ScheduleCmdHandler extends BotCmdHandler {
     this.usersData[userId].scheduleConfirmed = false;
   }
 
-  writeUserEmptySchedule = (userId) => {
+  writeUserEmptySchedule(userId) {
     this.usersData[userId].schedule = this.getUserEmptySchedule();
   };
 
