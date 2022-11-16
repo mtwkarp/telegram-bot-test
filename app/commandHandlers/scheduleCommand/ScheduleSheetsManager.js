@@ -321,6 +321,19 @@ class ScheduleSheetsManager {
 
     return nextDayWorStatus[0][0];
   }
+
+  async isNextDayWorkable() {
+    const nextDayScheduleLetter = fullScheduleByDayLetters[DateHelper.nextDayName];
+
+    const nextDayWorStatus = (await this.spreadsheet.spreadsheets.values.get({
+      spreadsheetId: SPREADSHEETID,
+      range: `Рендер розклад!${nextDayScheduleLetter}2`
+    })).data.values;
+
+    if (nextDayWorStatus[0][0] === 'FALSE') return false;
+
+    return true;
+  }
 }
 
 module.exports = ScheduleSheetsManager;
