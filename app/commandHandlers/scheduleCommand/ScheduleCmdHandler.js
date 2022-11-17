@@ -1,5 +1,4 @@
 const BotCmdHandler = require('../BotCmdHandler.js');
-const {sheets_service_name} = require('../../constants/googleServicesNames.js');
 const {dayNames, notAvailableInstructor, confirmScheduleBtnText} = require('../../constants/spreadsheetsConstants');
 const replyMessages = require('../../constants/replyMessages.js');
 const ScheduleSheetsManager = require('./ScheduleSheetsManager.js');
