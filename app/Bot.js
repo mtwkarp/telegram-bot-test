@@ -2,7 +2,7 @@ const GoogleServicesManager = require('./google/GoogleServicesManager.js');
 const CmdHandlersManager = require('./commandHandlers/СmdHandlersManager.js');
 const { Telegraf } = require('telegraf');
 const dotenv = require('dotenv');
-// const FireStoreTest = require('./FireStoreTest.js')
+const FireStoreDB = require('./FireStoreDB.js')
 
 class Bot {
   constructor() {
@@ -39,15 +39,15 @@ class Bot {
 
   async initBot() {
     this.loadEnvironmentVariables();
-    this.createTelegramBot();
+    await new FireStoreDB().initDatabase()
 
+    this.createTelegramBot();
     await this.googleServicesManager.authorize()
     this.cmdHandlersManager.init(this.bot)
     this.subscribeForEvents();
     this.bot.launch();
 
     console.log('Successful init');
-    // new FireStoreTest()
   }
 
   subscribeForEvents() {
