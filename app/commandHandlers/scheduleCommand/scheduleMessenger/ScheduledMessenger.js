@@ -2,7 +2,7 @@ const { Telegram } = require('telegraf');
 const EveryDayScheduleMessenger = require('./messengerModules/EveryDayScheduleMessenger.js');
 const ScheduleEnrolmentMessenger = require('./messengerModules/ScheduleEnrolmentMessenger.js');
 const NextDayInstructorReminderMessenger = require('./messengerModules/NextDayInstructorReminderMessenger.js');
-const ScheduleSheetsManager = require('../ScheduleSheetsManager.js')
+const ScheduleSheetsManager = require('../ScheduleSheetsManager.js');
 
 class ScheduledMessenger {
   constructor() {
@@ -19,7 +19,7 @@ class ScheduledMessenger {
 
     messengerModules.forEach((M) => {
       const module = new M(this.tg, this.scheduleSheetsManager);
-      module.setScheduledMessages()
+      module.setScheduledMessages();
       this.messengerModules.push(module);
     });
   }

@@ -12,7 +12,7 @@ class GoogleServicesManager {
       [sheets_service_name]: this.sheetsService.bind(this),
       [drive_service_name]: this.driveService.bind(this)
     };
-    GoogleServicesManager.#instance = this
+    GoogleServicesManager.#instance = this;
   }
 
   async authorize() {
@@ -49,12 +49,12 @@ class GoogleServicesManager {
     return new SheetService(this.authenticationObj);
   }
 
-  static #instance = null
+  static #instance = null;
 
   driveService() {}
 
   static getGoogleServiceByName(serviceName) {
-    return GoogleServicesManager.#instance.getService(serviceName)
+    return GoogleServicesManager.#instance.getService(serviceName);
   }
 }
 

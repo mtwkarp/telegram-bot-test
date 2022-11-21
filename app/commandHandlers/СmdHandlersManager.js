@@ -8,8 +8,8 @@ class CmdHandlersManager {
   }
 
   init(bot) {
-    this.initCommandHandlers(bot)
-    this.initCommands(bot)
+    this.initCommandHandlers(bot);
+    this.initCommands(bot);
   }
 
   initCommandHandlers(bot) {

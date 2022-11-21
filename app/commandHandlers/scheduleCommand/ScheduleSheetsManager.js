@@ -5,15 +5,16 @@ const {
   baseInstructorsByLetters,
   fullScheduleByDayLetters
 } = require('../../constants/spreadsheetsConstants');
-const {monday, tuesday, wednesday,thursday,friday,saturday,sunday} = dayNames
+const {monday, tuesday, wednesday, thursday, friday, saturday, sunday} = dayNames;
 const DateHelper = require('../../helpers/DateHelper.js');
-const GoogleServicesManager = require('../../google/GoogleServicesManager.js')
-const {sheets_service_name} = require("../../constants/googleServicesNames");
+const GoogleServicesManager = require('../../google/GoogleServicesManager.js');
+const {sheets_service_name} = require('../../constants/googleServicesNames');
+const FireStoreDB = require('../../FireStoreDB.js')
 
 class ScheduleSheetsManager {
   constructor() {
     this.spreadsheet = GoogleServicesManager.getGoogleServiceByName(sheets_service_name);
-    this.spreadsheet.setSpreadSheetId(process.env.SCHEDULE_SPREADSHEET_ID)
+    this.spreadsheet.setSpreadSheetId(process.env.SCHEDULE_SPREADSHEET_ID);
   }
 
   async sendConfirmedScheduleToSpreadsheet(ctx, userSchedule) {
@@ -30,24 +31,25 @@ class ScheduleSheetsManager {
   async setScheduleInSpreadsheet(rowIndex, userSchedule) {
     const mondayCell = dayNamesByCellsLettersInSheet[dayNames.monday] + rowIndex;
     const notAvailableCell = dayNamesByCellsLettersInSheet[notAvailableInstructor] + rowIndex;
-    const range = `Доступність інструкторів!${mondayCell}:${notAvailableCell}`;
+
+    const range = `${FireStoreDB.getSheetsData('schedule_sheets_names', 'instructors_availability')}!${mondayCell}:${notAvailableCell}`;
     const values = [
-        userSchedule[monday],
-        userSchedule[tuesday],
-        userSchedule[wednesday],
-        userSchedule[thursday],
-        userSchedule[friday],
-        userSchedule[saturday],
-        userSchedule[sunday],
-        userSchedule[notAvailableInstructor]
-    ].map(el => el.toString().toUpperCase())
+      userSchedule[monday],
+      userSchedule[tuesday],
+      userSchedule[wednesday],
+      userSchedule[thursday],
+      userSchedule[friday],
+      userSchedule[saturday],
+      userSchedule[sunday],
+      userSchedule[notAvailableInstructor]
+    ].map((el) => [el.toString().toUpperCase()]);
 
     try {
       await this.spreadsheet.updateSheetValues({
         values,
         range
       }).then(() => {
-            console.log('Schedule was successfully sent !');
+        console.log('Schedule was successfully sent !');
       });
     } catch (err) {
       console.log('Schedule sending is unsuccessfull, abort !');
@@ -58,11 +60,11 @@ class ScheduleSheetsManager {
   async clearPreviousSchedule(rowIndex) {
     const mondayCell = dayNamesByCellsLettersInSheet[dayNames.monday] + rowIndex;
     const notAvailableCell = dayNamesByCellsLettersInSheet[notAvailableInstructor] + rowIndex;
-    const range = `Доступність інструкторів!${mondayCell}:${notAvailableCell}`;
-    const values = [['FALSE'], ['FALSE'], ['FALSE'], ['FALSE'], ['FALSE'], ['FALSE'], ['FALSE'], ['FALSE']]
+    const range = `${FireStoreDB.getSheetsData('schedule_sheets_names', 'instructors_availability')}!${mondayCell}:${notAvailableCell}`;
+    const values = [['FALSE'], ['FALSE'], ['FALSE'], ['FALSE'], ['FALSE'], ['FALSE'], ['FALSE'], ['FALSE']];
 
     try {
-      await this.spreadsheet.updateSheetValues({range, values})
+      await this.spreadsheet.updateSheetValues({range, values});
     } catch (err) {
       console.log('Schedule cleaning is unsuccessfull');
       throw err;
@@ -71,7 +73,9 @@ class ScheduleSheetsManager {
 
   async getFullNameByTelegramId(userId) {
     const namesLetter = 'A';
-    const instructorsNames = await this.spreadsheet.getSheetValues({range: `Список інструкторів!${namesLetter}:${namesLetter}`})
+    const instructorsNames = await this.spreadsheet.getSheetValues({
+      range: `${FireStoreDB.getSheetsData('schedule_sheets_names', 'instructors_list')}!${namesLetter}:${namesLetter}`
+    });
 
     if (!instructorsNames || instructorsNames.length === 0) {
       console.log('No names data found.');
@@ -104,7 +108,10 @@ class ScheduleSheetsManager {
   }
 
   async getUserRowIndexInAvailabilitySheet(userFullName) {
-    const namesList = await this.spreadsheet.getSheetValues({range: 'Доступність інструкторів!A:A'})
+    const namesList = await this.spreadsheet.getSheetValues(
+        {
+          range: `${FireStoreDB.getSheetsData('schedule_sheets_names', 'instructors_availability')}!A:A`
+        });
 
     let rowIndex = null;
 
@@ -143,7 +150,10 @@ class ScheduleSheetsManager {
   async getAsmInstructorsIds() {
     const userIdLetter = 'C';
 
-    const userIds = await this.spreadsheet.getSheetValues({range: `Список інструкторів!${userIdLetter}:${userIdLetter}`})
+    const userIds = await this.spreadsheet.getSheetValues(
+        {
+          range: `${FireStoreDB.getSheetsData('schedule_sheets_names', 'instructors_list')}!${userIdLetter}:${userIdLetter}`
+        });
 
     return userIds;
   }
@@ -152,12 +162,15 @@ class ScheduleSheetsManager {
     const noResponseInstructorsColumn = 'M';
     const rowStart = 2;
     const noResponseInstructors = await this.spreadsheet.getSheetValues({
-      range: `Доступність інструкторів!${noResponseInstructorsColumn}${rowStart}:${noResponseInstructorsColumn}1000`
-    })
+      range: `${FireStoreDB.getSheetsData('schedule_sheets_names', 'instructors_availability')}!${noResponseInstructorsColumn}${rowStart}:${noResponseInstructorsColumn}1000`
+    });
 
     const noResponseInstructorsNames = noResponseInstructors.flat();
 
-    const allInstructorsInfo = await this.spreadsheet.getSheetValues({range: 'Список інструкторів!A:D'})
+    const allInstructorsInfo = await this.spreadsheet.getSheetValues(
+        {
+          range: `${FireStoreDB.getSheetsData('schedule_sheets_names', 'instructors_list')}!A:D`
+        });
 
     const noResponseInstructorsFinalList = [];
 
@@ -182,7 +195,9 @@ class ScheduleSheetsManager {
   }
 
   async getInstructorsIdsByNames(namesArr=[]) {
-    const allInstructorsInfo = await this.spreadsheet.getSheetValues({range: 'Список інструкторів!$A:D'})
+    const allInstructorsInfo = await this.spreadsheet.getSheetValues({
+      range: `${FireStoreDB.getSheetsData('schedule_sheets_names', 'instructors_list')}!$A:D`
+    });
 
     const finalList = [];
 
@@ -214,8 +229,8 @@ class ScheduleSheetsManager {
     const baseNamesByNumbers = {[0]: 'blood', [1]: 'lungs', [2]: 'heart', [3]: 'evacuation'};
 
     const instructorsByBase = await this.spreadsheet.getSheetValues({
-      range: `Інструктори по базах (РОЗКЛАД)!${sheetLetters['blood']}3:${sheetLetters['evacuation']}100`
-    })
+      range: `${FireStoreDB.getSheetsData('schedule_sheets_names', 'instructors_by_bases_schedule')}!${sheetLetters['blood']}3:${sheetLetters['evacuation']}100`
+    });
 
     const allNames = [];
 
@@ -251,10 +266,10 @@ class ScheduleSheetsManager {
   }
 
   async getNextDayFullSchedule() {
-    const nextDayScheduleLetter = fullScheduleByDayLetters[DateHelper.nextDayName],
-        range = `Рендер розклад!${nextDayScheduleLetter}3:${nextDayScheduleLetter}100`
+    const nextDayScheduleLetter = fullScheduleByDayLetters[DateHelper.nextDayName];
+    const range = `${FireStoreDB.getSheetsData('schedule_sheets_names', 'schedule_rendered')}!${nextDayScheduleLetter}3:${nextDayScheduleLetter}100`;
 
-    const nextDaySchedule = await this.spreadsheet.getSheetValues({range})
+    const nextDaySchedule = await this.spreadsheet.getSheetValues({range});
 
     return nextDaySchedule;
   }
@@ -262,7 +277,9 @@ class ScheduleSheetsManager {
   async isNextDayWorkable() {
     const nextDayScheduleLetter = fullScheduleByDayLetters[DateHelper.nextDayName];
 
-    const nextDayWorkStatus = await this.spreadsheet.getSheetValues({range: `Рендер розклад!${nextDayScheduleLetter}2`})
+    const nextDayWorkStatus = await this.spreadsheet.getSheetValues({
+      range: `${FireStoreDB.getSheetsData('schedule_sheets_names', 'schedule_rendered')}!${nextDayScheduleLetter}2`
+    });
 
     if (nextDayWorkStatus[0][0] === 'FALSE') return false;
 

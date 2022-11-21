@@ -1,14 +1,14 @@
 
-const path = require("path");
-const {CleanWebpackPlugin} = require("clean-webpack-plugin");
+const path = require('path');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 
 module.exports = {
-  entry: "./index.js",
-  mode: "production",
-  target: "node",
+  entry: './index.js',
+  mode: 'production',
+  target: 'node',
   output: {
-    path: path.join(__dirname, "build"),
-    filename: "build.js",
+    path: path.join(__dirname, 'build'),
+    filename: 'build.js'
   },
 
   module: {
@@ -17,12 +17,12 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader",
-        },
-      },
-    ],
+          loader: 'babel-loader'
+        }
+      }
+    ]
   },
   plugins: [
-    new CleanWebpackPlugin(),
-  ],
+    new CleanWebpackPlugin()
+  ]
 };

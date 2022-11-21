@@ -1,5 +1,5 @@
 const BotCmdHandler = require('../BotCmdHandler');
-const FirebaseDB = require("../../FireStoreDB");
+const FirebaseDB = require('../../FireStoreDB');
 
 class CommandsInfoHandler extends BotCmdHandler {
   constructor(bot) {

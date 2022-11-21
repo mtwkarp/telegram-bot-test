@@ -6,14 +6,14 @@ class SheetsService extends GoogleService {
     super(authenticationObj);
 
     this.spreadsheet = null;
-    this.spreadsheetId = ''
+    this.spreadsheetId = '';
     this.values = null;
 
     this.initService(authenticationObj);
   }
 
   setSpreadSheetId(id) {
-    this.spreadsheetId = id
+    this.spreadsheetId = id;
   }
 
   initService(authenticationObj) {
@@ -22,7 +22,7 @@ class SheetsService extends GoogleService {
       auth: authenticationObj
     });
 
-    this.values = this.spreadsheet.spreadsheets.values
+    this.values = this.spreadsheet.spreadsheets.values;
   }
 
   async getSheetValues({range}) {
@@ -31,12 +31,12 @@ class SheetsService extends GoogleService {
       range
     })).data.values;
 
-    return values
+    return values;
   }
 
-  async updateSheetValues(options = {range: '', valueInputOption: 'USER_ENTERED', majorDimension: 'COLUMNS', values: []}) {
-    const inputOptions = options.valueInputOption || 'USER_ENTERED',
-        mDimension = options.majorDimension || 'COLUMNS'
+  updateSheetValues(options = {range: '', valueInputOption: 'USER_ENTERED', majorDimension: 'COLUMNS', values: []}) {
+    const inputOptions = options.valueInputOption || 'USER_ENTERED';
+    const mDimension = options.majorDimension || 'COLUMNS';
 
     const updatePromise = this.values.update({
       spreadsheetId: this.spreadsheetId,
@@ -47,9 +47,9 @@ class SheetsService extends GoogleService {
         majorDimension: mDimension,
         values: options.values
       }
-    })
+    });
 
-    return updatePromise
+    return updatePromise;
   }
 }
 

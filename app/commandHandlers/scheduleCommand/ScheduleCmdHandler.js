@@ -5,7 +5,7 @@ const ScheduleViewManager = require('./ScheduleViewManager.js');
 const cron = require('node-cron');
 const UserData = require('./UserData.js');
 const ScheduledMessenger = require('./scheduleMessenger/ScheduledMessenger.js');
-const FirebaseDB = require('../../FireStoreDB.js')
+const FirebaseDB = require('../../FireStoreDB.js');
 
 class ScheduleCmdHandler extends BotCmdHandler {
   constructor(bot) {
@@ -20,7 +20,7 @@ class ScheduleCmdHandler extends BotCmdHandler {
 
     this.usersData = {};
     this.scheduleOpen = true;
-    this.initScheduleMessenger()
+    this.initScheduleMessenger();
     this.setScheduleAvailabilityTime();
   }
 
@@ -29,9 +29,9 @@ class ScheduleCmdHandler extends BotCmdHandler {
   }
 
   setScheduleAvailabilityTime() {
-    const openScheduleTime = FirebaseDB.getTimeValueData('schedule', 'open_schedule_time'),
-        closeScheduleTime = FirebaseDB.getTimeValueData('schedule', 'open_schedule_time'),
-        timeConfig = FirebaseDB.getTimeValueData('time_configs', 'kyiv_time')
+    const openScheduleTime = FirebaseDB.getTimeValueData('schedule', 'open_schedule_time');
+    const closeScheduleTime = FirebaseDB.getTimeValueData('schedule', 'open_schedule_time');
+    const timeConfig = FirebaseDB.getTimeValueData('time_configs', 'kyiv_time');
 
     cron.schedule(openScheduleTime, this.openSchedule.bind(this), timeConfig);
     cron.schedule(closeScheduleTime, this.closeSchedule.bind(this), timeConfig);
@@ -122,7 +122,7 @@ class ScheduleCmdHandler extends BotCmdHandler {
 
   writeUserEmptySchedule(userId) {
     this.usersData[userId].schedule = this.getUserEmptySchedule();
-  };
+  }
 
   getUserSchedule = (userId) => {
     return this.usersData[userId].schedule;
@@ -169,7 +169,7 @@ class ScheduleCmdHandler extends BotCmdHandler {
     const userId = ctx.update.callback_query.from.id;
     const messageId = ctx.update.callback_query.message.message_id;
 
-    ctx.telegram.sendMessage(chatId, FirebaseDB.getReplyMessage('schedule', 'schedule_confirmed_reply'));
+    ctx.telegram.sendMessage(chatId, FirebaseDB.getReplyMessage('schedule', 'confirmed_schedule_reply'));
 
     const userSchedule = this.getUserSchedule(userId);
     const updatedUserMarkup = JSON.parse(this.scheduleViewManager.getUserReplyMarkup(userSchedule, true).reply_markup);
