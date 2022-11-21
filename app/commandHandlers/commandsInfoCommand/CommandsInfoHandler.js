@@ -1,5 +1,5 @@
 const BotCmdHandler = require('../BotCmdHandler');
-const replyMessages = require('../../constants/replyMessages');
+const FirebaseDB = require("../../FireStoreDB");
 
 class CommandsInfoHandler extends BotCmdHandler {
   constructor(bot) {
@@ -17,7 +17,7 @@ class CommandsInfoHandler extends BotCmdHandler {
 
   sendCommandsDescription(ctx) {
     const chatId = ctx.update.message.chat.id;
-    ctx.telegram.sendMessage(chatId, replyMessages.commands.commandsDescription);
+    ctx.telegram.sendMessage(chatId, FirebaseDB.getReplyMessage('commands', 'commands_description'));
   }
 }
 

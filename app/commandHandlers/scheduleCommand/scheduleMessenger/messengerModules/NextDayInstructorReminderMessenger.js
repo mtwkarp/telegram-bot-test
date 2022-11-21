@@ -1,16 +1,17 @@
 const MessengerModule = require("./MessengerModule");
 const cron = require("node-cron");
-const {everyDayTeachingReminder, timeConfig} = require("../../../../constants/timeConstants");
 const DateHelper = require("../../../../helpers/DateHelper");
-const replyMessages = require("../../../../constants/replyMessages");
+const FirebaseDB = require("../../../../FireStoreDB");
 
 class NextDayInstructorReminderMessenger extends MessengerModule {
     constructor(tg, scheduleSheetsManager) {
         super(tg, scheduleSheetsManager);
-        // this.sendTomorrowInstructorsReminders()
     }
 
     setScheduledMessages() {
+        const everyDayTeachingReminder = FirebaseDB.getTimeValueData('schedule', 'every_day_teaching_reminder'),
+            timeConfig = FirebaseDB.getTimeValueData('time_configs', 'kyiv_time')
+
         cron.schedule(everyDayTeachingReminder, this.sendTomorrowInstructorsReminders.bind(this), timeConfig);
     }
 //refactor
@@ -37,8 +38,13 @@ class NextDayInstructorReminderMessenger extends MessengerModule {
 
                 if (firstName === undefined) firstName = name.split(' ')[0];
 
+                let message = FirebaseDB.getReplyMessage('schedule', 'every_day_instructor_reminder')
+
+                message = message.replace('$1', firstName)
+                message = message.replace('$2', basesTranslation[baseName])
+
                 try {
-                    await this.tg.sendMessage(chatId, replyMessages.schedule.everyDayInstructorReminder(basesTranslation[baseName], firstName));
+                    await this.tg.sendMessage(chatId, message);
                 } catch (err) {
                     console.log(err);
                 }

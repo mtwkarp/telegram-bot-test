@@ -1,6 +1,6 @@
 const MessengerModule = require('./MessengerModule.js');
-const { timeConfig, everyDayFullScheduleReminder} = require('../../../../constants/timeConstants');
 const cron = require('node-cron');
+const FirebaseDB = require("../../../../FireStoreDB");
 
 class EveryDayScheduleMessenger extends MessengerModule {
   constructor(tg, scheduleSheetsManager) {
@@ -8,6 +8,9 @@ class EveryDayScheduleMessenger extends MessengerModule {
   }
 
   setScheduledMessages() {
+    const everyDayFullScheduleReminder = FirebaseDB.getTimeValueData('schedule', 'every_day_full_schedule_reminder'),
+        timeConfig = FirebaseDB.getTimeValueData('time_configs', 'kyiv_time')
+
     cron.schedule(everyDayFullScheduleReminder, this.sendFullNextDaySchedule.bind(this), timeConfig);
   }
 

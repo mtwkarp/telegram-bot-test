@@ -1,12 +1,11 @@
 const BotCmdHandler = require('../BotCmdHandler.js');
 const {dayNames, notAvailableInstructor, confirmScheduleBtnText} = require('../../constants/spreadsheetsConstants');
-const replyMessages = require('../../constants/replyMessages.js');
 const ScheduleSheetsManager = require('./ScheduleSheetsManager.js');
 const ScheduleViewManager = require('./ScheduleViewManager.js');
 const cron = require('node-cron');
-const {openScheduleTime, closeScheduleTime, timeConfig} = require('../../constants/timeConstants.js');
 const UserData = require('./UserData.js');
 const ScheduledMessenger = require('./scheduleMessenger/ScheduledMessenger.js');
+const FirebaseDB = require('../../FireStoreDB.js')
 
 class ScheduleCmdHandler extends BotCmdHandler {
   constructor(bot) {
@@ -14,7 +13,6 @@ class ScheduleCmdHandler extends BotCmdHandler {
 
     this.scheduleSheetsManager = new ScheduleSheetsManager();
     this.scheduleViewManager = new ScheduleViewManager();
-    this.scheduledMessenger = new ScheduledMessenger(this.scheduleSheetsManager);
 
     this.commands = {
       schedule: { command: 'schedule', description: 'Надіслати розклад' }
@@ -22,10 +20,19 @@ class ScheduleCmdHandler extends BotCmdHandler {
 
     this.usersData = {};
     this.scheduleOpen = true;
+    this.initScheduleMessenger()
     this.setScheduleAvailabilityTime();
   }
 
+  initScheduleMessenger() {
+    const scheduledMessenger = new ScheduledMessenger(this.scheduleSheetsManager);
+  }
+
   setScheduleAvailabilityTime() {
+    const openScheduleTime = FirebaseDB.getTimeValueData('schedule', 'open_schedule_time'),
+        closeScheduleTime = FirebaseDB.getTimeValueData('schedule', 'open_schedule_time'),
+        timeConfig = FirebaseDB.getTimeValueData('time_configs', 'kyiv_time')
+
     cron.schedule(openScheduleTime, this.openSchedule.bind(this), timeConfig);
     cron.schedule(closeScheduleTime, this.closeSchedule.bind(this), timeConfig);
   }
@@ -57,18 +64,18 @@ class ScheduleCmdHandler extends BotCmdHandler {
       chatId = ctx.update.message.chat.id;
     }
 
-    ctx.telegram.sendMessage(chatId, replyMessages.schedule.scheduleClosed);
+    ctx.telegram.sendMessage(chatId, FirebaseDB.getReplyMessage('schedule', 'schedule_closed'));
   }
 
   notifyUserToFillSchedule(ctx) {
     const chatId = ctx.update.callback_query.message.chat.id;
-    ctx.telegram.sendMessage(chatId, replyMessages.schedule.scheduleMustBeFilledBeforeSending);
+    ctx.telegram.sendMessage(chatId, FirebaseDB.getReplyMessage('schedule', 'schedule_must_be_filled_before_sending'));
   }
 
   notifyNotASMUserInstructor(ctx) {
     const chatId = ctx.update.message.chat.id;
 
-    ctx.telegram.sendMessage(chatId, replyMessages.schedule.userNotASMInstructor);
+    ctx.telegram.sendMessage(chatId, FirebaseDB.getReplyMessage('schedule', 'user_not_asm_instructor'));
   }
 
   async requestScheduleMarkup(ctx) {
@@ -105,7 +112,7 @@ class ScheduleCmdHandler extends BotCmdHandler {
 
     const message = await ctx.telegram.sendMessage(
         ctx.update.message.chat.id,
-        replyMessages.schedule.scheduleMarkupDescription,
+        FirebaseDB.getReplyMessage('schedule', 'schedule_markup_description'),
         userMarkup
     );
 
@@ -162,7 +169,7 @@ class ScheduleCmdHandler extends BotCmdHandler {
     const userId = ctx.update.callback_query.from.id;
     const messageId = ctx.update.callback_query.message.message_id;
 
-    ctx.telegram.sendMessage(chatId, replyMessages.schedule.confirmedScheduleReply);
+    ctx.telegram.sendMessage(chatId, FirebaseDB.getReplyMessage('schedule', 'schedule_confirmed_reply'));
 
     const userSchedule = this.getUserSchedule(userId);
     const updatedUserMarkup = JSON.parse(this.scheduleViewManager.getUserReplyMarkup(userSchedule, true).reply_markup);
@@ -181,9 +188,9 @@ class ScheduleCmdHandler extends BotCmdHandler {
     const userId = ctx.update.callback_query.from.id;
 
     if (messageId !== this.activeUserMessages[userId]) {
-      ctx.telegram.sendMessage(chatId, replyMessages.schedule.chosenScheduleMarkupNotActive);
+      ctx.telegram.sendMessage(chatId, FirebaseDB.getReplyMessage('schedule', 'chosen_schedule_markup_not_active'));
     } else {
-      ctx.telegram.sendMessage(chatId, replyMessages.schedule.scheduleAlreadyConfirmed);
+      ctx.telegram.sendMessage(chatId, FirebaseDB.getReplyMessage('schedule', 'schedule_confirmed_reply'));
     }
   }
 

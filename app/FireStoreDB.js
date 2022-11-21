@@ -1,5 +1,5 @@
-const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
-const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');
+const { initializeApp, cert } = require('firebase-admin/app');
+const { getFirestore} = require('firebase-admin/firestore');
 const serviceAccount = require('./service-account.json');
 
 class FireStoreDB {
@@ -27,21 +27,28 @@ class FireStoreDB {
                 const documentSnapshot = await document.get()
 
                 collectionObj[documentSnapshot.id] = await documentSnapshot.data()
-
-                document.onSnapshot(async (docSnapshot) => {
-                    collectionObj[document.id] = await docSnapshot.data()
-                    console.log('CHANGE', document.id)
-                },err => {
-                    console.log(`Encountered error: ${err}`);
-                })
-
+                this.setActionOnDocumentSnapshotOnAppLoad(collection, document)
             }
             FireStoreDB.#data[collection.id] = collectionObj
         }
-        // console.log(FireStoreDB.#data)
-
     }
 
+    setActionOnDocumentSnapshotOnAppLoad(collection, document) {
+        let updateDataOnSnapshot = false//value to skip first snapshot update, because data loaded earlier in loadRemoteData function
+
+        document.onSnapshot(async (docSnapshot) => {
+            if(updateDataOnSnapshot === true) {
+                // console.log('CHANGE', document.id)
+                const data = await docSnapshot.data()
+                // console.log(data, document.id)
+                FireStoreDB.#data[collection.id][document.id] = data
+            }
+
+            updateDataOnSnapshot = true
+        },err => {
+            console.log(`Encountered error: ${err}`);
+        })
+    }
 
     async initApp() {
         await initializeApp({
@@ -49,21 +56,22 @@ class FireStoreDB {
         })
     }
 
-    static async getData(collection, doc, field) {
-        FireStoreDB.#data[collection].doc(doc).get({source: 'cache'})
-        return FireStoreDB.#data[collection].doc(doc).get({source: 'cache'}).get(field)
+    static getData(collection, doc, field) {
+        // console.log(`Firebase getting:\ncollection: '${collection}',\ndocument: '${doc}'\nfield: '${field}'`)
+        // console.log(FireStoreDB.#data[collection][doc][field])
+        return FireStoreDB.#data[collection][doc][field]
     }
 
     static getGoogleSheetsData(doc, field) {
-        FireStoreDB.getData('google_sheets', doc, field)
+        return FireStoreDB.getData('google_sheets', doc, field)
     }
 
     static getReplyMessage(doc, field) {
-        FireStoreDB.getData('reply_messages', doc, field)
+        return FireStoreDB.getData('reply_messages', doc, field)
     }
 
     static getTimeValueData(doc, field) {
-        FireStoreDB.getData('time_values', doc, field)
+        return FireStoreDB.getData('time_values', doc, field)
     }
 
     static #data = {
