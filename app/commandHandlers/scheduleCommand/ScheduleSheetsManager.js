@@ -66,7 +66,7 @@ class ScheduleSheetsManager {
     try {
       await this.spreadsheet.updateSheetValues({range, values});
     } catch (err) {
-      console.log('Schedule cleaning is unsuccessfull');
+      console.log('Schedule cleaning is unsuccessfull !');
       throw err;
     }
   }
