@@ -9,13 +9,12 @@
   "scripts": {
     "dev": "mode=development nodemon index.js",
     "production": "mode=production node ./build/build.js",
-    "build": "webpack"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MatthewKarpenko/telegram-bot-test.git"
   },
-  "author": "",
+  "author": "Matvii Karpenko",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/MatthewKarpenko/telegram-bot-test/issues"
