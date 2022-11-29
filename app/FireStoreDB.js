@@ -50,11 +50,12 @@ class FireStoreDB {
   }
 
   async initApp() {
+    const privateKey = process.env.SERVICE_ACCOUNT_PRIVATE_KEY.replaceAll('\\n','\n');
     console.log({
       "type": process.env.SERVICE_ACCOUNT_TYPE,
       "project_id": process.env.SERVICE_ACCOUNT_PROJECT_ID,
       "private_key_id": process.env.SERVICE_ACCOUNT_PRIVATE_KEY_ID,
-      "private_key": process.env.SERVICE_ACCOUNT_PRIVATE_KEY,
+      "private_key": privateKey,
       "client_email": process.env.SERVICE_ACCOUNT_CLIENT_EMAIL,
       "client_id": process.env.SERVICE_ACCOUNT_CLIENT_ID,
       "auth_uri": process.env.SERVICE_ACCOUNT_AUTH_URI,
@@ -67,7 +68,7 @@ class FireStoreDB {
         "type": process.env.SERVICE_ACCOUNT_TYPE,
         "project_id": process.env.SERVICE_ACCOUNT_PROJECT_ID,
         "private_key_id": process.env.SERVICE_ACCOUNT_PRIVATE_KEY_ID,
-        "private_key": process.env.SERVICE_ACCOUNT_PRIVATE_KEY,
+        "private_key": privateKey,
         "client_email": process.env.SERVICE_ACCOUNT_CLIENT_EMAIL,
         "client_id": process.env.SERVICE_ACCOUNT_CLIENT_ID,
         "auth_uri": process.env.SERVICE_ACCOUNT_AUTH_URI,
