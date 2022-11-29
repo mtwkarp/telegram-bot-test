@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "16.18.1"
+  },
   "scripts": {
     "dev": "mode=development nodemon index.js",
     "production": "mode=production node ./build/build.js",
