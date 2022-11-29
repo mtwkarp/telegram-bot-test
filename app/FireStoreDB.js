@@ -50,6 +50,7 @@ class FireStoreDB {
   }
 
   async initApp() {
+    console.log(process.env.SERVICE_ACCOUNT_PRIVATE_KEY)
     await initializeApp({
       credential: cert({
         "type": process.env.SERVICE_ACCOUNT_TYPE,
