@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "mode=development nodemon index.js",
-    "production": "mode=production node ./build/build.js"
+    "production": "mode=production node index.js"
   },
   "repository": {
     "type": "git",
