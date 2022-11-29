@@ -7,12 +7,16 @@ class CmdHandlersManager {
     this.cmdHandlers = [];
   }
 
-  initCommandHandlers(bot, googleServicesManager) {
+  init(bot) {
+    this.initCommandHandlers(bot);
+    this.initCommands(bot);
+  }
+
+  initCommandHandlers(bot) {
     const handlers = [CommandsInfoHandler, ScheduleCmdHandler, StartCmdHandler];
 
     handlers.forEach((h) => {
-      const services = googleServicesManager.getServicesObjByNames(h._SERVICES);
-      const Handler = new h(bot, services);
+      const Handler = new h(bot);
 
       Handler.initCommand();
 
