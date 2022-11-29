@@ -53,6 +53,7 @@ class FireStoreDB {
     const privateKey = process.env.SERVICE_ACCOUNT_PRIVATE_KEY.replaceAll('\\n','\n');
 
     console.log('heroku test action')
+    console.log('test pull request update')
     await initializeApp({
       credential: cert({
         "type": process.env.SERVICE_ACCOUNT_TYPE,
