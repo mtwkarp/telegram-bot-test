@@ -39,41 +39,27 @@ class ScheduleCmdHandler extends BotCmdHandler {
   }
 
   isScheduleOpen() {
-    let curr = new Date; // get current date
-    // console.log(curr.getDate(), curr.getDay())
+    let scheduleOpenStatus = false
 
-    let first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
-    // let thursday = first + 4; //  thursday is the first day + 4
-    // let sunday = first + 6; // sunday is the first day + 6
-
-    // let firstday = new Date(curr.setDate(thursday))
-    // firstday.setHours(18,0,0);
-    // // firstday.toUTCString();
-    //
-    // let lastday = new Date(curr.setDate(sunday))
-    // lastday.setHours(17, 0, 0);
-    // console.log(lastday.toUTCString())
-
-    // console.log(firstday.toLocaleString("en-GB", {timeZone: "Europe/Kiev"}))
-    // console.log(lastday.toLocaleString("en-GB", {timeZone: "Europe/Kiev"}))
-    //open schedule time - Thursday 18:00
-    //close schedule time - Sunday 17:00
-
-    var dt = DateTime.now();
+    let dt = DateTime.now();
     dt.setZone('Europe/Kiev')
-    // dt.plus({ hours: 3, minutes: 2 });
+
     let dayNow = DateTime.now()
     dayNow.setZone('Europe/Kiev')
-    let firstWeekDay = dt.minus({ days: dt.weekday });
+
+    const firstWeekDay = dt.minus({ days: dt.weekday });
+
     let thursday = firstWeekDay.plus({days: 4})
+    thursday = thursday.set({hour: 18, minute: 0, second: 0})
+
     let sunday = firstWeekDay.plus({days: 6})
-    // dt.startOf('day');
-    // dt.endOf('hour');
-    // console.log(dt.day, dt.weekday)
+    sunday = sunday.set({hour: 17, minute: 0, second: 0})
 
-console.log(thursday.toLocaleString(), sunday.toLocaleString(), firstWeekDay.toLocaleString())
+    if(dayNow >= thursday && dayNow <= sunday) {//check if current time is between thursday and sunday opened schedule time
+      scheduleOpenStatus = true
+    }
 
-    return false
+    return scheduleOpenStatus
   }
 
   openSchedule() {
