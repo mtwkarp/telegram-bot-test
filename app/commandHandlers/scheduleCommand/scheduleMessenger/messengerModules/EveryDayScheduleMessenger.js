@@ -1,6 +1,6 @@
 const MessengerModule = require('./MessengerModule.js');
 const cron = require('node-cron');
-const FirebaseDB = require('../../../../FireStoreDB');
+const FirebaseDB = require('../../../../google/FireStoreDB');
 
 class EveryDayScheduleMessenger extends MessengerModule {
   constructor(tg, scheduleSheetsManager) {
