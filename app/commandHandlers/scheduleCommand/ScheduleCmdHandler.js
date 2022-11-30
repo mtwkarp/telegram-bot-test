@@ -5,7 +5,7 @@ const ScheduleViewManager = require('./ScheduleViewManager.js');
 const cron = require('node-cron');
 const UserData = require('./UserData.js');
 const ScheduledMessenger = require('./scheduleMessenger/ScheduledMessenger.js');
-const FirebaseDB = require('../../FireStoreDB.js');
+const FirebaseDB = require('../../google/FireStoreDB.js');
 
 class ScheduleCmdHandler extends BotCmdHandler {
   constructor(bot) {

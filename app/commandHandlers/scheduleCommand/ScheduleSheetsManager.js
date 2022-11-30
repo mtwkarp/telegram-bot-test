@@ -9,7 +9,7 @@ const {monday, tuesday, wednesday, thursday, friday, saturday, sunday} = dayName
 const DateHelper = require('../../helpers/DateHelper.js');
 const GoogleServicesManager = require('../../google/GoogleServicesManager.js');
 const {sheets_service_name} = require('../../constants/googleServicesNames');
-const FireStoreDB = require('../../FireStoreDB.js')
+const FireStoreDB = require('../../google/FireStoreDB.js')
 
 class ScheduleSheetsManager {
   constructor() {

@@ -2,7 +2,7 @@ const GoogleServicesManager = require('./google/GoogleServicesManager.js');
 const CmdHandlersManager = require('./commandHandlers/СmdHandlersManager.js');
 const { Telegraf } = require('telegraf');
 const dotenv = require('dotenv');
-const FireStoreDB = require('./FireStoreDB.js');
+const FireStoreDB = require('./google/FireStoreDB.js');
 
 class Bot {
   constructor() {
