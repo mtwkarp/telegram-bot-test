@@ -1,8 +1,5 @@
 const { google } = require('googleapis');
-const {
-  sheets_service_name,
-  drive_service_name
-} = require('../constants/googleServicesNames.js');
+const {sheets_service_name, drive_service_name} = require('../constants/googleServicesNames.js');
 const SheetService = require('./services/SheetsService.js');
 
 class GoogleServicesManager {
@@ -16,26 +13,25 @@ class GoogleServicesManager {
   }
 
   async authorize() {
+    const privateKey = process.env.SERVICE_ACCOUNT_PRIVATE_KEY.replaceAll('\\n','\n');
+
     const auth = await new google.auth.GoogleAuth({
-      keyFile: process.env.SERVICE_ACCOUNT_CREDENTIALS_PATH,
+      credentials: {
+        "type": process.env.SERVICE_ACCOUNT_TYPE,
+        "project_id": process.env.SERVICE_ACCOUNT_PROJECT_ID,
+        "private_key_id": process.env.SERVICE_ACCOUNT_PRIVATE_KEY_ID,
+        "private_key": privateKey,
+        "client_email": process.env.SERVICE_ACCOUNT_CLIENT_EMAIL,
+        "client_id": process.env.SERVICE_ACCOUNT_CLIENT_ID,
+        "auth_uri": process.env.SERVICE_ACCOUNT_AUTH_URI,
+        "token_uri": process.env.SERVICE_ACCOUNT_TOKEN_URI,
+        "auth_provider_x509_cert_url": process.env.SERVICE_ACCOUNT_AUTH_PROVIDER_CERT_URL,
+        "client_x509_cert_url": process.env.SERVICE_ACCOUNT_CLIENT_CERT_URL
+      },
       scopes: ['https://www.googleapis.com/auth/spreadsheets']
     });
 
     this.authenticationObj = auth;
-  }
-
-  getServicesObjByNames(names = []) {
-    const servicesObj = {};
-
-    names.forEach((name) => {
-      const service = this.getService(name);
-
-      if (service !== undefined) {
-        servicesObj[name] = service;
-      }
-    });
-
-    return servicesObj;
   }
 
   // serviceName refers to GoogleServicesManager._SERVICES_NAMES
