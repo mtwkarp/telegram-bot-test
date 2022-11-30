@@ -50,8 +50,6 @@ class FireStoreDB {
   }
 
   async initApp() {
-    const privateKey = process.env.SERVICE_ACCOUNT_PRIVATE_KEY.replaceAll('\\n','\n');
-
     await initializeApp({
       credential: cert(GoogleCredentialsManager.serviceAccountCredentials)
     });
