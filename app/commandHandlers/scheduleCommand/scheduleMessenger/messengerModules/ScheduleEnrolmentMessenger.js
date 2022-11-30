@@ -1,10 +1,13 @@
 const MessengerModule = require('./MessengerModule');
 const cron = require('node-cron');
 const FirebaseDB = require('../../../../google/FireStoreDB.js');
+const ScheduleSheetsManager = require("../../ScheduleSheetsManager");
 
 class ScheduleEnrolmentMessenger extends MessengerModule {
   constructor(tg, scheduleSheetsManager) {
     super(tg, scheduleSheetsManager);
+
+    this.scheduleSheetsManager = new ScheduleSheetsManager();
   }
 
   setScheduledMessages() {
@@ -26,7 +29,7 @@ class ScheduleEnrolmentMessenger extends MessengerModule {
     const channelScheduleReminder2 = FirebaseDB.getTimeValueData('schedule', 'channel_schedule_reminder_2');
     const timeConfig = FirebaseDB.getTimeValueData('time_configs', 'kyiv_time');
 
-    cron.schedule(channelScheduleReminder1, this.sendScheduleStartReminderToChannel.bind(this), timeConfig);
+    cron.schedule(channelScheduleReminder1, this.sendFirstScheduleStartReminderToChannel.bind(this), timeConfig);
     cron.schedule(channelScheduleReminder2, this.sendScheduleStartReminderToChannel.bind(this), timeConfig);
   }
 
@@ -52,6 +55,11 @@ class ScheduleEnrolmentMessenger extends MessengerModule {
 
   sendScheduleStartReminderToChannel() {
     this.tg.sendMessage(process.env.TELEGRAM_CHANNEL_ID, FirebaseDB.getReplyMessage('schedule', 'channel_schedule_reminder'));
+  }
+
+  async sendFirstScheduleStartReminderToChannel() {
+    await this.scheduleSheetsManager.clearAllPreviousScheduleReplies()
+    this.sendScheduleStartReminderToChannel()
   }
 }
 

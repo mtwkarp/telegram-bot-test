@@ -1,7 +1,7 @@
 const { google } = require('googleapis');
 const {sheets_service_name, drive_service_name} = require('../constants/googleServicesNames.js');
 const SheetService = require('./services/SheetsService.js');
-const GoogleCredentialsManager = require('./GoogleCredentialsManager.js')
+const GoogleCredentialsManager = require('./GoogleCredentialsManager.js');
 
 class GoogleServicesManager {
   constructor() {

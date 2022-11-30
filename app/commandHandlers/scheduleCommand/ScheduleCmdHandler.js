@@ -6,6 +6,7 @@ const cron = require('node-cron');
 const UserData = require('./UserData.js');
 const ScheduledMessenger = require('./scheduleMessenger/ScheduledMessenger.js');
 const FirebaseDB = require('../../google/FireStoreDB.js');
+const {DateTime} = require('luxon')
 
 class ScheduleCmdHandler extends BotCmdHandler {
   constructor(bot) {
@@ -19,13 +20,13 @@ class ScheduleCmdHandler extends BotCmdHandler {
     };
 
     this.usersData = {};
-    this.scheduleOpen = true;
+    this.scheduleOpen = this.isScheduleOpen();
     this.initScheduleMessenger();
     this.setScheduleAvailabilityTime();
   }
 
   initScheduleMessenger() {
-    const scheduledMessenger = new ScheduledMessenger(this.scheduleSheetsManager);
+    const scheduledMessenger = new ScheduledMessenger();
   }
 
   setScheduleAvailabilityTime() {
@@ -35,6 +36,44 @@ class ScheduleCmdHandler extends BotCmdHandler {
 
     cron.schedule(openScheduleTime, this.openSchedule.bind(this), timeConfig);
     cron.schedule(closeScheduleTime, this.closeSchedule.bind(this), timeConfig);
+  }
+
+  isScheduleOpen() {
+    let curr = new Date; // get current date
+    // console.log(curr.getDate(), curr.getDay())
+
+    let first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
+    // let thursday = first + 4; //  thursday is the first day + 4
+    // let sunday = first + 6; // sunday is the first day + 6
+
+    // let firstday = new Date(curr.setDate(thursday))
+    // firstday.setHours(18,0,0);
+    // // firstday.toUTCString();
+    //
+    // let lastday = new Date(curr.setDate(sunday))
+    // lastday.setHours(17, 0, 0);
+    // console.log(lastday.toUTCString())
+
+    // console.log(firstday.toLocaleString("en-GB", {timeZone: "Europe/Kiev"}))
+    // console.log(lastday.toLocaleString("en-GB", {timeZone: "Europe/Kiev"}))
+    //open schedule time - Thursday 18:00
+    //close schedule time - Sunday 17:00
+
+    var dt = DateTime.now();
+    dt.setZone('Europe/Kiev')
+    // dt.plus({ hours: 3, minutes: 2 });
+    let dayNow = DateTime.now()
+    dayNow.setZone('Europe/Kiev')
+    let firstWeekDay = dt.minus({ days: dt.weekday });
+    let thursday = firstWeekDay.plus({days: 4})
+    let sunday = firstWeekDay.plus({days: 6})
+    // dt.startOf('day');
+    // dt.endOf('hour');
+    // console.log(dt.day, dt.weekday)
+
+console.log(thursday.toLocaleString(), sunday.toLocaleString(), firstWeekDay.toLocaleString())
+
+    return false
   }
 
   openSchedule() {
