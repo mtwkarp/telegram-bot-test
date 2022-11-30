@@ -1,20 +1,33 @@
-const {
-  dayNamesByCellsLettersInSheet,
-  dayNames,
-  notAvailableInstructor,
-  baseInstructorsByLetters,
-  fullScheduleByDayLetters
-} = require('../../constants/spreadsheetsConstants');
-const {monday, tuesday, wednesday, thursday, friday, saturday, sunday} = dayNames;
+const {dayNamesByCellsLettersInSheet, dayNames, notAvailableInstructor, baseInstructorsByLetters, fullScheduleByDayLetters} = require('../../constants/spreadsheetsConstants'); const {monday, tuesday, wednesday, thursday, friday, saturday, sunday} = dayNames;
 const DateHelper = require('../../helpers/DateHelper.js');
 const GoogleServicesManager = require('../../google/GoogleServicesManager.js');
 const {sheets_service_name} = require('../../constants/googleServicesNames');
-const FireStoreDB = require('../../google/FireStoreDB.js')
+const FireStoreDB = require('../../google/FireStoreDB.js');
 
 class ScheduleSheetsManager {
   constructor() {
     this.spreadsheet = GoogleServicesManager.getGoogleServiceByName(sheets_service_name);
     this.spreadsheet.setSpreadSheetId(process.env.SCHEDULE_SPREADSHEET_ID);
+  }
+
+  async clearAllPreviousScheduleReplies() {
+    const mondayCell = dayNamesByCellsLettersInSheet[dayNames.monday];
+    const notAvailableCell = dayNamesByCellsLettersInSheet[notAvailableInstructor];
+    const sheetName = FireStoreDB.getSheetsData('schedule_sheets_names', 'instructors_availability')
+    const getRange = `${sheetName}!${mondayCell}2:${notAvailableCell}`
+    const data = await this.spreadsheet.getSheetValues({range: getRange})
+
+    for (let i = 0; i < data.length; i++) {
+      const row = data[i]
+
+      for (let j = 0; j < row.length; j++) {
+        row[j] = 'FALSE'
+      }
+    }
+
+    const writeRange = `${sheetName}!${mondayCell}2:${notAvailableCell}${data.length + 1}`
+
+    await this.spreadsheet.updateSheetValues({range: writeRange, values: data, majorDimension: 'ROWS'})
   }
 
   async sendConfirmedScheduleToSpreadsheet(ctx, userSchedule) {
