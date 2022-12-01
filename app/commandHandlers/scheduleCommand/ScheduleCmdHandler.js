@@ -21,6 +21,7 @@ class ScheduleCmdHandler extends BotCmdHandler {
 
     this.usersData = {};
     this.scheduleOpen = this.isScheduleOpen();
+
     this.initScheduleMessenger();
     this.setScheduleAvailabilityTime();
   }
