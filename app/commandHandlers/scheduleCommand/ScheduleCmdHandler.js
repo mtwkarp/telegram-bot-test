@@ -31,7 +31,7 @@ class ScheduleCmdHandler extends BotCmdHandler {
 
   setScheduleAvailabilityTime() {
     const openScheduleTime = FirebaseDB.getTimeValueData('schedule', 'open_schedule_time');
-    const closeScheduleTime = FirebaseDB.getTimeValueData('schedule', 'open_schedule_time');
+    const closeScheduleTime = FirebaseDB.getTimeValueData('schedule', 'close_schedule_time');
     const timeConfig = FirebaseDB.getTimeValueData('time_configs', 'kyiv_time');
 
     cron.schedule(openScheduleTime, this.openSchedule.bind(this), timeConfig);
