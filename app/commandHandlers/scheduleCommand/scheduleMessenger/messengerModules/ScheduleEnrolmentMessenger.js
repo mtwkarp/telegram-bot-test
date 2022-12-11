@@ -17,7 +17,7 @@ class ScheduleEnrolmentMessenger extends MessengerModule {
 
   setPrivateMsgScheduleReminders() {
     const privateMsgScheduleReminder1 = FirebaseDB.getTimeValueData('schedule', 'private_msg_schedule_reminder_1');
-    const privateMsgScheduleReminder2 = FirebaseDB.getTimeValueData('schedule', 'private_msg_schedule_reminder_1');
+    const privateMsgScheduleReminder2 = FirebaseDB.getTimeValueData('schedule', 'private_msg_schedule_reminder_2');
     const timeConfig = FirebaseDB.getTimeValueData('time_configs', 'kyiv_time');
 
     cron.schedule(privateMsgScheduleReminder1, this.sendScheduleStartPrivateReminders.bind(this), timeConfig);

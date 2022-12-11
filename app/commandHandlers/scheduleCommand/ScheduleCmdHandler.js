@@ -52,12 +52,14 @@ class ScheduleCmdHandler extends BotCmdHandler {
     let thursday = firstWeekDay.plus({days: 4})
     thursday = thursday.set({hour: 18, minute: 0, second: 0})
 
-    let sunday = firstWeekDay.plus({days: 6})
+    let sunday = firstWeekDay.plus({days: 7})
     sunday = sunday.set({hour: 17, minute: 0, second: 0})
 
     if(dayNow >= thursday && dayNow <= sunday) {//check if current time is between thursday and sunday opened schedule time
       scheduleOpenStatus = true
     }
+
+    console.log(`Запис у розклад ${scheduleOpenStatus ? 'відкритий' : 'закритий'}`)
 
     return scheduleOpenStatus
   }
