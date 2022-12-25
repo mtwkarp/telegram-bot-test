@@ -6,6 +6,7 @@ const FirebaseDB = require('../../../../google/FireStoreDB');
 class NextDayInstructorReminderMessenger extends MessengerModule {
   constructor(tg, scheduleSheetsManager) {
     super(tg, scheduleSheetsManager);
+    this.sendTomorrowInstructorsReminders()
   }
 
   setScheduledMessages() {
@@ -29,19 +30,49 @@ class NextDayInstructorReminderMessenger extends MessengerModule {
       ['evacuation']: 'евакуація🚑'
     };
 
+    const basesByInstructor = {}
+
+    const instructorsInfo = {}
+
     for (const baseName in tomorrowInstructorsByBase) {
       const instructorsData = tomorrowInstructorsByBase[baseName];
 
       for (let i = 0; i < instructorsData.length; i++) {
-        const {chatId, name} = instructorsData[i];
+        const {name} = instructorsData[i];
+
+        if(instructorsInfo[name] === undefined) instructorsInfo[name] = instructorsData[i]
+        if(basesByInstructor[name] === undefined) basesByInstructor[name] = []
+
+        basesByInstructor[name].push(baseName)
+      }
+    }
+
+    for (const instructorName in instructorsInfo) {
+      const instructorsData = instructorsInfo[instructorName];
+
+        const {chatId, name} = instructorsData;
         let firstName = name.split(' ')[1];
 
         if (firstName === undefined) firstName = name.split(' ')[0];
-
         let message = FirebaseDB.getReplyMessage('schedule', 'every_day_instructor_reminder');
+        let replace2 = ''
+
+        if(basesByInstructor[name].length === 1) {
+          message = FirebaseDB.getReplyMessage('schedule', 'every_day_instructor_reminder');
+          replace2 = basesTranslation[basesByInstructor[name][0]];
+
+        }else {
+          message = FirebaseDB.getReplyMessage('schedule', 'every_day_instructor_reminder_2');
+          for (let j = 0; j < basesByInstructor[name].length; j++) {
+            const instructorBase = basesByInstructor[name][j]
+            const baseLabel = basesTranslation[instructorBase]
+
+            replace2 += `\n- ${baseLabel}`
+          }
+        }
 
         message = message.replace('$1', firstName);
-        message = message.replace('$2', basesTranslation[baseName]);
+        message = message.replace('$2', replace2);
 
         try {
           await this.tg.sendMessage(chatId, message);
@@ -49,7 +80,6 @@ class NextDayInstructorReminderMessenger extends MessengerModule {
           console.log(err);
         }
       }
-    }
   }
 }
 

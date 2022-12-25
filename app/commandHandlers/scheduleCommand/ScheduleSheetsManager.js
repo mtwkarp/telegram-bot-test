@@ -254,10 +254,11 @@ class ScheduleSheetsManager {
         const name = row[j];
 
         if (name === '' || name === '#N/A') continue;
-        allNames.push(name);
+        if(allNames.includes(name) === false) allNames.push(name);
         namesByBase[baseNamesByNumbers[j]].push(name);
       }
     }
+    // console.log(allNames, namesByBase)
     const namesWithIds = await this.getInstructorsIdsByNames(allNames);
 
     const finalObj = {
