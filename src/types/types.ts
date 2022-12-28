@@ -1,9 +1,10 @@
 import {CommandsDictionary, CommandDescription} from "./commandTypes";
+import {Context} from "telegraf";
 
 interface IBotInteractionListener {
-    onCallbackQuery: Function;
-    onMessage: Function;
-    onCmd: Function
+    onCallbackQuery(ctx: Context): void;
+    onMessage(ctx: Context): void;
+    onCmd(name: string, ctx: Context): void
 }
 
 export {IBotInteractionListener, CommandsDictionary, CommandDescription}

@@ -1,8 +1,5 @@
 import {IBotInteractionListener} from "../types/types";
-import {Context, Telegraf, Types} from "telegraf";
-import {commandsDescription} from "../static/commandsInfo";
-import {Message} from "typegram";
-import {messaging} from "firebase-admin";
+import {Context, Telegraf} from "telegraf";
 
 class BotInteractionObserver implements IBotInteractionListener {
     private listeners: IBotInteractionListener[]
@@ -17,41 +14,58 @@ class BotInteractionObserver implements IBotInteractionListener {
     }
 
     subscribeListener(listener: IBotInteractionListener): void {
+        const subscribedListener: IBotInteractionListener | false = this.findListener(listener)
+
+        if(subscribedListener !== false) {
+            return
+        }
+
         this.listeners.push(listener)
     }
 
-    unsubscribeListener(listener: IBotInteractionListener): void {
+    private findListener(listener: IBotInteractionListener): false | IBotInteractionListener {
         const subscribedListener: IBotInteractionListener | undefined = this.listeners.find(
             (l) => l === listener
         );
 
         if(subscribedListener === undefined) {
-            console.log('No such listener')
+            return false
+        }
+
+        return subscribedListener
+    }
+
+    unsubscribeListener(listener: IBotInteractionListener): void {
+        const subscribedListener: IBotInteractionListener | false = this.findListener(listener)
+
+        if(subscribedListener === false) {
             return
         }
 
         this.listeners.splice(this.listeners.indexOf(subscribedListener), 1)
     }
-    onCallbackQuery(ctx: Object): void {
+    onCallbackQuery(ctx: Context): void {
         this.listeners.forEach(s => s.onCallbackQuery(ctx))
     }
 
-    onCmd(cmdName: string, ctx: Object): void  {
-        console.log(cmdName, ctx)
-        console.log('pidor')
-        this.listeners.forEach(s => s.onCallbackQuery(cmdName, ctx))
+    onCmd(cmdName: string, ctx: Context): void  {
+        this.listeners.forEach(s => s.onCmd(cmdName, ctx))
     }
 
     onMessage(ctx: Context): void  {
         const msg: any = ctx.message,
             text: string = msg.text;
 
-        if(text[0] === '/') {
-            this.onCmd(text, Context)
+        if(this.isTextCommand(text)) {
+            this.onCmd(text, ctx)
             return
         }
 
-        this.listeners.forEach(s => s.onCallbackQuery(ctx))
+        this.listeners.forEach(s => s.onMessage(ctx))
+    }
+
+    private isTextCommand(text: string): boolean {
+        return (text[0] === '/')
     }
 }
 
