@@ -27,24 +27,21 @@ class UserScopeManager implements IBotInteractionListener {
         return newUser
     }
     onCallbackQuery(ctx: Context): void {
-        // @ts-ignore
-        const user = this.getUserById(ctx.from.id)
+        if(ctx.from === undefined) return
 
-        user.onCallbackQuery(ctx)
+        this.getUserById(ctx.from.id).onCallbackQuery(ctx)
     }
 
     onCmd(name: string, ctx: Context): void {
-        // @ts-ignore
-        const user = this.getUserById(ctx.from.id)
+        if(ctx.from === undefined) return
 
-        user.onCmd(name, ctx)
+        this.getUserById(ctx.from.id).onCmd(name, ctx)
     }
-//check !
-    onMessage(ctx: Context): void {
-        // @ts-ignore
-        const user = this.getUserById(ctx.from.id)
 
-        user.onMessage(ctx)
+    onMessage(ctx: Context): void {
+        if(ctx.from === undefined) return
+
+        this.getUserById(ctx.from.id).onMessage(ctx)
     }
 }
 

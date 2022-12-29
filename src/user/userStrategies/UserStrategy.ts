@@ -6,6 +6,13 @@ abstract class UserStrategy implements IBotInteractionListener {
     // protected cmdHandlersManager
     // constructor() {
     // }
+
+    initCmdHandlersManager() {
+
+    }
+    getUserCmdHandlers() {
+
+    }
     onCallbackQuery(ctx: Context): void {
     }
 

@@ -1,7 +1,7 @@
 import UserStrategy from "./UserStrategy";
 import {Context} from "telegraf";
 
-class RegisteredUserStrategy extends UserStrategy {
+class InstructorUserStrategy extends UserStrategy {
     onCallbackQuery(ctx: Context): void {
     }
 
@@ -16,4 +16,4 @@ class RegisteredUserStrategy extends UserStrategy {
     }
 }
 
-export default RegisteredUserStrategy
+export default InstructorUserStrategy

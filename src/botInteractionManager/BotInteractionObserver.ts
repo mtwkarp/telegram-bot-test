@@ -49,7 +49,9 @@ class BotInteractionObserver implements IBotInteractionListener {
     }
 
     onCmd(cmdName: string, ctx: Context): void  {
-        this.listeners.forEach(s => s.onCmd(cmdName, ctx))
+        const cmdNameWithoutSlash = cmdName.replace('/', '')
+
+        this.listeners.forEach(s => s.onCmd(cmdNameWithoutSlash, ctx))
     }
 
     onMessage(ctx: Context): void  {

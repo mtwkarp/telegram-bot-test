@@ -1,7 +1,7 @@
 import {IBotInteractionListener} from "../types/types";
 import {Context} from "telegraf";
 import UserStrategy from "./userStrategies/UserStrategy";
-import RegisteredUserStrategy from "./userStrategies/RegisteredUserStrategy";
+import InstructorUserStrategy from "./userStrategies/InstructorUserStrategy";
 
 class UserScope implements IBotInteractionListener {
 
@@ -10,7 +10,15 @@ class UserScope implements IBotInteractionListener {
 
     constructor(id: number) {
         this.id = id
-        this.strategy = new RegisteredUserStrategy()
+        this.strategy = new InstructorUserStrategy()
+    }
+
+    private init() {
+
+    }
+
+    setStrategies() {
+
     }
 
     onCallbackQuery(ctx: Context): void {
