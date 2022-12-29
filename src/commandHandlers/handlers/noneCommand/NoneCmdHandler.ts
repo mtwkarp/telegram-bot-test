@@ -8,6 +8,11 @@ class NoneCmdHandler extends CmdHandler {
 
         this._name = NoneCmdHandler.handlerName
     }
+
+    override copy(): CmdHandler {
+        return new NoneCmdHandler(this.id);
+    }
+
     override onCallbackQuery() {
         this.sendMessage('Аби зі мною поспілкуватися, треба використати одну з команд :).')
     }

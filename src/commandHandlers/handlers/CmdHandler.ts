@@ -17,6 +17,8 @@ abstract class CmdHandler extends EventEmitter implements IBotInteractionListene
         this._name = CMD_NAMES.NONE
     }
 
+    abstract copy(): CmdHandler
+
     get name(): CMD_NAME_TYPE {
         return this._name
     }

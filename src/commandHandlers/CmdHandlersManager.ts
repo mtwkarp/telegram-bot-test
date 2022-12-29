@@ -9,29 +9,29 @@ class CmdHandlersManager extends EventEmitter implements IBotInteractionListener
 
     private readonly id: number
     //name: one of cmd_names
-    protected handlers: {[name: string]: typeof CmdHandler}
+    protected handlers: {[name: string]: CmdHandler}
     private currentHandler: CmdHandler
 
-    constructor(userId: number, cmdHandlers: typeof CmdHandler[]) {
+    constructor(userId: number, cmdHandlers: CmdHandler[]) {
         super();
 
         this.id = userId
         this.handlers = {
-            [CMD_NAMES.NONE]: NoneCmdHandler
+            [CMD_NAMES.NONE]: new NoneCmdHandler(this.id)
         }
         this.currentHandler = new NoneCmdHandler(this.id)
 
 
         this.initHandlers(cmdHandlers)
     }
-    private initHandlers(cmdHandlers: typeof CmdHandler[]): void {
-        cmdHandlers.forEach((H) => {
-            this.handlers[H.handlerName] = H
+    private initHandlers(cmdHandlers: CmdHandler[]): void {
+        cmdHandlers.forEach((Handler) => {
+            this.handlers[Handler.handlerName] = new Handler(this.id)
         })
     }
 
     private setCurrentHandler(handlerName: CMD_NAME_TYPE): void {
-        this.currentHandler = new this.handlers[handlerName](this.id)
+        this.currentHandler = this.handlers[handlerName].copy()
     }
 
     private unsetCurrentHandler(): void {
