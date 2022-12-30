@@ -1,16 +1,22 @@
 import {IBotInteractionListener} from "../types/types";
 import {Context, Telegraf} from "telegraf";
+import {Update} from "typegram";
+import * as tg from 'typegram';
 
 class BotInteractionObserver implements IBotInteractionListener {
     private listeners: IBotInteractionListener[]
 
     constructor() {
         this.listeners = []
+
+        // console.log(Update.)
     }
 
     subscribeForBotEvents(bot: Telegraf) {
-        bot.on('message', this.onMessage.bind(this))
+        // bot.on('message', this.onMessage.bind(this))
+        bot.on('channel_post', this.onMessage.bind(this))
         bot.on('callback_query', this.onCallbackQuery.bind(this))
+        // bot.on('text', )
     }
 
     subscribeListener(listener: IBotInteractionListener): void {
@@ -55,15 +61,19 @@ class BotInteractionObserver implements IBotInteractionListener {
     }
 
     onMessage(ctx: Context): void  {
-        const msg: any = ctx.message,
-            text: string = msg.text;
-
-        if(this.isTextCommand(text)) {
-            this.onCmd(text, ctx)
-            return
-        }
-
-        this.listeners.forEach(s => s.onMessage(ctx))
+        console.log(ctx)
+        // console.log(ctx.message typeof tg.Message)
+        // console.log(ctx.message === )
+        // typeof ctx.update === Update.MessageUpdate
+        // const msg: any = ctx.message,
+        //     text: string = msg.text;
+        //
+        // if(this.isTextCommand(text)) {
+        //     this.onCmd(text, ctx)
+        //     return
+        // }
+        //
+        // this.listeners.forEach(s => s.onMessage(ctx))
     }
 
     private isTextCommand(text: string): boolean {

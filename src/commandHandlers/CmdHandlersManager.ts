@@ -12,7 +12,7 @@ class CmdHandlersManager extends EventEmitter implements IBotInteractionListener
     protected handlers: {[name: string]: CmdHandler}
     private currentHandler: CmdHandler
 
-    constructor(userId: number, cmdHandlers: CmdHandler[]) {
+    constructor(userId: number, cmdHandlers:  Array<{new(userId: number): CmdHandler}>) {
         super();
 
         this.id = userId
@@ -21,12 +21,12 @@ class CmdHandlersManager extends EventEmitter implements IBotInteractionListener
         }
         this.currentHandler = new NoneCmdHandler(this.id)
 
-
         this.initHandlers(cmdHandlers)
     }
-    private initHandlers(cmdHandlers: CmdHandler[]): void {
+    private initHandlers(cmdHandlers: Array<{new(userId: number): CmdHandler}>): void {
         cmdHandlers.forEach((Handler) => {
-            this.handlers[Handler.handlerName] = new Handler(this.id)
+            const instance = new Handler(this.id)
+            this.handlers[instance.name] = instance
         })
     }
 

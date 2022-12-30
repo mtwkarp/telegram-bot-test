@@ -11,8 +11,8 @@ export default class Main {
         this.initEnvironmentVariables();
         await this.initBot()
         this.initBotInteractionObserver()
-        this.initUserScopeManager()
-        this.subscribeForBotObserver()
+        // this.initUserScopeManager()
+        // this.subscribeForBotObserver()
     }
 
     private async initBot(): Promise<void> {
