@@ -12,9 +12,7 @@ export default class Bot extends Telegraf {
     }
 
     public async launchBot(): Promise<void> {
-        await this.launch()
-            .then(() => console.log('Successful BOT launch'))
-            .catch((err: string) => console.error(err))
+        this.launch()
     }
 
     private async initCommands(): Promise<void> {

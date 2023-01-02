@@ -1,7 +1,10 @@
 import {IBotInteractionListener} from "../types/types";
 import {Context, Telegraf} from "telegraf";
-import {Update} from "typegram";
-import * as tg from 'typegram';
+import {Message, Update} from "typegram";
+
+
+import {message} from 'telegraf/filters'
+
 
 class BotInteractionObserver implements IBotInteractionListener {
     private listeners: IBotInteractionListener[]
@@ -13,10 +16,18 @@ class BotInteractionObserver implements IBotInteractionListener {
     }
 
     subscribeForBotEvents(bot: Telegraf) {
-        // bot.on('message', this.onMessage.bind(this))
-        bot.on('channel_post', this.onMessage.bind(this))
+        bot.command('schedule', () => console.log('hui'))
+        bot.use(async (ctx, next) => {
+            console.log('hi')
+            // console.time(`Processing update ${ctx.update.update_id}`);
+            await next() // runs next middleware
+            // runs after next middleware finishes
+            console.log('by by')
+            // console.timeEnd(`Processing update ${ctx.update.update_id}`);
+        })
+        bot.on(message('text'), this.onMessage.bind(this))
         bot.on('callback_query', this.onCallbackQuery.bind(this))
-        // bot.on('text', )
+
     }
 
     subscribeListener(listener: IBotInteractionListener): void {
@@ -60,8 +71,41 @@ class BotInteractionObserver implements IBotInteractionListener {
         this.listeners.forEach(s => s.onCmd(cmdNameWithoutSlash, ctx))
     }
 
-    onMessage(ctx: Context): void  {
-        console.log(ctx)
+    onMessage(ctx: Context<Update>): void  {
+        // @ts-ignore
+        if(ctx.message.text) {
+            // @ts-ignore
+
+            console.log(ctx.message.text)
+
+        }
+
+        // const msgType: UpdateType = ctx.updateType
+        // const updateObj: Update.MessageUpdate = ctx.update as Update.MessageUpdate
+
+            // message
+        // if(ctx.update?.message) {
+        //
+        // }
+
+        // @ts-ignore
+        // console.log(Update)
+        //
+        // if(updateObj as Update.MessageUpdate) {
+        //     // console.log('hi pidor')
+        //     const msg = updateObj.message
+        //
+        //     if(msg as Message.TextMessage) {
+        //         console.log(msg)
+        //     }
+        // }
+        // console.log(Update.MessageUpdate)
+
+        // console.log(ctx.update)
+        // console.log(MountMap.message)
+        // if()
+
+        // const u: Update.Types.MessageSubType = ctx.update
         // console.log(ctx.message typeof tg.Message)
         // console.log(ctx.message === )
         // typeof ctx.update === Update.MessageUpdate
@@ -80,5 +124,7 @@ class BotInteractionObserver implements IBotInteractionListener {
         return (text[0] === '/')
     }
 }
+
+// const c: Context<Update.MessageUpdate> = new Context(Update.MessageUpdate, new Telegram(), UserFromGetMe)
 
 export default BotInteractionObserver
