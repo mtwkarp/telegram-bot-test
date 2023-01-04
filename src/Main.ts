@@ -1,11 +1,11 @@
 import EnvLoader from "./envLoader/EnvLoader";
-import BotInteractionObserver from "./botInteractionManager/BotInteractionObserver";
+import BotInteractionObservable from "./botInteractionManager/BotInteractionObservable";
 import Bot from "./Bot";
 import UserScopeManager from "./user/UserScopeManager";
 
 export default class Main {
     private bot: Bot
-    private botInteractionObserver: BotInteractionObserver
+    private botInteractionObserver: BotInteractionObservable
     private userScopeManager: UserScopeManager
     public async init(): Promise<void> {
         this.initEnvironmentVariables();
@@ -29,7 +29,7 @@ export default class Main {
         this.userScopeManager = new UserScopeManager()
     }
     private initBotInteractionObserver() {
-        this.botInteractionObserver = new BotInteractionObserver()
+        this.botInteractionObserver = new BotInteractionObservable()
         this.botInteractionObserver.subscribeForBotEvents(this.bot)
     }
 

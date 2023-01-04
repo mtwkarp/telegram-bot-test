@@ -1,0 +1,2 @@
+
+type privateMessageType = 'text' | 'audio'
