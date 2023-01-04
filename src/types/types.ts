@@ -7,4 +7,8 @@ interface IBotInteractionListener {
     onCmd(name: string, ctx: Context): void
 }
 
-export {IBotInteractionListener, CommandsDictionary, CommandDescription}
+export {
+    IBotInteractionListener,
+    CommandsDictionary,
+    CommandDescription
+}

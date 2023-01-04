@@ -3,7 +3,7 @@ import {Context} from "telegraf";
 import UserScope from "./UserScope";
 
 
-class UserScopeManager implements IBotInteractionListener {
+class PrivateScopeManager implements IBotInteractionListener {
 
     protected users: {
         [userId: number]: UserScope
@@ -45,4 +45,4 @@ class UserScopeManager implements IBotInteractionListener {
     }
 }
 
-export default UserScopeManager
+export default PrivateScopeManager
