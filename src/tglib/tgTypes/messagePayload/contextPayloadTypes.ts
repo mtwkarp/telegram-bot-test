@@ -6,6 +6,7 @@ export interface IContextPayload {
 }
 
 export interface IPrivateContextPayload extends IContextPayload {
+    senderId: number,
 }
 
 export interface IChannelContextPayload extends IContextPayload {

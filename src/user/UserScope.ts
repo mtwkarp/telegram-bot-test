@@ -1,37 +1,28 @@
-import {IBotInteractionListener} from "../types/types";
 import {Context} from "telegraf";
 import UserStrategy from "./userStrategies/UserStrategy";
 import InstructorUserStrategy from "./userStrategies/InstructorUserStrategy";
+import {UserPrivateScope} from "../types/types";
+import {Update} from "typegram";
+import {IContextDecorator, IPrivateContextDecorator} from "../tglib/tgTypes/contextDecoratorTypes";
 
-class UserScope implements IBotInteractionListener {
+class UserScope implements UserPrivateScope {
 
     private readonly id: number
     private strategy: UserStrategy
 
     constructor(id: number) {
         this.id = id
-        this.strategy = new InstructorUserStrategy()
+        this.strategy = new InstructorUserStrategy(id)
     }
 
     private init() {
 
     }
 
-    setStrategies() {
-
+    onUpdate(context: IPrivateContextDecorator) {
+        this.strategy.onUpdate(context)
     }
 
-    onCallbackQuery(ctx: Context): void {
-        this.strategy.onCallbackQuery(ctx)
-    }
-
-    onCmd(name: string, ctx: Context): void {
-        this.strategy.onCmd(name, ctx)
-    }
-
-    onMessage(ctx: Context): void {
-        this.strategy.onMessage(ctx)
-    }
 }
 
 export default UserScope

@@ -1,15 +1,16 @@
-import {IBotInteractionListener} from "../../types/types";
 import {Context, Telegram} from "telegraf";
 import {CMD_HANDLERS_EVENTS} from "../../enums/botEnums";
 import EventEmitter from "eventemitter3";
 import {CMD_NAME_TYPE, CMD_NAMES} from "../../types/commandTypes";
+import {ICmdHandler} from "../../types/commandHandlerTypes";
+import {IContextDecorator} from "../../tglib/tgTypes/contextDecoratorTypes";
 
-abstract class CmdHandler extends EventEmitter implements IBotInteractionListener {
+abstract class CmdHandler extends EventEmitter implements ICmdHandler {
 
     protected readonly id: number
     protected readonly tg: Telegram
     protected _name: CMD_NAME_TYPE
-    constructor(userId: number) {
+    protected constructor(userId: number) {
         super()
 
         this.id = userId
@@ -26,13 +27,8 @@ abstract class CmdHandler extends EventEmitter implements IBotInteractionListene
     onCallbackQuery(ctx: Context): void {
     }
 
-    onCmd(name: string, ctx: Context): void {
-    }
-
-    onMessage(ctx: Context): void {
-    }
-
     async sendMessage(message: string): Promise<void> {
+        console.log(this.id)
         await this.tg.sendMessage(this.id.toString(), message)
     }
 
@@ -48,6 +44,12 @@ abstract class CmdHandler extends EventEmitter implements IBotInteractionListene
 
     static get handlerName():CMD_NAME_TYPE {
         return this._name
+    }
+
+    onCommand(contextDecorator: IContextDecorator): void {
+    }
+
+    onUpdate(contextDecorator: IContextDecorator): void {
     }
 }
 

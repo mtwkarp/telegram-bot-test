@@ -1,18 +1,15 @@
 import UserStrategy from "./UserStrategy";
-import {Context} from "telegraf";
+import {IPrivateContextDecorator} from "../../tglib/tgTypes/contextDecoratorTypes";
+import CmdHandlersManager from "../../commandHandlers/CmdHandlersManager";
 
 class InstructorUserStrategy extends UserStrategy {
-    onCallbackQuery(ctx: Context): void {
+    protected cmdHandlerManager: CmdHandlersManager
+    constructor(userId: number) {
+        super();
+        this.cmdHandlerManager = new CmdHandlersManager(userId, [])
     }
-
-    onCmd(name: string, ctx: Context): void {
-        console.log('iam registered cmd ')
-
-    }
-
-    onMessage(ctx: Context): void {
-        console.log('iam registered msg ')
-
+    onUpdate(context: IPrivateContextDecorator) {
+        this.cmdHandlerManager.onUpdate(context)
     }
 }
 

@@ -1,5 +1,6 @@
 import CmdHandler from "../CmdHandler";
 import {CMD_NAME_TYPE, CMD_NAMES} from "../../../types/commandTypes";
+import {IContextDecorator} from "../../../tglib/tgTypes/contextDecoratorTypes";
 
 class NoneCmdHandler extends CmdHandler {
 
@@ -17,12 +18,7 @@ class NoneCmdHandler extends CmdHandler {
         this.sendMessage('Аби зі мною поспілкуватися, треба використати одну з команд :).')
     }
 
-    override onCmd() {
-        console.log('None cmd handler is set')
-        // this.sendMessage('Аби зі мною поспілкуватися, треба використати одну з команд :).')
-    }
-
-    override onMessage() {
+    override onUpdate(contextDecorator: IContextDecorator) {
         this.sendMessage('Аби зі мною поспілкуватися, треба використати одну з команд :).')
     }
 

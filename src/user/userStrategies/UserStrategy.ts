@@ -1,25 +1,12 @@
-import {IBotInteractionListener} from "../../types/types";
 import {Context} from "telegraf";
+import {UserPrivateScope} from "../../types/types";
+import {IContextDecorator, IPrivateContextDecorator} from "../../tglib/tgTypes/contextDecoratorTypes";
 
-abstract class UserStrategy implements IBotInteractionListener {
+abstract class UserStrategy implements UserPrivateScope{
 
-    // protected cmdHandlersManager
-    // constructor() {
-    // }
 
-    initCmdHandlersManager() {
+    onUpdate(context: IPrivateContextDecorator) {
 
-    }
-    getUserCmdHandlers() {
-
-    }
-    onCallbackQuery(ctx: Context): void {
-    }
-
-    onCmd(name: string, ctx: Context): void {
-    }
-
-    onMessage(ctx: Context): void {
     }
 
 }

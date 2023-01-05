@@ -1,5 +1,4 @@
 import EnvLoader from "./envLoader/EnvLoader";
-import BotInteractionObservable from "./botInteractionManager/BotInteractionObservable";
 import Bot from "./Bot";
 import PrivateScopeManager from "./user/PrivateScopeManager";
 import PrivateUpdateSubject from "./tglib/botUpdatesObservers/PrivateUpdateSubject";

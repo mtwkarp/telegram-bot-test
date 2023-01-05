@@ -1,8 +1,6 @@
-import {CommandDescription, IBotInteractionListener} from "../types/types";
-import {Context} from "telegraf";
 import UserScope from "./UserScope";
 import {IObserver} from "../tglib/lib/observer/observerTypes";
-
+import {IContextDecorator, IPrivateContextDecorator} from "../tglib/tgTypes/contextDecoratorTypes";
 
 class PrivateScopeManager implements IObserver {
 
@@ -27,26 +25,12 @@ class PrivateScopeManager implements IObserver {
 
         return newUser
     }
-    onCallbackQuery(ctx: Context): void {
-        if(ctx.from === undefined) return
 
-        this.getUserById(ctx.from.id).onCallbackQuery(ctx)
-    }
-
-    onCmd(name: string, ctx: Context): void {
-        if(ctx.from === undefined) return
-
-        this.getUserById(ctx.from.id).onCmd(name, ctx)
-    }
-
-    onMessage(ctx: Context): void {
-        if(ctx.from === undefined) return
-
-        this.getUserById(ctx.from.id).onMessage(ctx)
-    }
-
-    onUpdate(update: any): void {
-        console.log(update)
+    onUpdate(ctxDecorator: IPrivateContextDecorator): void {
+        const user: UserScope = this.getUserById(ctxDecorator.payload.senderId)
+        console.log(user)
+        user.onUpdate(ctxDecorator)
+        // console.log(contextDecorator)
     }
 }
 

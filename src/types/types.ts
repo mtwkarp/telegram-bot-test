@@ -1,14 +1,13 @@
 import {CommandsDictionary, CommandDescription} from "./commandTypes";
 import {Context} from "telegraf";
-
-interface IBotInteractionListener {
-    onCallbackQuery(ctx: Context): void;
-    onMessage(ctx: Context, next?: Function): void;
-    onCmd(name: string, ctx: Context): void
+import {Update} from 'typegram'
+import {IContextDecorator, IPrivateContextDecorator} from "../tglib/tgTypes/contextDecoratorTypes";
+interface UserPrivateScope {
+    onUpdate(contextDecorator: IPrivateContextDecorator): void
 }
 
 export {
-    IBotInteractionListener,
     CommandsDictionary,
-    CommandDescription
+    CommandDescription,
+    UserPrivateScope
 }
