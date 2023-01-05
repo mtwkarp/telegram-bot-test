@@ -1,9 +1,10 @@
 import {CommandDescription, IBotInteractionListener} from "../types/types";
 import {Context} from "telegraf";
 import UserScope from "./UserScope";
+import {IObserver} from "../tglib/lib/observer/observerTypes";
 
 
-class PrivateScopeManager implements IBotInteractionListener {
+class PrivateScopeManager implements IObserver {
 
     protected users: {
         [userId: number]: UserScope
@@ -42,6 +43,10 @@ class PrivateScopeManager implements IBotInteractionListener {
         if(ctx.from === undefined) return
 
         this.getUserById(ctx.from.id).onMessage(ctx)
+    }
+
+    onUpdate(update: any): void {
+        console.log(update)
     }
 }
 

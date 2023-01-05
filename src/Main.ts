@@ -2,17 +2,18 @@ import EnvLoader from "./envLoader/EnvLoader";
 import BotInteractionObservable from "./botInteractionManager/BotInteractionObservable";
 import Bot from "./Bot";
 import PrivateScopeManager from "./user/PrivateScopeManager";
+import PrivateUpdateSubject from "./tglib/botUpdatesObservers/PrivateUpdateSubject";
 
 export default class Main {
     private bot: Bot
-    private botInteractionObserver: BotInteractionObservable
+    private privateUpdateSubject: PrivateUpdateSubject
     private userScopeManager: PrivateScopeManager
     public async init(): Promise<void> {
         this.initEnvironmentVariables();
         await this.initBot()
-        this.initBotInteractionObserver()
-        // this.initUserScopeManager()
-        // this.subscribeForBotObserver()
+        this.initPrivateUpdateSubject()
+        this.initUserScopeManager()
+        this.subscribeForPrivateMessagesUpdates()
     }
 
     private async initBot(): Promise<void> {
@@ -28,12 +29,12 @@ export default class Main {
     private initUserScopeManager() {
         this.userScopeManager = new PrivateScopeManager()
     }
-    private initBotInteractionObserver() {
-        this.botInteractionObserver = new BotInteractionObservable()
-        this.botInteractionObserver.subscribeForBotEvents(this.bot)
+    private initPrivateUpdateSubject() {
+        this.privateUpdateSubject = new PrivateUpdateSubject()
+        this.privateUpdateSubject.subscribeForBotUpdates(this.bot)
     }
 
-    private subscribeForBotObserver() {
-        this.botInteractionObserver.subscribeListener(this.userScopeManager)
+    private subscribeForPrivateMessagesUpdates() {
+        this.privateUpdateSubject.registerObserver(this.userScopeManager)
     }
 }

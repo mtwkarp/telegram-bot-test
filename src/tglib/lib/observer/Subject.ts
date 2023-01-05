@@ -2,7 +2,11 @@ import {IObserver} from "./observerTypes";
 
 abstract class Subject<NotifyValue> {
     protected observers: IObserver<NotifyValue>[]
-    protected registerObserver(observer: IObserver<NotifyValue>): void {
+
+    constructor() {
+        this.observers = []
+    }
+    public registerObserver(observer: IObserver<NotifyValue>): void {
         if(!this.observers.includes(observer)) {
             this.observers.push(observer)
         }else {
@@ -10,7 +14,7 @@ abstract class Subject<NotifyValue> {
         }
     }
 
-    protected removeObserver(observer: IObserver<NotifyValue>): void {
+    public removeObserver(observer: IObserver<NotifyValue>): void {
         if(this.observers.includes(observer)) {
             this.observers.splice(this.observers.indexOf(observer), 1)
         }else {

@@ -1,10 +1,11 @@
+import {MESSAGE_PAYLOAD_TYPE} from "./messagePayloadTypes";
 
 export interface IContextPayload {
-    senderId: string
+    chatId: number,
+    type: MESSAGE_PAYLOAD_TYPE
 }
 
 export interface IPrivateContextPayload extends IContextPayload {
-    chatId: number
 }
 
 export interface IChannelContextPayload extends IContextPayload {
@@ -16,4 +17,5 @@ export interface IChatContextPayload extends IContextPayload {
 }
 
 
-export type CONTEXT_PAYLOAD_TYPES = IPrivateContextPayload | IChannelContextPayload | IChatContextPayload
+
+export type CONTEXT_PAYLOAD_TYPE = IContextPayload | IPrivateContextPayload | IChannelContextPayload | IChatContextPayload
