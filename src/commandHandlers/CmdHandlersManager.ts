@@ -1,7 +1,7 @@
 import EventEmitter from "eventemitter3";
 import CmdHandler from "./handlers/CmdHandler";
 import NoneCmdHandler from "./handlers/noneCommand/NoneCmdHandler";
-import {CMD_NAMES, CMD_NAME_TYPE} from "../types/commandTypes";
+import {CMD_NAME_TYPE} from "../types/commandTypes";
 import {ICmdHandler} from "../types/commandHandlerTypes";
 import {IContextDecorator} from "../tglib/tgTypes/contextDecoratorTypes";
 
@@ -43,6 +43,7 @@ class CmdHandlersManager extends EventEmitter implements ICmdHandler {
     }
 
     onCommand(contextDecorator: IContextDecorator) {
+        this.currentHandler.onCommand(contextDecorator)
     }
 }
 

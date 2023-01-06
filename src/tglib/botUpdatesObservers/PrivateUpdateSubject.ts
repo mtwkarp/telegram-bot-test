@@ -8,15 +8,23 @@ import PrivateContextDecoratorCreator from "../contextCreators/PrivateContextDec
 class PrivateUpdateSubject extends ScopeUpdateSubject<PRIVATE_UPDATE_TYPES, IPrivateContextDecorator> {
 
     protected readonly contextDecoratorCreator: PrivateContextDecoratorCreator
-
-    constructor() {
-        super();
-
+    protected receiveCommands: string[]
+    constructor(receiveMessagesTypes: PRIVATE_UPDATE_TYPES[], receiveCommands: string[]) {
+        super(receiveMessagesTypes);
+        this.receiveCommands = receiveCommands
         this.contextDecoratorCreator = new PrivateContextDecoratorCreator()
     }
-    subscribeForBotUpdates(bot: Telegraf) {
-        bot.on(PRIVATE_UPDATE_TYPES.text, (context: Context<Update>) => this.onUpdate(PRIVATE_UPDATE_TYPES.text, context))
+    override subscribeForBotUpdates(bot: Telegraf) {
+        this.subscribeForCommands(bot)
+        this.subscribeForMessages(bot)
     }
+
+    protected subscribeForCommands(bot: Telegraf) {
+        this.receiveCommands.forEach(commandName => {
+            bot.command(commandName, (context: Context<Update>) => this.onUpdate(PRIVATE_UPDATE_TYPES.command, context))
+        })
+    }
+
     protected onUpdate(messageType: PRIVATE_UPDATE_TYPES, context: Context<Update>): void {
         if(context.chat?.type !== 'private') return
         

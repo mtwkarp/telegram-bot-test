@@ -28,9 +28,8 @@ class PrivateScopeManager implements IObserver {
 
     onUpdate(ctxDecorator: IPrivateContextDecorator): void {
         const user: UserScope = this.getUserById(ctxDecorator.payload.senderId)
-        console.log(user)
+
         user.onUpdate(ctxDecorator)
-        // console.log(contextDecorator)
     }
 }
 

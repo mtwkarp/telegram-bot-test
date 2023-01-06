@@ -13,4 +13,6 @@ export default abstract class PayloadCreator<U extends SCOPE_UPDATE_TYPES, P ext
         // @ts-ignore
         return this.decoratorCreatorFunctionByUpdateType[updateType](context)
     }
+
+
 }

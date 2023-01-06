@@ -2,6 +2,8 @@ import EnvLoader from "./envLoader/EnvLoader";
 import Bot from "./Bot";
 import PrivateScopeManager from "./user/PrivateScopeManager";
 import PrivateUpdateSubject from "./tglib/botUpdatesObservers/PrivateUpdateSubject";
+import {PRIVATE_UPDATE_TYPES} from "./tglib/tgTypes/botUpdatesTypes";
+import {CMD_NAME_TYPE, CMD_NAMES} from "./types/commandTypes";
 
 export default class Main {
     private bot: Bot
@@ -29,7 +31,13 @@ export default class Main {
         this.userScopeManager = new PrivateScopeManager()
     }
     private initPrivateUpdateSubject() {
-        this.privateUpdateSubject = new PrivateUpdateSubject()
+        const messagesTypes: PRIVATE_UPDATE_TYPES[] = [
+            PRIVATE_UPDATE_TYPES.text,
+            PRIVATE_UPDATE_TYPES.callback_query
+        ]
+        const commands: CMD_NAME_TYPE[] = [CMD_NAMES.SCHEDULE]
+
+        this.privateUpdateSubject = new PrivateUpdateSubject(messagesTypes, commands)
         this.privateUpdateSubject.subscribeForBotUpdates(this.bot)
     }
 

@@ -28,7 +28,6 @@ abstract class CmdHandler extends EventEmitter implements ICmdHandler {
     }
 
     async sendMessage(message: string): Promise<void> {
-        console.log(this.id)
         await this.tg.sendMessage(this.id.toString(), message)
     }
 

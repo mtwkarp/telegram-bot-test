@@ -3,7 +3,8 @@ import {Context} from "telegraf";
 import {Update} from "typegram";
 import {CONTEXT_PAYLOAD_TYPE} from "./contextPayloadTypes";
 export interface IPayloadCreator {
-    create(updateType: SCOPE_UPDATE_TYPES, context: Context<Update>): CONTEXT_PAYLOAD_TYPE
+    create(updateType: SCOPE_UPDATE_TYPES, context: Context<Update>): CONTEXT_PAYLOAD_TYPE,
+
 }
 
 type PayloadCreatorFunc = (context: Context<Update>) => CONTEXT_PAYLOAD_TYPE

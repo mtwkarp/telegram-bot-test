@@ -6,6 +6,7 @@ class InstructorUserStrategy extends UserStrategy {
     protected cmdHandlerManager: CmdHandlersManager
     constructor(userId: number) {
         super();
+
         this.cmdHandlerManager = new CmdHandlersManager(userId, [])
     }
     onUpdate(context: IPrivateContextDecorator) {

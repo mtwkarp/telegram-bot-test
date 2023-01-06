@@ -11,7 +11,8 @@ enum CHANNEL_UPDATE_TYPES {
 }
 
 enum CHAT_UPDATE_TYPES {
-    new_chat_photo = 'new_chat_photo'
+    new_chat_photo = 'new_chat_photo',
+    command='command'
 }
 
 
