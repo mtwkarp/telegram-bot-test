@@ -1,6 +1,6 @@
 import UserScope from "./UserScope";
 import {IObserver} from "../tglib/lib/observer/observerTypes";
-import {IContextDecorator, IPrivateContextDecorator} from "../tglib/tgTypes/contextDecoratorTypes";
+import {IPrivateContextDecorator} from "../tglib/tgTypes/contextDecoratorTypes";
 
 class PrivateScopeManager implements IObserver {
 

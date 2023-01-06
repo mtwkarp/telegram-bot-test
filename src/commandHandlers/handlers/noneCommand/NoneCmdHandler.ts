@@ -1,8 +1,8 @@
-import CmdHandler from "../CmdHandler";
+import PrivateCmdHandler from "../PrivateCmdHandler";
 import {CMD_NAME_TYPE, CMD_NAMES} from "../../../types/commandTypes";
-import {IContextDecorator} from "../../../tglib/tgTypes/contextDecoratorTypes";
+import {IContextDecorator, IPrivateContextDecorator} from "../../../tglib/tgTypes/contextDecoratorTypes";
 
-class NoneCmdHandler extends CmdHandler {
+class NoneCmdHandler extends PrivateCmdHandler {
 
     constructor(userId: number) {
         super(userId);
@@ -10,7 +10,7 @@ class NoneCmdHandler extends CmdHandler {
         this._name = NoneCmdHandler.handlerName
     }
 
-    override copy(): CmdHandler {
+    override copy(): PrivateCmdHandler {
         return new NoneCmdHandler(this.id);
     }
 
@@ -18,7 +18,8 @@ class NoneCmdHandler extends CmdHandler {
         this.sendMessage('Аби зі мною поспілкуватися, треба використати одну з команд :).')
     }
 
-    override onUpdate(contextDecorator: IContextDecorator) {
+    override onUpdate(contextDecorator: IPrivateContextDecorator) {
+        this.updateTypesImplementations[contextDecorator.updateType](contextDecorator)
         this.sendMessage('Аби зі мною поспілкуватися, треба використати одну з команд :).')
     }
 

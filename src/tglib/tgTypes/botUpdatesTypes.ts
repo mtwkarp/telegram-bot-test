@@ -2,7 +2,23 @@
 enum PRIVATE_UPDATE_TYPES {
     text = 'text',
     callback_query = 'callback_query',
-    command='command'
+
+    command='command',
+    animation = 'animation',
+    audio='audio',
+    document='document',
+    photo='photo',
+    sticker='sticker',
+    video='video',
+    video_note='video_note',
+    voice='voice',
+    edited_message='edited_message',
+    // inline_query='inline_query' ???
+    // chosen_inline_result='chosen_inline_result' ???
+    // shipping_query='shipping_query'
+    // pre_checkout_query='pre_checkout_query'
+    // poll = 'poll'
+    //poll_answer ='poll_answer'
 }
 
 

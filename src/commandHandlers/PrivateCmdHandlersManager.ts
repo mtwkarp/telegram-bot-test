@@ -1,18 +1,18 @@
 import EventEmitter from "eventemitter3";
-import CmdHandler from "./handlers/CmdHandler";
+import PrivateCmdHandler from "./handlers/PrivateCmdHandler";
 import NoneCmdHandler from "./handlers/noneCommand/NoneCmdHandler";
 import {CMD_NAME_TYPE} from "../types/commandTypes";
-import {ICmdHandler} from "../types/commandHandlerTypes";
-import {IContextDecorator} from "../tglib/tgTypes/contextDecoratorTypes";
+import {IPrivateCmdHandler} from "../types/commandHandlerTypes";
+import {IContextDecorator, IPrivateContextDecorator} from "../tglib/tgTypes/contextDecoratorTypes";
 
-class CmdHandlersManager extends EventEmitter implements ICmdHandler {
+class PrivateCmdHandlersManager extends EventEmitter implements IPrivateCmdHandler {
 
     private readonly id: number
     //name: one of cmd_names
-    protected handlers: {[name: string]: ICmdHandler}
-    private currentHandler: ICmdHandler
+    protected handlers: {[name: string]: PrivateCmdHandler}
+    private currentHandler: PrivateCmdHandler
 
-    constructor(userId: number, cmdHandlers:  Array<{new(userId: number): CmdHandler}>) {
+    constructor(userId: number, cmdHandlers:  Array<{new(userId: number): PrivateCmdHandler}>) {
         super();
 
         this.id = userId
@@ -23,7 +23,7 @@ class CmdHandlersManager extends EventEmitter implements ICmdHandler {
 
         this.initHandlers(cmdHandlers)
     }
-    private initHandlers(cmdHandlers: Array<{new(userId: number): CmdHandler}>): void {
+    private initHandlers(cmdHandlers: Array<{new(userId: number): PrivateCmdHandler}>): void {
         cmdHandlers.forEach((Handler) => {
             const instance = new Handler(this.id)
             this.handlers[instance.name] = instance
@@ -38,13 +38,13 @@ class CmdHandlersManager extends EventEmitter implements ICmdHandler {
         this.currentHandler = new NoneCmdHandler(this.id)
     }
 
-    onUpdate(contextDecorator: IContextDecorator) {
+    onUpdate(contextDecorator: IPrivateContextDecorator) {
         this.currentHandler.onUpdate(contextDecorator)
     }
 
     onCommand(contextDecorator: IContextDecorator) {
-        this.currentHandler.onCommand(contextDecorator)
+        // this.currentHandler.onCommand(contextDecorator)
     }
 }
 
-export default CmdHandlersManager
+export default PrivateCmdHandlersManager

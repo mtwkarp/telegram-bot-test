@@ -1,6 +1,7 @@
-import {IContextDecorator} from "../tglib/tgTypes/contextDecoratorTypes";
+import {IContextDecorator, IPrivateContextDecorator} from "../tglib/tgTypes/contextDecoratorTypes";
 
-export interface ICmdHandler {
-    onUpdate(contextDecorator: IContextDecorator): void
-    onCommand(contextDecorator: IContextDecorator): void
+export interface IPrivateCmdHandler {
+    onUpdate(contextDecorator: IPrivateContextDecorator): void
+    onCommand(contextDecorator: IPrivateContextDecorator): void
+
 }
