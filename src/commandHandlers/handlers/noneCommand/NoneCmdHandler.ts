@@ -18,11 +18,6 @@ class NoneCmdHandler extends PrivateCmdHandler {
         this.sendMessage('Аби зі мною поспілкуватися, треба використати одну з команд :).')
     }
 
-    override onUpdate(contextDecorator: IPrivateContextDecorator) {
-        this.updateTypesImplementations[contextDecorator.updateType](contextDecorator)
-        this.sendMessage('Аби зі мною поспілкуватися, треба використати одну з команд :).')
-    }
-
     protected static override readonly _name: CMD_NAME_TYPE = CMD_NAMES.NONE
 }
 

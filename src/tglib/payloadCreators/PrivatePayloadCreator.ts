@@ -1,5 +1,5 @@
 import PayloadCreator from "./PayloadCreator";
-import {PRIVATE_UPDATE_TYPES} from "../tgTypes/botUpdatesTypes";
+import {MESSAGES_TYPES, PRIVATE_UPDATE_TYPES, UPDATE_TYPES} from "../tgTypes/botUpdatesTypes";
 import {
     IPrivateAnimationPayload,
     IPrivateAudioPayload,
@@ -22,6 +22,16 @@ import {Message, Update, User} from 'typegram'
 import ContextHelper from "../../helpers/ContextHelper";
 import TextMessage = Message.TextMessage;
 import CallbackQueryUpdate = Update.CallbackQueryUpdate;
+import AnimationMessage = Message.AnimationMessage;
+import AudioMessage = Message.AudioMessage;
+import DocumentMessage = Message.DocumentMessage;
+import PhotoMessage = Message.PhotoMessage;
+import StickerMessage = Message.StickerMessage;
+import VideoMessage = Message.VideoMessage;
+import VideoNoteMessage = Message.VideoNoteMessage;
+import VoiceMessage = Message.VoiceMessage;
+import EditedMessageUpdate = Update.EditedMessageUpdate;
+import NonChannel = Update.NonChannel;
 
 export default class PrivatePayloadCreator extends PayloadCreator<PRIVATE_UPDATE_TYPES, IPrivateContextPayload> {
     readonly decoratorCreatorFunctionByUpdateType: PRIVATE_PAYLOAD_CREATORS_HOLDER = {
@@ -40,13 +50,23 @@ export default class PrivatePayloadCreator extends PayloadCreator<PRIVATE_UPDATE
     }
 
 
-    getDefaultPayload(context: Context<Update>, type: PAYLOAD_TYPES): IPrivateContextPayload {
-        const message: Message = ContextHelper.getMessageField(context),
-            from: User = message.from as User
+    getDefaultPayload(context: Context<Update>, type: PAYLOAD_TYPES, from: User): IPrivateContextPayload {
+        const updateType: UPDATE_TYPES = ContextHelper.getContextUpdateType(context.update)
+        let updateMessageType: MESSAGES_TYPES = MESSAGES_TYPES.none
+//REFACTOR !!!!
+        if(updateType === UPDATE_TYPES.unknown) {
+            throw new Error('UPDATE TYPE UNKNOWN !!!')
+        }
+
+        if(updateType === UPDATE_TYPES.message) {
+            updateMessageType = ContextHelper.getUpdateMessageType(context.message as Message)
+        }
 
         const obj: IPrivateContextPayload = {
             senderId: from.id,
-            chatId: message.chat.id,
+            chatId: from.id,
+            updateType,
+            messageType: updateMessageType,
             type
         }
 
@@ -54,114 +74,127 @@ export default class PrivatePayloadCreator extends PayloadCreator<PRIVATE_UPDATE
     }
 
     protected createTextPayload(context: Context<Update>): IPrivateTextPayload {
-        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.text)
         const message = ContextHelper.getMessageField(context) as TextMessage
+        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.text, message.from as User)
 
         return {
             ...defaultObj,
-            [PRIVATE_UPDATE_TYPES.text]: message.text
+            text: message.text,
+            entities: message.entities
         }
     }
 
     protected createCallbackQueryPayload(context: Context<Update>): IPrivateCbQueryPayload {
-        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.callback_query)
         const update = context.update as CallbackQueryUpdate
+        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.callback_query, update.callback_query.from)
 
         return {
             ...defaultObj,
-            [PRIVATE_UPDATE_TYPES.callback_query]: update.callback_query
+            callback_query: update.callback_query
         }
     }
 
     protected createCommandPayload(context: Context<Update>): IPrivateCommandPayload {
-        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.command)
         const message = ContextHelper.getMessageField(context) as TextMessage
+        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.command, message.from as User)
 
         return {
             ...defaultObj,
-            [PRIVATE_UPDATE_TYPES.command]: message.text
+            command: message.text
         }
     }
 
     protected createAnimationPayload(context: Context<Update>): IPrivateAnimationPayload {
-        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.command)
+        const message = ContextHelper.getMessageField(context) as AnimationMessage
+        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.animation, message.from as User)
 
         return {
             ...defaultObj,
-            [PRIVATE_UPDATE_TYPES.animation]: 'some'
+            animation: message.animation,
+            document: message.document
         }
     }
 
     protected createAudioPayload(context: Context<Update>): IPrivateAudioPayload {
-        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.command)
+        const message = ContextHelper.getMessageField(context) as AudioMessage
+        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.audio, message.from as User)
 
         return {
             ...defaultObj,
-            [PRIVATE_UPDATE_TYPES.audio]: 'some'
+            audio: message.audio
         }
     }
 
     protected createDocumentPayload(context: Context<Update>): IPrivateDocumentPayload {
-        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.command)
+        const message = ContextHelper.getMessageField(context) as DocumentMessage
+        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.document, message.from as User)
 
         return {
             ...defaultObj,
-            [PRIVATE_UPDATE_TYPES.document]: 'some'
+            document: message.document
         }
     }
 
     protected createPhotoPayload(context: Context<Update>): IPrivatePhotoPayload {
-        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.command)
+        const message = ContextHelper.getMessageField(context) as PhotoMessage
+        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.photo, message.from as User)
 
         return {
             ...defaultObj,
-            [PRIVATE_UPDATE_TYPES.photo]: 'some'
+            photo: message.photo
         }
     }
 
     protected createStickerPayload(context: Context<Update>): IPrivateStickerPayload {
-        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.command)
+        const message = ContextHelper.getMessageField(context) as StickerMessage
+        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.sticker, message.from as User)
 
         return {
             ...defaultObj,
-            [PRIVATE_UPDATE_TYPES.sticker]: 'some'
+            sticker: message.sticker
         }
     }
 
     protected createVideoPayload(context: Context<Update>): IPrivateVideoPayload {
-        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.command)
+        const message = ContextHelper.getMessageField(context) as VideoMessage
+        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.video, message.from as User)
 
         return {
             ...defaultObj,
-            [PRIVATE_UPDATE_TYPES.video]: 'some'
+            video: message.video
         }
     }
 
     protected createVideoNotePayload(context: Context<Update>): IPrivateVideNotePayload {
-        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.command)
+        const message = ContextHelper.getMessageField(context) as VideoNoteMessage
+        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.video_note, message.from as User)
 
         return {
             ...defaultObj,
-            [PRIVATE_UPDATE_TYPES.video_note]: 'some'
+            video_note: message.video_note
         }
     }
 
     protected createVoicePayload(context: Context<Update>): IPrivateVoicePayload {
-        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.command)
+        const message = ContextHelper.getMessageField(context) as VoiceMessage
+        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.voice, message.from as User)
 
         return {
             ...defaultObj,
-            [PRIVATE_UPDATE_TYPES.voice]: 'some'
+            voice: message.voice
         }
     }
 
-
+//EDITED MESSAGE SUPPORT
     protected createEditedMessagePayload(context: Context<Update>): IPrivateEditedMessagePayload {
-        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.command)
+        const update = context.update as EditedMessageUpdate
+        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.edited_message, update.edited_message.from)
+        const editedMsgType = ContextHelper.getUpdateMessageType(update.edited_message)
 
         return {
             ...defaultObj,
-            [PRIVATE_UPDATE_TYPES.edited_message]: 'some'
+            edited_message: update,
+            edited_message_type: editedMsgType
         }
     }
 

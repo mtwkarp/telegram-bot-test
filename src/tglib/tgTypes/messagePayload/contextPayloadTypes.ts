@@ -1,10 +1,14 @@
 import {MESSAGE_PAYLOAD_TYPE} from "./messagePayloadTypes";
-import {CallbackQuery} from "typegram";
-import {PRIVATE_UPDATE_TYPES} from "../botUpdatesTypes";
+import {Animation, Audio, CallbackQuery, Document, PhotoSize, Sticker, Update, Video, VideoNote, Voice} from "typegram";
+import {MESSAGES_TYPES, PRIVATE_UPDATE_TYPES, UPDATE_TYPES} from "../botUpdatesTypes";
+import EditedMessageUpdate = Update.EditedMessageUpdate;
+import {MessageEntity} from "typegram/message";
 
 export interface IContextPayload {
 
-    type: MESSAGE_PAYLOAD_TYPE
+    type: MESSAGE_PAYLOAD_TYPE,
+    updateType: UPDATE_TYPES,
+    messageType: MESSAGES_TYPES
 }
 
 export interface IPrivateContextPayload extends IContextPayload {
@@ -13,51 +17,54 @@ export interface IPrivateContextPayload extends IContextPayload {
 }
 
 export interface IPrivateTextPayload extends IPrivateContextPayload {
-    [PRIVATE_UPDATE_TYPES.text]: string
+    text: string,
+    entities?: MessageEntity[];
 }
 
 export interface IPrivateCbQueryPayload extends IPrivateContextPayload {
-    [PRIVATE_UPDATE_TYPES.callback_query]: CallbackQuery
+    callback_query: CallbackQuery
 }
 
 export interface IPrivateCommandPayload extends IPrivateContextPayload {
-    [PRIVATE_UPDATE_TYPES.command]: string
+    command: string
 }
 
 export interface IPrivateAnimationPayload extends IPrivateContextPayload {
-    [PRIVATE_UPDATE_TYPES.animation]: string
+    document: Document,
+    animation: Animation
 }
 
 export interface IPrivateAudioPayload extends IPrivateContextPayload {
-    [PRIVATE_UPDATE_TYPES.audio]: string
+    audio: Audio
 }
 
 export interface IPrivateDocumentPayload extends IPrivateContextPayload {
-    [PRIVATE_UPDATE_TYPES.document]: string
+    document: Document
 }
 
 export interface IPrivatePhotoPayload extends IPrivateContextPayload {
-    [PRIVATE_UPDATE_TYPES.photo]: string
+    photo: PhotoSize[]
 }
 
 export interface IPrivateStickerPayload extends IPrivateContextPayload {
-    [PRIVATE_UPDATE_TYPES.sticker]: string
+    sticker: Sticker
 }
 
 export interface IPrivateVideoPayload extends IPrivateContextPayload {
-   [PRIVATE_UPDATE_TYPES.video]: string
+   video: Video
 }
 
 export interface IPrivateVideNotePayload extends IPrivateContextPayload {
-    [PRIVATE_UPDATE_TYPES.video_note]: string
+    video_note: VideoNote
 }
 
 export interface IPrivateVoicePayload extends IPrivateContextPayload {
-    [PRIVATE_UPDATE_TYPES.voice]: string
+    voice: Voice
 }
 
 export interface IPrivateEditedMessagePayload extends IPrivateContextPayload {
-    [PRIVATE_UPDATE_TYPES.edited_message]: string
+    edited_message: EditedMessageUpdate,
+    edited_message_type: MESSAGES_TYPES
 }
 
 export interface IChannelContextPayload extends IContextPayload {

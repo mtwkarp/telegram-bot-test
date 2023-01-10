@@ -31,7 +31,9 @@ export default class Main {
         this.userScopeManager = new PrivateScopeManager()
     }
     private initPrivateUpdateSubject() {
-        const {text, callback_query, command, animation, audio, document, photo, sticker, video, video_note, voice, edited_message} = PRIVATE_UPDATE_TYPES
+        const {text, callback_query, command, animation, audio, document, photo, sticker, video, video_note, voice,
+            edited_message
+        } = PRIVATE_UPDATE_TYPES
         const messagesTypes: PRIVATE_UPDATE_TYPES[] = [
             text,
             callback_query,

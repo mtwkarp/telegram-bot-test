@@ -10,7 +10,7 @@ export interface IPayloadCreator {
 type PayloadCreatorFunc = (context: Context<Update>) => CONTEXT_PAYLOAD_TYPE
 
 export type PRIVATE_PAYLOAD_CREATORS_HOLDER = {
-    [key in PRIVATE_UPDATE_TYPES]: PayloadCreatorFunc;
+    [key in PRIVATE_UPDATE_TYPES]: (context: Context<Update>) => CONTEXT_PAYLOAD_TYPE;
 };
 
 export type CHANNEL_PAYLOAD_CREATORS_HOLDER = {

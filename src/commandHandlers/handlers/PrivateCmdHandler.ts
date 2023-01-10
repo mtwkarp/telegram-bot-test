@@ -59,7 +59,7 @@ abstract class PrivateCmdHandler extends EventEmitter {
     static get handlerName():CMD_NAME_TYPE {
         return this._name
     }
-
+    //NO OVERRIDE ALLOWED
     onUpdate(contextDecorator: IPrivateContextDecorator): void {
         this.updateTypesImplementations[contextDecorator.updateType](contextDecorator)
     }
