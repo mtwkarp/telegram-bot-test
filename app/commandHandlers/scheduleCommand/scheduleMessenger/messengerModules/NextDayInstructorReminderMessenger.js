@@ -6,7 +6,6 @@ const FirebaseDB = require('../../../../google/FireStoreDB');
 class NextDayInstructorReminderMessenger extends MessengerModule {
   constructor(tg, scheduleSheetsManager) {
     super(tg, scheduleSheetsManager);
-    this.sendTomorrowInstructorsReminders()
   }
 
   setScheduledMessages() {
