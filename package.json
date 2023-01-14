@@ -7,7 +7,7 @@
     "node": "16.18.1"
   },
   "scripts": {
-    "dev": "mode=development nodemon index.js",
+    "dev": "mode=development ts-node-dev src/index.ts --watch /src",
     "production": "mode=production node --optimize_for_size --max_old_space_size=460 index.js"
   },
   "repository": {
