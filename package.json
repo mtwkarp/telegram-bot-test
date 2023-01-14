@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "mode=development nodemon index.js",
-    "production": "mode=production node index.js"
+    "production": "mode=production node --optimize_for_size --max_old_space_size=460 index.js"
   },
   "repository": {
     "type": "git",
