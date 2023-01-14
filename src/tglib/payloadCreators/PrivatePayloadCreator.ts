@@ -31,7 +31,6 @@ import VideoMessage = Message.VideoMessage;
 import VideoNoteMessage = Message.VideoNoteMessage;
 import VoiceMessage = Message.VoiceMessage;
 import EditedMessageUpdate = Update.EditedMessageUpdate;
-import NonChannel = Update.NonChannel;
 
 export default class PrivatePayloadCreator extends PayloadCreator<PRIVATE_UPDATE_TYPES, IPrivateContextPayload> {
     readonly decoratorCreatorFunctionByUpdateType: PRIVATE_PAYLOAD_CREATORS_HOLDER = {
@@ -121,7 +120,8 @@ export default class PrivatePayloadCreator extends PayloadCreator<PRIVATE_UPDATE
 
         return {
             ...defaultObj,
-            audio: message.audio
+            audio: message.audio,
+            ...this.getDefaultMediaValuesFromMsg(message)
         }
     }
 
@@ -131,7 +131,8 @@ export default class PrivatePayloadCreator extends PayloadCreator<PRIVATE_UPDATE
 
         return {
             ...defaultObj,
-            document: message.document
+            document: message.document,
+            ...this.getDefaultMediaValuesFromMsg(message)
         }
     }
 
@@ -141,7 +142,8 @@ export default class PrivatePayloadCreator extends PayloadCreator<PRIVATE_UPDATE
 
         return {
             ...defaultObj,
-            photo: message.photo
+            photo: message.photo,
+            ...this.getDefaultMediaValuesFromMsg(message)
         }
     }
 
@@ -161,7 +163,8 @@ export default class PrivatePayloadCreator extends PayloadCreator<PRIVATE_UPDATE
 
         return {
             ...defaultObj,
-            video: message.video
+            video: message.video,
+            ...this.getDefaultMediaValuesFromMsg(message)
         }
     }
 
@@ -181,11 +184,11 @@ export default class PrivatePayloadCreator extends PayloadCreator<PRIVATE_UPDATE
 
         return {
             ...defaultObj,
-            voice: message.voice
+            voice: message.voice,
+            caption: message.caption
         }
     }
 
-//EDITED MESSAGE SUPPORT
     protected createEditedMessagePayload(context: Context<Update>): IPrivateEditedMessagePayload {
         const update = context.update as EditedMessageUpdate
         const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.edited_message, update.edited_message.from)
