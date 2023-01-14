@@ -19,9 +19,18 @@
   "bugs": {
     "url": "https://github.com/MatthewKarpenko/telegram-bot-test/issues"
   },
+  "ava": {
+    "extensions": {
+      "ts": "module"
+    },
+    "nodeArguments": [
+      "--loader=ts-node/esm"
+    ]
+  },
   "homepage": "https://github.com/MatthewKarpenko/telegram-bot-test#readme",
   "dependencies": {
     "@google-cloud/local-auth": "^2.1.1",
+    "ava": "^5.1.0",
     "babel-loader": "^8.2.5",
     "clean-webpack-plugin": "^4.0.0",
     "dotenv": "^16.0.3",
