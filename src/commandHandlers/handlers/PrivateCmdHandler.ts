@@ -4,8 +4,9 @@ import EventEmitter from "eventemitter3";
 import {CMD_NAME_TYPE, CMD_NAMES} from "../../types/commandTypes";
 import {IPrivateContextDecorator} from "../../tglib/tgTypes/contextDecoratorTypes";
 import {PRIVATE_UPDATE_TYPES} from "../../tglib/tgTypes/botUpdatesTypes";
+import PrivateUpdateHandler from "../../tglib/scopeUpdateHandlers/PrivateUpdateHandler";
 
-abstract class PrivateCmdHandler extends EventEmitter {
+abstract class PrivateCmdHandler extends PrivateUpdateHandler {
 
     protected readonly id: number
     protected readonly tg: Telegram
@@ -51,7 +52,7 @@ abstract class PrivateCmdHandler extends EventEmitter {
 
     protected notifyAboutCmdFinish(): void {
         this.finishCmd()
-        this.emit(CMD_HANDLERS_EVENTS.FINISH)
+        // this.emit(CMD_HANDLERS_EVENTS.FINISH)
     }
 
     protected static readonly _name: CMD_NAME_TYPE = CMD_NAMES.NONE
@@ -61,12 +62,21 @@ abstract class PrivateCmdHandler extends EventEmitter {
     }
     //NO OVERRIDE ALLOWED
     onUpdate(contextDecorator: IPrivateContextDecorator): void {
+        if(this.updateTypesImplementations[contextDecorator.updateType] === undefined) {
+            this.updateNotSupported(contextDecorator.updateType)
+
+            return
+        }
         this.updateTypesImplementations[contextDecorator.updateType](contextDecorator)
     }
-    protected onCommand(contextDecorator: IPrivateContextDecorator): void {
+
+    protected updateNotSupported(updateType: PRIVATE_UPDATE_TYPES): void {
+        console.log(`Update ${updateType} not supported`)
+    }
+    protected override onCommand(contextDecorator: IPrivateContextDecorator): void {
         this.noImplementationFound(contextDecorator)
     }
-    protected onCallbackQuery(contextDecorator: IPrivateContextDecorator): void {
+    protected override onCallbackQuery(contextDecorator: IPrivateContextDecorator): void {
         this.noImplementationFound(contextDecorator)
     }
 
@@ -75,43 +85,43 @@ abstract class PrivateCmdHandler extends EventEmitter {
         console.log(contextDecorator.payload)
     }
 
-    protected onText(contextDecorator: IPrivateContextDecorator): void {
+    protected override onText(contextDecorator: IPrivateContextDecorator): void {
         this.noImplementationFound(contextDecorator)
     }
 
-    protected onAnimation(contextDecorator: IPrivateContextDecorator): void {
+    protected override onAnimation(contextDecorator: IPrivateContextDecorator): void {
         this.noImplementationFound(contextDecorator)
     }
 
-    protected onAudio(contextDecorator: IPrivateContextDecorator): void {
+    protected override onAudio(contextDecorator: IPrivateContextDecorator): void {
         this.noImplementationFound(contextDecorator)
     }
 
-    protected onDocument(contextDecorator: IPrivateContextDecorator): void {
+    protected override onDocument(contextDecorator: IPrivateContextDecorator): void {
         this.noImplementationFound(contextDecorator)
     }
 
-    protected onPhoto(contextDecorator: IPrivateContextDecorator): void {
+    protected override onPhoto(contextDecorator: IPrivateContextDecorator): void {
         this.noImplementationFound(contextDecorator)
     }
 
-    protected onSticker(contextDecorator: IPrivateContextDecorator): void {
+    protected override onSticker(contextDecorator: IPrivateContextDecorator): void {
         this.noImplementationFound(contextDecorator)
     }
 
-    protected onVideo(contextDecorator: IPrivateContextDecorator): void {
+    protected override onVideo(contextDecorator: IPrivateContextDecorator): void {
         this.noImplementationFound(contextDecorator)
     }
 
-    protected onVideoNote(contextDecorator: IPrivateContextDecorator): void {
+    protected override onVideoNote(contextDecorator: IPrivateContextDecorator): void {
         this.noImplementationFound(contextDecorator)
     }
 
-    protected onVoice(contextDecorator: IPrivateContextDecorator): void {
+    protected override onVoice(contextDecorator: IPrivateContextDecorator): void {
         this.noImplementationFound(contextDecorator)
     }
 
-    protected onEditedMessage(contextDecorator: IPrivateContextDecorator): void {
+    protected override onEditedMessage(contextDecorator: IPrivateContextDecorator): void {
         this.noImplementationFound(contextDecorator)
     }
 }

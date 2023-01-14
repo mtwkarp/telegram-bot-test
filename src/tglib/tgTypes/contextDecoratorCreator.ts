@@ -5,6 +5,6 @@ import {IContextDecorator, IEmptyContext} from "./contextDecoratorTypes";
 import {CONTEXT_PAYLOAD_TYPE, IContextPayload} from "./messagePayload/contextPayloadTypes";
 
 export interface IContextDecoratorCreator<U extends SCOPE_UPDATE_TYPES> {
-    createDecorator(updateType: U, context: Context<Update>): IContextDecorator
+    createDecorator(updateType: U, context: Context<Update>): IContextDecorator | null
 }
 

@@ -28,7 +28,9 @@ class PrivateUpdateSubject extends ScopeUpdateSubject<PRIVATE_UPDATE_TYPES, IPri
     protected onUpdate(messageType: PRIVATE_UPDATE_TYPES, context: Context<Update>): void {
         if(context.chat?.type !== 'private') return
         
-        const contextDecorator: IPrivateContextDecorator = this.contextDecoratorCreator.createDecorator(messageType, context)
+        const contextDecorator: null | IPrivateContextDecorator = this.contextDecoratorCreator.createDecorator(messageType, context)
+
+        if(contextDecorator === null) return
 
         this.notifyObservers(contextDecorator)
     }

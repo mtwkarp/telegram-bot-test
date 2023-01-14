@@ -11,5 +11,5 @@ export default abstract class ContextDecoratorCreator<U extends SCOPE_UPDATE_TYP
     protected abstract updateScope: BOT_UPDATE_SCOPE
     protected abstract payloadCreator: IPayloadCreator
 
-    public abstract createDecorator(updateType: U, context: Context<Update>): IContextDecorator
+    public abstract createDecorator(updateType: U, context: Context<Update>): IContextDecorator | null
 }
