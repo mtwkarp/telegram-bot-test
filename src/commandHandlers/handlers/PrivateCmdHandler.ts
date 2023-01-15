@@ -12,7 +12,7 @@ abstract class PrivateCmdHandler extends PrivateUpdateHandler {
     protected readonly tg: Telegram
     protected _name: CMD_NAME_TYPE
     protected readonly updateTypesImplementations: {
-        [key in PRIVATE_UPDATE_TYPES]: (contextDecorator: IPrivateContextDecorator) => void
+        [key in PRIVATE_UPDATE_TYPES]?: (contextDecorator: IPrivateContextDecorator) => void
     }
     protected constructor(userId: number) {
         super()
@@ -66,7 +66,11 @@ abstract class PrivateCmdHandler extends PrivateUpdateHandler {
             this.updateNotSupported(contextDecorator.updateType)
 
             return
+        }else {
+
         }
+
+        // @ts-ignore nonsense, look up
         this.updateTypesImplementations[contextDecorator.updateType](contextDecorator)
     }
 

@@ -32,7 +32,8 @@ export default class Main {
     }
     private initPrivateUpdateSubject() {
         const {text, callback_query, command, animation, audio, document, photo, sticker, video, video_note, voice,
-            edited_message
+            edited_message,
+            location
         } = PRIVATE_UPDATE_TYPES
         const messagesTypes: PRIVATE_UPDATE_TYPES[] = [
             text,
@@ -46,7 +47,8 @@ export default class Main {
             video,
             video_note,
             voice,
-            edited_message
+            edited_message,
+            location
         ]
         const commands: CMD_NAME_TYPE[] = [CMD_NAMES.SCHEDULE]
 

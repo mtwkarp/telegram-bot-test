@@ -1,5 +1,5 @@
 import {MESSAGE_PAYLOAD_TYPE} from "./messagePayloadTypes";
-import {Animation, Audio, CallbackQuery, Document, PhotoSize, Sticker, Update, Video, VideoNote, Voice} from "typegram";
+import {Animation, Audio, CallbackQuery, Document, PhotoSize, Sticker, Update, Video, VideoNote, Voice, Location} from "typegram";
 import {MESSAGES_TYPES, PRIVATE_UPDATE_TYPES, UPDATE_TYPES} from "../botUpdatesTypes";
 import EditedMessageUpdate = Update.EditedMessageUpdate;
 import {MessageEntity} from "typegram/message";
@@ -79,6 +79,9 @@ export interface IPrivateEditedMessagePayload extends IPrivateContextPayload {
     edited_message_type: MESSAGES_TYPES
 }
 
+export interface IPrivateLocationPayload extends IPrivateContextPayload {
+    location: Location
+}
 export interface IChannelContextPayload extends IContextPayload {
     // chatId: number
 }

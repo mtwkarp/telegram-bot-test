@@ -78,6 +78,7 @@ enum PRIVATE_UPDATE_TYPES {
     video_note='video_note',
     voice='voice',
     edited_message='edited_message',
+    location='location'
     // inline_query='inline_query' ???
     // chosen_inline_result='chosen_inline_result' ???
     // shipping_query='shipping_query'

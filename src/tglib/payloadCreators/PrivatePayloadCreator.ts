@@ -6,7 +6,7 @@ import {
     IPrivateCommandPayload,
     IPrivateContextPayload,
     IPrivateDocumentPayload,
-    IPrivateEditedMessagePayload,
+    IPrivateEditedMessagePayload, IPrivateLocationPayload,
     IPrivatePhotoPayload,
     IPrivateStickerPayload,
     IPrivateTextPayload,
@@ -32,6 +32,7 @@ import VoiceMessage = Message.VoiceMessage;
 import EditedMessageUpdate = Update.EditedMessageUpdate;
 import MediaMessage = Message.MediaMessage;
 import PrivateUpdateHandler from "../scopeUpdateHandlers/PrivateUpdateHandler";
+import LocationMessage = Message.LocationMessage;
 
 export default class PrivatePayloadCreator extends PrivateUpdateHandler implements IPayloadCreator {
     readonly decoratorCreatorFunctionByUpdateType: PRIVATE_PAYLOAD_CREATORS_HOLDER = {
@@ -46,18 +47,21 @@ export default class PrivatePayloadCreator extends PrivateUpdateHandler implemen
         [PRIVATE_UPDATE_TYPES.video]: this.onVideo.bind(this),
         [PRIVATE_UPDATE_TYPES.video_note]: this.onVideoNote.bind(this),
         [PRIVATE_UPDATE_TYPES.voice]: this.onVoice.bind(this),
-        [PRIVATE_UPDATE_TYPES.edited_message]: this.onEditedMessage.bind(this)
+        [PRIVATE_UPDATE_TYPES.edited_message]: this.onEditedMessage.bind(this),
+        [PRIVATE_UPDATE_TYPES.location]: this.onLocation.bind(this)
     }
 
     public create(updateType: PRIVATE_UPDATE_TYPES, context: Context<Update>): IPrivateContextPayload | null {
         if(this.decoratorCreatorFunctionByUpdateType[updateType] === undefined) {
-            console.log(`Creation of this kind of payload (${updateType}) not supported`)
+            console.log(`Creation of this kind of payload (${updateType}) not yet supported`)
 
             return null
         }
+        // @ts-ignore
+        const result = this.decoratorCreatorFunctionByUpdateType[updateType](context)
 
         // @ts-ignore
-        return this.decoratorCreatorFunctionByUpdateType[updateType](context)
+        return result ? result : null
     }
 
     public getDefaultMediaValuesFromMsg(message: MediaMessage): MediaPayload {
@@ -217,6 +221,16 @@ export default class PrivatePayloadCreator extends PrivateUpdateHandler implemen
             ...defaultObj,
             edited_message: update,
             edited_message_type: editedMsgType
+        }
+    }
+
+    protected override onLocation(context: Context<Update>): IPrivateLocationPayload {
+        const message = ContextHelper.getMessageField(context) as LocationMessage
+        const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.voice, message.from as User)
+
+        return {
+            ...defaultObj,
+            location: message.location
         }
     }
 

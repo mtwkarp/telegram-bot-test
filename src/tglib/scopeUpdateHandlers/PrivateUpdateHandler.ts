@@ -22,4 +22,6 @@ export default abstract class PrivateUpdateHandler {
     protected onVoice(update: any) {}
 
     protected onEditedMessage(update: any) {}
+
+    protected onLocation(update: any) {}
 }
