@@ -1,14 +1,23 @@
 import EnvLoader from "./envLoader/EnvLoader";
-import Bot from "./Bot";
+import TelegrafBot from "./TelegrafBot";
 import PrivateScopeManager from "./user/PrivateScopeManager";
 import PrivateUpdateSubject from "./tglib/botUpdatesObservers/PrivateUpdateSubject";
 import {PRIVATE_UPDATE_TYPES} from "./tglib/tgTypes/botUpdatesTypes";
 import {CMD_NAME_TYPE, CMD_NAMES} from "./types/commandTypes";
+import UpdateTemplatesCreator from "./tglib/helpers/UpdateTemplatesCreator";
+import {Context} from "telegraf";
+import {Update} from "typegram";
 
-export default class Main {
-    private bot: Bot
+export default class MyBot {
+    public bot: TelegrafBot
     private privateUpdateSubject: PrivateUpdateSubject
     private userScopeManager: PrivateScopeManager
+    private readonly privateMessagesTypes: PRIVATE_UPDATE_TYPES[]
+    private readonly privateCommands: string[]
+    constructor(privateMessagesTypes: PRIVATE_UPDATE_TYPES[], privateCommands: string[]) {
+        this.privateMessagesTypes = privateMessagesTypes
+        this.privateCommands = privateCommands
+    }
     public async init(): Promise<void> {
         this.initEnvironmentVariables();
         await this.initBot()
@@ -18,7 +27,7 @@ export default class Main {
     }
 
     private async initBot(): Promise<void> {
-        this.bot = new Bot()
+        this.bot = new TelegrafBot()
         await this.bot.initBot()
         await this.bot.launchBot()
     }
@@ -31,32 +40,14 @@ export default class Main {
         this.userScopeManager = new PrivateScopeManager()
     }
     private initPrivateUpdateSubject() {
-        const {text, callback_query, command, animation, audio, document, photo, sticker, video, video_note, voice,
-            edited_message,
-            location
-        } = PRIVATE_UPDATE_TYPES
-        const messagesTypes: PRIVATE_UPDATE_TYPES[] = [
-            text,
-            callback_query,
-            command,
-            animation,
-            audio,
-            document,
-            photo,
-            sticker,
-            video,
-            video_note,
-            voice,
-            edited_message,
-            location
-        ]
-        const commands: CMD_NAME_TYPE[] = [CMD_NAMES.SCHEDULE]
-
-        this.privateUpdateSubject = new PrivateUpdateSubject(messagesTypes, commands)
+        console.log('Private messages types: ', ...this.privateMessagesTypes)
+        this.privateUpdateSubject = new PrivateUpdateSubject(this.privateMessagesTypes, this.privateCommands)
         this.privateUpdateSubject.subscribeForBotUpdates(this.bot)
     }
 
     private subscribeForPrivateMessagesUpdates() {
         this.privateUpdateSubject.registerObserver(this.userScopeManager)
     }
+
+
 }

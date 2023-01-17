@@ -66,8 +66,6 @@ abstract class PrivateCmdHandler extends PrivateUpdateHandler {
             this.updateNotSupported(contextDecorator.updateType)
 
             return
-        }else {
-
         }
 
         // @ts-ignore nonsense, look up

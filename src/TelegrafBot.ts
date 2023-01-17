@@ -2,7 +2,7 @@
 
 import {Telegraf} from "telegraf";
 import {commandsDescription} from "./static/commandsInfo";
-export default class Bot extends Telegraf {
+export default class TelegrafBot extends Telegraf {
     constructor() {
         super(process.env.TELEGRAM_BOT_TOKEN as string);
     }

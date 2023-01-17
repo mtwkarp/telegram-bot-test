@@ -8,7 +8,8 @@
   },
   "scripts": {
     "dev": "mode=development ts-node-dev src/index.ts --watch /src",
-    "production": "mode=production node --optimize_for_size --max_old_space_size=460 index.js"
+    "production": "mode=production node --optimize_for_size --max_old_space_size=460 index.js",
+    "test": "tsc && mode=development ava test/updateTest.js"
   },
   "repository": {
     "type": "git",
@@ -19,18 +20,9 @@
   "bugs": {
     "url": "https://github.com/MatthewKarpenko/telegram-bot-test/issues"
   },
-  "ava": {
-    "extensions": {
-      "ts": "module"
-    },
-    "nodeArguments": [
-      "--loader=ts-node/esm"
-    ]
-  },
   "homepage": "https://github.com/MatthewKarpenko/telegram-bot-test#readme",
   "dependencies": {
     "@google-cloud/local-auth": "^2.1.1",
-    "ava": "^5.1.0",
     "babel-loader": "^8.2.5",
     "clean-webpack-plugin": "^4.0.0",
     "dotenv": "^16.0.3",
@@ -50,6 +42,7 @@
   },
   "devDependencies": {
     "@types/node": "^18.11.18",
+    "ava": "^5.1.1",
     "eslint": "^8.26.0",
     "prettier": "^2.7.1",
     "ts-node-dev": "^2.0.0",

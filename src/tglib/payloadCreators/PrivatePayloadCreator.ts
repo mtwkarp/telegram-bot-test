@@ -81,6 +81,7 @@ export default class PrivatePayloadCreator extends PrivateUpdateHandler implemen
         }
 
         if(updateType === UPDATE_TYPES.message) {
+            // console.log('asdf', context.message)
             updateMessageType = ContextHelper.getUpdateMessageType(context.message as Message)
         }
 
