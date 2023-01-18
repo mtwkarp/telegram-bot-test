@@ -1,12 +1,11 @@
 import EventEmitter from "eventemitter3";
 import PrivateCmdHandler from "./PrivateCmdHandler";
 import NoneCmdHandler from "./handlers/noneCommand/NoneCmdHandler";
-import {CMD_NAME_TYPE} from "../../types/commandTypes";
 import {IPrivateCmdHandler} from "../../types/commandHandlerTypes";
-import {IContextDecorator, IPrivateContextDecorator} from "../../tglib/tgTypes/contextDecoratorTypes";
+import {IPrivateContextDecorator} from "../../tglib/tgTypes/contextDecoratorTypes";
 import {PRIVATE_UPDATE_TYPES} from "../../tglib/tgTypes/botUpdatesTypes";
 import {DefaultCmdHandler} from "../../types/types";
-import {IPrivateCommandPayload, IPrivateContextPayload} from "../../tglib/tgTypes/messagePayload/contextPayloadTypes";
+import {IPrivateCommandPayload} from "../../tglib/tgTypes/messagePayload/contextPayloadTypes";
 
 class PrivateCmdHandlersManager extends EventEmitter implements IPrivateCmdHandler {
 

@@ -79,8 +79,8 @@ class FireStoreDB {
 
   static #data = {
     // collections
-    // documents
-    // fields
+      // documents
+        // fields
   };
 }
 

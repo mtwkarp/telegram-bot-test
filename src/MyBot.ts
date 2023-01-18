@@ -3,6 +3,8 @@ import TelegrafBot from "./TelegrafBot";
 import PrivateScopeManager from "./user/PrivateScopeManager";
 import PrivateUpdateSubject from "./tglib/botUpdatesObservers/PrivateUpdateSubject";
 import {PRIVATE_UPDATE_TYPES} from "./tglib/tgTypes/botUpdatesTypes";
+import {firebase_v1beta1} from "googleapis";
+import FireBaseDB from "./db/FireBaseDB";
 
 export default class MyBot {
     public bot: TelegrafBot
@@ -16,12 +18,22 @@ export default class MyBot {
     }
     public async init(): Promise<void> {
         this.initEnvironmentVariables();
+        await this.initDatabase()
         await this.initBot()
         this.initPrivateUpdateSubject()
         this.initUserScopeManager()
         this.subscribeForPrivateMessagesUpdates()
+
+
     }
 
+    async initDatabase(): Promise<void> {
+        const firebase = new FireBaseDB()
+
+        await firebase.initDataBase()
+
+        console.log(firebase.allRemoteData)
+    }
     private async initBot(): Promise<void> {
         this.bot = new TelegrafBot()
         await this.bot.initBot()

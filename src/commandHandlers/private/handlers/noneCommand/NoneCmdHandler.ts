@@ -7,9 +7,7 @@ class NoneCmdHandler extends PrivateCmdHandler implements DefaultCmdHandler{
     constructor(userId: number) {
         super(userId);
 
-        this._name = NoneCmdHandler.handlerName
-
-
+        this._name = CMD_NAMES.NONE
     }
 
     override copy(): PrivateCmdHandler {
@@ -19,8 +17,6 @@ class NoneCmdHandler extends PrivateCmdHandler implements DefaultCmdHandler{
     public sendNotAvailableCmdMessage(): void {
         this.sendMessage('Дана команда наразі вам недоступна. Зверніться до адміністратора бота.')
     }
-
-    protected static override readonly _name: CMD_NAME_TYPE = CMD_NAMES.NONE
 }
 
 export default NoneCmdHandler
