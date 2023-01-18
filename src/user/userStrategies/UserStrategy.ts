@@ -6,9 +6,11 @@ abstract class UserStrategy implements UserPrivateScope{
 
 
     onUpdate(context: IPrivateContextDecorator) {
-
     }
 
+    // commandNotAvailiable() {
+
+    // }
 }
 
 export default UserStrategy

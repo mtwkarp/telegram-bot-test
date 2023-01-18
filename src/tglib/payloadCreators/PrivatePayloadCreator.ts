@@ -120,10 +120,11 @@ export default class PrivatePayloadCreator extends PrivateUpdateHandler implemen
     protected override onCommand(context: Context<Update>): IPrivateCommandPayload {
         const message = ContextHelper.getMessageField(context) as TextMessage
         const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.command, message.from as User)
+        const cmdWithoutSlash = message.text.slice(1)
 
         return {
             ...defaultObj,
-            command: message.text
+            command: cmdWithoutSlash
         }
     }
 

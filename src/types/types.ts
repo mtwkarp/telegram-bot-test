@@ -4,8 +4,12 @@ interface UserPrivateScope {
     onUpdate(contextDecorator: IPrivateContextDecorator): void
 }
 
+interface DefaultCmdHandler {
+    sendNotAvailableCmdMessage(): void
+}
+
 export {
     CommandsDictionary,
     CommandDescription,
-    UserPrivateScope
+    UserPrivateScope, DefaultCmdHandler
 }

@@ -3,10 +3,6 @@ import TelegrafBot from "./TelegrafBot";
 import PrivateScopeManager from "./user/PrivateScopeManager";
 import PrivateUpdateSubject from "./tglib/botUpdatesObservers/PrivateUpdateSubject";
 import {PRIVATE_UPDATE_TYPES} from "./tglib/tgTypes/botUpdatesTypes";
-import {CMD_NAME_TYPE, CMD_NAMES} from "./types/commandTypes";
-import UpdateTemplatesCreator from "./tglib/helpers/UpdateTemplatesCreator";
-import {Context} from "telegraf";
-import {Update} from "typegram";
 
 export default class MyBot {
     public bot: TelegrafBot
@@ -48,6 +44,4 @@ export default class MyBot {
     private subscribeForPrivateMessagesUpdates() {
         this.privateUpdateSubject.registerObserver(this.userScopeManager)
     }
-
-
 }

@@ -3,9 +3,11 @@ class EnvLoader {
     public static load(): void {
         dotenv.config();
 
-        if(process.env.mode === 'development') this.loadDevEnvVariables();
+        const {mode} = process.env
 
-        if(process.env.mode === 'production') this.loadProdEnvVariables();
+        if(mode === 'development' || mode === 'test') this.loadDevEnvVariables();
+
+        if(mode === 'production') this.loadProdEnvVariables();
     }
 
     private static loadDevEnvVariables(): void {

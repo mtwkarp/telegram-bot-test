@@ -4,8 +4,6 @@ import {Update} from "typegram"
 import ScopeUpdateSubject from "./ScopeUpdateSubject";
 import {IPrivateContextDecorator} from "../tgTypes/contextDecoratorTypes";
 import PrivateContextDecoratorCreator from "../contextCreators/PrivateContextDecoratorCreator";
-import UpdateTemplatesCreator from "../helpers/UpdateTemplatesCreator";
-import Telegram from 'telegraf'
 class PrivateUpdateSubject extends ScopeUpdateSubject<PRIVATE_UPDATE_TYPES, IPrivateContextDecorator> {
 
     protected readonly contextDecoratorCreator: PrivateContextDecoratorCreator
@@ -27,7 +25,6 @@ class PrivateUpdateSubject extends ScopeUpdateSubject<PRIVATE_UPDATE_TYPES, IPri
     }
 
     protected onUpdate(messageType: PRIVATE_UPDATE_TYPES, context: Context<Update>): void {
-        console.log('PRIVATE MESSAGE')
         if(context.chat?.type !== 'private') return
 
         const contextDecorator: null | IPrivateContextDecorator = this.contextDecoratorCreator.createDecorator(messageType, context)

@@ -1,6 +1,4 @@
 import {Telegram} from "telegraf";
-import {CMD_HANDLERS_EVENTS} from "../../enums/botEnums";
-import EventEmitter from "eventemitter3";
 import {CMD_NAME_TYPE, CMD_NAMES} from "../../types/commandTypes";
 import {IPrivateContextDecorator} from "../../tglib/tgTypes/contextDecoratorTypes";
 import {PRIVATE_UPDATE_TYPES} from "../../tglib/tgTypes/botUpdatesTypes";
@@ -41,18 +39,14 @@ abstract class PrivateCmdHandler extends PrivateUpdateHandler {
     get name(): CMD_NAME_TYPE {
         return this._name
     }
-
-
     async sendMessage(message: string): Promise<void> {
         await this.tg.sendMessage(this.id.toString(), message)
     }
 
-    public finishCmd(): void {
-    }
+    public finishCmd(): void {}
 
     protected notifyAboutCmdFinish(): void {
         this.finishCmd()
-        // this.emit(CMD_HANDLERS_EVENTS.FINISH)
     }
 
     protected static readonly _name: CMD_NAME_TYPE = CMD_NAMES.NONE
@@ -60,7 +54,6 @@ abstract class PrivateCmdHandler extends PrivateUpdateHandler {
     static get handlerName():CMD_NAME_TYPE {
         return this._name
     }
-    //NO OVERRIDE ALLOWED
     onUpdate(contextDecorator: IPrivateContextDecorator): void {
         if(this.updateTypesImplementations[contextDecorator.updateType] === undefined) {
             this.updateNotSupported(contextDecorator.updateType)
@@ -84,7 +77,7 @@ abstract class PrivateCmdHandler extends PrivateUpdateHandler {
 
     private noImplementationFound(contextDecorator: IPrivateContextDecorator): void {
         console.log(`Update type is ${contextDecorator.updateType}, but no implementation in current handler (handler name - ${this.name}) found.`)
-        console.log(contextDecorator.payload)
+        // console.log(contextDecorator.payload)
     }
 
     protected override onText(contextDecorator: IPrivateContextDecorator): void {

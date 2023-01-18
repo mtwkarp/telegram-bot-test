@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "mode=development ts-node-dev src/index.ts --watch /src",
     "production": "mode=production node --optimize_for_size --max_old_space_size=460 index.js",
-    "test": "tsc && mode=development ava test/updateTest.js"
+    "test": "tsc && mode=test ava test/updateTest.js"
   },
   "repository": {
     "type": "git",

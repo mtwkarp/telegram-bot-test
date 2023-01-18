@@ -23,7 +23,7 @@ const privateMessagesTypes: PRIVATE_UPDATE_TYPES[] = [
     location
 ]
 
-const privateCommands: CMD_NAME_TYPE[] = [CMD_NAMES.SCHEDULE]
+const privateCommands: CMD_NAME_TYPE[] = [CMD_NAMES.SCHEDULE, CMD_NAMES.COMMANDS_INFO]
 
 new MyBot(privateMessagesTypes, privateCommands).init()
         .then(() => console.log('Successful APPLICATION start'))
