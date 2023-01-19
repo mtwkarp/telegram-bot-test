@@ -1,9 +1,9 @@
-import Database from "./Database";
+import Database from "../Database";
 import {cert, initializeApp} from "firebase-admin/app";
-import GoogleCredentialsManager from "../helpers/GoogleCredentialsManager";
+import GoogleCredentialsManager from "../../helpers/GoogleCredentialsManager";
 import {getFirestore} from "firebase-admin/firestore";
 
-export default class FireBaseDB extends Database {
+export default class FireStoreDB extends Database {
     constructor() {
         super();
     }

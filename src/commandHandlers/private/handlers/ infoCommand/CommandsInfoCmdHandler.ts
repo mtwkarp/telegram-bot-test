@@ -1,7 +1,6 @@
 import PrivateCmdHandler from "../../PrivateCmdHandler";
 import {CMD_NAMES} from "../../../../types/commandTypes";
-
-// const FirebaseDB = require('../../google/FireStoreDB');
+import ReplyMsgCollection from "../../../../db/firestore/collectionManagers/implementations/ReplyMsgCollection";
 
 export default class CommandsInfoHandler extends PrivateCmdHandler {
     constructor(userId: number) {
@@ -14,6 +13,8 @@ export default class CommandsInfoHandler extends PrivateCmdHandler {
         return new CommandsInfoHandler(this.id)
     }
     onCommand() {
-        // this.sendMessage(this.id, FirebaseDB.getReplyMessage('commands', 'commands_description'));
+        const reply = ReplyMsgCollection.getInstance().getValueFromDocument('commands', 'commands_description')
+
+        this.sendMessage(reply);        // this.sendMessage(this.id, FirebaseDB.getReplyMessage('commands', 'commands_description'));
     }
 }

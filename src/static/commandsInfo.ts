@@ -3,7 +3,8 @@ import {CMD_NAMES} from "../types/commandTypes";
 
 const commandsDescription: Readonly<CommandsDictionary> = {
     schedule: {command: CMD_NAMES.SCHEDULE, description: 'Надіслати розклад.'},
-    info: {command: CMD_NAMES.COMMANDS_INFO, description: 'Інформація по доступних командах бота.'}
+    info: {command: CMD_NAMES.COMMANDS_INFO, description: 'Інформація по доступних командах бота.'},
+    start: {command: CMD_NAMES.START, description: 'Старт роботи з ботом.'}
 }
 
 export {commandsDescription}

@@ -4,7 +4,9 @@ import PrivateScopeManager from "./user/PrivateScopeManager";
 import PrivateUpdateSubject from "./tglib/botUpdatesObservers/PrivateUpdateSubject";
 import {PRIVATE_UPDATE_TYPES} from "./tglib/tgTypes/botUpdatesTypes";
 import {firebase_v1beta1} from "googleapis";
-import FireBaseDB from "./db/FireBaseDB";
+import FireStoreDB from "./db/firestore/FireStoreDB";
+import TimeCollection from "./db/firestore/collectionManagers/implementations/TimeCollection";
+import DataBaseManager from "./db/DataBaseManager";
 
 export default class MyBot {
     public bot: TelegrafBot
@@ -28,11 +30,9 @@ export default class MyBot {
     }
 
     async initDatabase(): Promise<void> {
-        const firebase = new FireBaseDB()
+        const databaseManager = new DataBaseManager()
 
-        await firebase.initDataBase()
-
-        console.log(firebase.allRemoteData)
+        await databaseManager.init()
     }
     private async initBot(): Promise<void> {
         this.bot = new TelegrafBot()

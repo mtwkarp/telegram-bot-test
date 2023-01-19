@@ -1,8 +1,6 @@
 import PrivateCmdHandler from "../../PrivateCmdHandler";
 import {CMD_NAMES} from "../../../../types/commandTypes";
-
-// const BotCmdHandler = require('../BotCmdHandler');
-// const FirebaseDB = require('../../google/FireStoreDB');
+import ReplyMsgCollection from "../../../../db/firestore/collectionManagers/implementations/ReplyMsgCollection";
 
 export default class StartCmdHandler extends PrivateCmdHandler {
     constructor(userId: number) {
@@ -16,7 +14,9 @@ export default class StartCmdHandler extends PrivateCmdHandler {
     }
 
     protected override onCommand() {
-        // this.sendMessage(this.id, FirebaseDB.getReplyMessage('start', 'bot_introduction'));
+        const reply = ReplyMsgCollection.getInstance().getValueFromDocument('start', 'bot_introduction')
+
+        this.sendMessage(reply);
     }
 }
 
