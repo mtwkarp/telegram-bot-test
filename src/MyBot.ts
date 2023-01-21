@@ -5,6 +5,9 @@ import PrivateUpdateSubject from "./tglib/botUpdatesObservers/PrivateUpdateSubje
 import {PRIVATE_UPDATE_TYPES} from "./tglib/tgTypes/botUpdatesTypes";
 import DataBaseManager from "./db/DataBaseManager";
 import GoogleServicesManager from "./googleServices/GoogleServicesManager";
+import {sheets_v4} from "googleapis";
+import Sheets = sheets_v4.Sheets;
+import SheetsService from "./googleServices/services/SheetsService";
 
 export default class MyBot {
     public bot: TelegrafBot

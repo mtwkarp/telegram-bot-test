@@ -1,10 +1,24 @@
-import {GoogleAuth} from "google-auth-library";
-import {JSONClient} from "google-auth-library/build/src/auth/googleauth";
 import GoogleServicesNames from "./googleServicesNames";
+//REFACTOR
+export interface SheetUpdateParams  {
+    range: string,
+    valueInputOption?: string,
+    values: any[][] | any[]
+    majorDimension?: string
+}
 export interface GoogleServiceInterface {
-    initService(authenticationObj: GoogleAuth<JSONClient>): void
+    // initService(): void
+}
+
+export interface IGoogleSheet extends GoogleServiceInterface {
+    getSheetValues(options: SheetValuesGetOptions): Promise<any[][]>,
+    // updateSheetValues():
 }
 
 export type GOOGLE_SERVICES_CREATORS_HOLDER = {
     [key in GoogleServicesNames]: () => GoogleServiceInterface
 };
+
+export interface SheetValuesGetOptions {
+    range: string
+}

@@ -1,55 +1,54 @@
-import {GoogleServiceInterface} from "../types";
+import {IGoogleSheet, SheetUpdateParams, SheetValuesGetOptions} from "../types";
 import {google, sheets_v4} from "googleapis";
-import {GoogleAuth} from "google-auth-library";
-import {JSONClient} from "google-auth-library/build/src/auth/googleauth";
 import Sheets = sheets_v4.Sheets;
-export default class SheetsService implements GoogleServiceInterface{
+import GoogleServicesManager from "../GoogleServicesManager";
+
+export default class SheetsService implements IGoogleSheet {
   private spreadsheet: Sheets
   private values: sheets_v4.Resource$Spreadsheets$Values
-  private spreadsheetId: string
-  constructor() {
-    // this.spreadsheet = null;
-    // this.spreadsheetId = '';
-    // this.values = null;
-  }
+  private readonly spreadsheetId: string
+  constructor(spreadsheetId: string) {
+    this.spreadsheetId = spreadsheetId
 
-  setSpreadSheetId(id: string) {
-    this.spreadsheetId = id;
-  }
-
-  initService(authenticationObj: GoogleAuth<JSONClient>) {
     this.spreadsheet = google.sheets({
       version: 'v4',
-      auth: authenticationObj
+      auth: GoogleServicesManager.authenticationObject
     });
 
     this.values = this.spreadsheet.spreadsheets.values;
   }
 
-  // async getSheetValues({range}) {
-  //   // const values = (await this.values.get({
-  //   //   spreadsheetId: this.spreadsheetId,
-  //   //   range
-  //   // })).data.values;
-  //   //
-  //   // return values;
-  // }
+  public async getSheetValues({range}: SheetValuesGetOptions): Promise<any[][]> {
+    const values = (await this.values.get({
+      spreadsheetId: this.spreadsheetId,
+      range
+    })).data.values;
 
-  updateSheetValues(options = {range: '', valueInputOption: 'USER_ENTERED', majorDimension: 'COLUMNS', values: []}) {
-    // const inputOptions = options.valueInputOption || 'USER_ENTERED';
-    // const mDimension = options.majorDimension || 'COLUMNS';
-    //
-    // const updatePromise = this.values.update({
-    //   spreadsheetId: this.spreadsheetId,
-    //   range: options.range,
-    //   valueInputOption: inputOptions,
-    //   resource: {
-    //     range: options.range,
-    //     majorDimension: mDimension,
-    //     values: options.values
-    //   }
-    // });
-    //
-    // return updatePromise;
+    if(values === null || values === undefined){
+      console.log('No value found in sheets')
+      return [[]]
+    }
+
+    return values;
+  }
+
+  public updateSheetValues( params: SheetUpdateParams) {
+    const inputOptions = params.valueInputOption || 'USER_ENTERED';
+    const mDimension = params.majorDimension || 'COLUMNS';
+
+    // @ts-ignore
+    return this.values.update(
+        {
+      spreadsheetId: this.spreadsheetId,
+      range: params.range,
+      valueInputOption: inputOptions,
+      resource: {
+        range: params.range,
+        majorDimension: mDimension,
+        values: params.values
+      }
+    }
+    );
+
   }
 }
