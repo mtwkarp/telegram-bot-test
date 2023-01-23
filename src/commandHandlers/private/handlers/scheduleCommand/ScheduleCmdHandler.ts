@@ -14,6 +14,6 @@ export default class ScheduleCmdHandler extends PrivateCmdHandler {
     }
 
     protected override onCommand(contextDecorator: IPrivateContextDecorator) {
-        this.sendMessage('Ty pidor')
+        // this.sendMessage('Ty pidor')
     }
 }

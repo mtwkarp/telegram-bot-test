@@ -31,7 +31,7 @@ export default class InstructorsAvailabilitySheet extends AbstractScheduleSheet 
         await this.updateSheetValues({range: writeRange, values: data, majorDimension: 'ROWS'})
     }
 
-    public async sendConfirmedScheduleToSpreadsheet(userId: number, userSchedule: UserScheduleObj) {
+    public async updateUserSchedule(userId: number, userSchedule: UserScheduleObj) {
         const userFullName: string = this.usersCollection.getUserFullName(userId.toString());
         const userRowIndex = await this.getUserRowIndexInAvailabilitySheet(userFullName);
 

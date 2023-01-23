@@ -36,7 +36,7 @@ export default class MyBot {
         const googleServicesManager = new GoogleServicesManager()
 
         await googleServicesManager.authorize()
-        const instructorsSheet = new InstructorsAvailabilitySheet()
+        // const instructorsSheet = new InstructorsAvailabilitySheet()
         // const instructorsResult = await instructorsSheet.getInstructorsChatIdsWithNoScheduleResponse()
         // console.log(instructorsResult)
         // const mondayCell = 'C'
