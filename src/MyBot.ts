@@ -9,6 +9,8 @@ import {sheets_v4} from "googleapis";
 import Sheets = sheets_v4.Sheets;
 import SheetsService from "./googleServices/services/SheetsService";
 import SheetsCollection from "./db/firestore/collectionManagers/implementations/SheetsCollection";
+import InstructorsAvailabilitySheet
+    from "./commandHandlers/private/handlers/scheduleCommand/scheduleSheet/scheduleSheets/InstructorsAvailabilitySheet";
 
 export default class MyBot {
     public bot: TelegrafBot
@@ -34,6 +36,9 @@ export default class MyBot {
         const googleServicesManager = new GoogleServicesManager()
 
         await googleServicesManager.authorize()
+        const instructorsSheet = new InstructorsAvailabilitySheet()
+        // const instructorsResult = await instructorsSheet.getInstructorsChatIdsWithNoScheduleResponse()
+        // console.log(instructorsResult)
         // const mondayCell = 'C'
         // const notAvailableCell = 'J'
         // const sheetName = SheetsCollection.getInstance().getSheetName( 'instructors_availability')

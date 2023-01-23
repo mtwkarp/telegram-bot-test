@@ -30,10 +30,11 @@ export default abstract class AbstractCollectionManager implements ICollectionMa
 
         return this.getValue(doc, valueId)
     }
-    //implement !
-    // public getAllDocumentValues() {
-    //
-    // }
+    public getAllDocumentValues(documentName: string): object {
+        const copy = Object.assign({}, this.collection[documentName])
+
+        return copy
+    }
 
     protected getValue(doc: FirebaseFirestore.DocumentData, valueId: string): any {
         let value = doc[valueId]

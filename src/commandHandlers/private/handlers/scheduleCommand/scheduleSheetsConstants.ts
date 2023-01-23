@@ -1,25 +1,18 @@
+import {DayNames} from "../../../../types/types";
+
 const notAvailableInstructor = 'Відсутній(ня)';
+const noResponseInstructorsColumn = 'M';
 
-const confirmScheduleBtnText = 'ПІДТВЕРДИТИ';
-
-const dayNames = {
-    monday: 'ПН',
-    tuesday: 'ВТ',
-    wednesday: 'СР',
-    thursday: 'ЧТ',
-    friday: 'ПТ',
-    saturday: 'СБ',
-    sunday: 'НД'
-};
+const confirmScheduleBtnText: string = 'ПІДТВЕРДИТИ';
 
 const dayNamesByCellsLettersInSheet = {
-    [dayNames.monday]: 'C',
-    [dayNames.tuesday]: 'D',
-    [dayNames.wednesday]: 'E',
-    [dayNames.thursday]: 'F',
-    [dayNames.friday]: 'G',
-    [dayNames.saturday]: 'H',
-    [dayNames.sunday]: 'I',
+    [DayNames.monday]: 'C',
+    [DayNames.tuesday]: 'D',
+    [DayNames.wednesday]: 'E',
+    [DayNames.thursday]: 'F',
+    [DayNames.friday]: 'G',
+    [DayNames.saturday]: 'H',
+    [DayNames.sunday]: 'I',
     [notAvailableInstructor]: 'J'
 };
 
@@ -81,11 +74,11 @@ const fullScheduleByDayLetters = {
 const numberOfRowsInRenderedSchedule = 14;
 
 export {
-    dayNames,
     dayNamesByCellsLettersInSheet,
     notAvailableInstructor,
     confirmScheduleBtnText,
     baseInstructorsByLetters,
     fullScheduleByDayLetters,
-    numberOfRowsInRenderedSchedule
+    numberOfRowsInRenderedSchedule,
+    noResponseInstructorsColumn
 };
