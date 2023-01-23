@@ -10,7 +10,7 @@ export default class ReplyMsgCollection extends AbstractCollectionManager {
         return this.getValueFromDocument('schedule', valueId)
     }
 
-    public static getInstance(): AbstractCollectionManager {
+    public static getInstance(): ReplyMsgCollection {
         if(ReplyMsgCollection.uniqueInstance === null) {
             const newInstance = new ReplyMsgCollection()
 

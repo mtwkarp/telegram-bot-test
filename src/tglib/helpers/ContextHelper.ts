@@ -1,7 +1,7 @@
 import {Context} from "telegraf";
 import {Message, Update} from 'typegram'
 import MessageUpdate = Update.MessageUpdate;
-import {MESSAGES_TYPES, UPDATE_TYPES} from "../tglib/tgTypes/botUpdatesTypes";
+import {MESSAGES_TYPES, UPDATE_TYPES} from "../tgTypes/botUpdatesTypes";
 export default class ContextHelper {
     static getMessageField(context: Context<Update>): Message {
         const updateObj = context.update as MessageUpdate

@@ -32,17 +32,16 @@ export default class SheetsService implements IGoogleSheet {
     return values;
   }
 
-  public updateSheetValues( params: SheetUpdateParams) {
+  public updateSheetValues(params: SheetUpdateParams): Promise<any> {
     const inputOptions = params.valueInputOption || 'USER_ENTERED';
     const mDimension = params.majorDimension || 'COLUMNS';
 
-    // @ts-ignore
     return this.values.update(
         {
       spreadsheetId: this.spreadsheetId,
       range: params.range,
       valueInputOption: inputOptions,
-      resource: {
+      requestBody: {
         range: params.range,
         majorDimension: mDimension,
         values: params.values

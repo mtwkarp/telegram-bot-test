@@ -8,6 +8,7 @@ import GoogleServicesManager from "./googleServices/GoogleServicesManager";
 import {sheets_v4} from "googleapis";
 import Sheets = sheets_v4.Sheets;
 import SheetsService from "./googleServices/services/SheetsService";
+import SheetsCollection from "./db/firestore/collectionManagers/implementations/SheetsCollection";
 
 export default class MyBot {
     public bot: TelegrafBot
@@ -33,6 +34,25 @@ export default class MyBot {
         const googleServicesManager = new GoogleServicesManager()
 
         await googleServicesManager.authorize()
+        // const mondayCell = 'C'
+        // const notAvailableCell = 'J'
+        // const sheetName = SheetsCollection.getInstance().getSheetName( 'instructors_availability')
+        // const getRange = `${sheetName}!${mondayCell}2:${notAvailableCell}`
+        // const sheet = new SheetsService(process.env.SCHEDULE_SPREADSHEET_ID as string)
+        // const data = await sheet.getSheetValues({range: getRange})
+        //
+        // for (let i = 0; i < data.length; i++) {
+        //     const row = data[i]
+        //
+        //     for (let j = 0; j < row.length; j++) {
+        //         row[j] = 'FALSE'
+        //     }
+        // }
+        //
+        // const writeRange = `${sheetName}!${mondayCell}2:${notAvailableCell}${data.length + 1}`
+        //
+        // const response = await sheet.updateSheetValues({range: writeRange, values: data, majorDimension: 'ROWS'})
+        // console.log(response)
     }
 
     private async initDatabase(): Promise<void> {

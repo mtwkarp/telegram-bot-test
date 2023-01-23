@@ -18,7 +18,7 @@ import {IPayloadCreator, PRIVATE_PAYLOAD_CREATORS_HOLDER} from "../tgTypes/messa
 import {PAYLOAD_TYPES} from "../tgTypes/messagePayload/messagePayloadTypes";
 import {Context} from "telegraf";
 import {Message, Update, User} from 'typegram'
-import ContextHelper from "../../helpers/ContextHelper";
+import ContextHelper from "../helpers/ContextHelper";
 import TextMessage = Message.TextMessage;
 import CallbackQueryUpdate = Update.CallbackQueryUpdate;
 import AnimationMessage = Message.AnimationMessage;

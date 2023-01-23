@@ -14,7 +14,7 @@ export default class TimeCollection extends AbstractCollectionManager {
         return this.getValueFromDocument('time_configs', valueId)
     }
 
-    public static getInstance(): AbstractCollectionManager {
+    public static getInstance(): TimeCollection {
         if(TimeCollection.uniqueInstance === null) {
             const newInstance = new TimeCollection()
 

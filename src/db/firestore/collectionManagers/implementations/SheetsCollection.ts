@@ -11,7 +11,7 @@ export default class SheetsCollection extends AbstractCollectionManager {
         return this.getValueFromDocument('schedule_sheets_names', sheetName)
     }
 
-    public static getInstance(): AbstractCollectionManager {
+    public static getInstance(): SheetsCollection {
         if(SheetsCollection.uniqueInstance === null) {
             const newInstance = new SheetsCollection()
 
