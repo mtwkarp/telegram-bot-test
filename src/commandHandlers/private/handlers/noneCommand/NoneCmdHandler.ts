@@ -5,9 +5,7 @@ import {DefaultCmdHandler} from "../../../../types/types";
 class NoneCmdHandler extends PrivateCmdHandler implements DefaultCmdHandler{
 
     constructor(userId: number) {
-        super(userId);
-
-        this._name = CMD_NAMES.NONE
+        super(userId, CMD_NAMES.NONE);
     }
 
     override copy(): PrivateCmdHandler {

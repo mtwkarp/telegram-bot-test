@@ -33,7 +33,8 @@ export interface IPrivateTextPayload extends IPrivateContextPayload {
 }
 
 export interface IPrivateCbQueryPayload extends IPrivateContextPayload {
-    callback_query: CallbackQuery
+    callback_query: CallbackQuery,
+    messageId: number
 }
 
 export interface IPrivateCommandPayload extends IPrivateContextPayload {

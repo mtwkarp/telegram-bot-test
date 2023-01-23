@@ -1,8 +1,17 @@
-import {DayNames} from "../../../../types/types";
+import {DayNames} from "../../../../../types/types";
 
 const notAvailableInstructor = 'Відсутній(ня)';
 const noResponseInstructorsColumn = 'M';
 
+const markupDayNames = {
+    [DayNames.monday]: 'ПН',
+    [DayNames.tuesday]: 'ВТ',
+    [DayNames.wednesday]: 'СР',
+    [DayNames.thursday]: 'ЧТ',
+    [DayNames.friday]: 'ПТ',
+    [DayNames.saturday]: 'СБ',
+    [DayNames.sunday]: 'НД'
+};
 const confirmScheduleBtnText: string = 'ПІДТВЕРДИТИ';
 
 const dayNamesByCellsLettersInSheet = {
@@ -80,5 +89,6 @@ export {
     baseInstructorsByLetters,
     fullScheduleByDayLetters,
     numberOfRowsInRenderedSchedule,
-    noResponseInstructorsColumn
+    noResponseInstructorsColumn,
+    markupDayNames
 };

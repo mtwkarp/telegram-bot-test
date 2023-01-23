@@ -43,7 +43,9 @@
     "ts-node": "^10.9.1"
   },
   "devDependencies": {
+    "@types/luxon": "^3.2.0",
     "@types/node": "^18.11.18",
+    "@types/node-cron": "^3.0.7",
     "ava": "^5.1.1",
     "eslint": "^8.26.0",
     "prettier": "^2.7.1",

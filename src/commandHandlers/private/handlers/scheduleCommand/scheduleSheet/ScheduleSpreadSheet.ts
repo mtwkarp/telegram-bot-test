@@ -1,6 +1,6 @@
 import InstructorsAvailabilitySheet from "./scheduleSheets/InstructorsAvailabilitySheet";
 import RenderedScheduleSheet from "./scheduleSheets/RenderedScheduleSheet";
-import {UserScheduleObj} from "../scheduleCmdTypes";
+import {UserScheduleObj} from "../static/scheduleCmdTypes";
 
 //FACADE pattern
 export default class ScheduleSpreadSheet {

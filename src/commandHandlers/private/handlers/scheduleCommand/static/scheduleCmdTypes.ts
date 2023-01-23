@@ -1,5 +1,5 @@
 import {notAvailableInstructor} from "./scheduleSheetsConstants";
-import {DayNames} from "../../../../types/types";
+import {DayNames} from "../../../../../types/types";
 
 export type UserScheduleObj = {
     [DayNames.monday]: boolean,

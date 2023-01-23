@@ -11,6 +11,8 @@ import SheetsService from "./googleServices/services/SheetsService";
 import SheetsCollection from "./db/firestore/collectionManagers/implementations/SheetsCollection";
 import InstructorsAvailabilitySheet
     from "./commandHandlers/private/handlers/scheduleCommand/scheduleSheet/scheduleSheets/InstructorsAvailabilitySheet";
+import ScheduleCmdTimeAccessController
+    from "./commandHandlers/private/handlers/scheduleCommand/ScheduleCmdTimeAccessController";
 
 export default class MyBot {
     public bot: TelegrafBot
@@ -36,6 +38,9 @@ export default class MyBot {
         const googleServicesManager = new GoogleServicesManager()
 
         await googleServicesManager.authorize()
+        const timer = new ScheduleCmdTimeAccessController()
+        timer.init()
+        // console.log(timer.accessible)
         // const instructorsSheet = new InstructorsAvailabilitySheet()
         // const instructorsResult = await instructorsSheet.getInstructorsChatIdsWithNoScheduleResponse()
         // console.log(instructorsResult)

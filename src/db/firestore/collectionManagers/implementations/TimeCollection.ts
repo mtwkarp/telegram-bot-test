@@ -10,7 +10,7 @@ export default class TimeCollection extends AbstractCollectionManager {
         return this.getValueFromDocument('schedule', valueId)
     }
 
-    public getTimeConfig(valueId: string): object {
+    public getTimeConfig(valueId: string): { scheduled: boolean, timezone: string } {
         return this.getValueFromDocument('time_configs', valueId)
     }
 

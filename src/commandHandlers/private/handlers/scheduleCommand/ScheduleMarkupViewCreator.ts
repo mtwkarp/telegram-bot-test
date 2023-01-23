@@ -1,14 +1,14 @@
-import {notAvailableInstructor, confirmScheduleBtnText} from "./scheduleSheetsConstants";
+import {notAvailableInstructor, confirmScheduleBtnText} from "./static/scheduleSheetsConstants";
 import {DayNames} from "../../../../types/types";
-import {UserScheduleObj} from "./scheduleCmdTypes";
-import {Markup} from "telegraf/typings/markup";
+import {UserScheduleObj} from "./static/scheduleCmdTypes";
+import {Markup} from "telegraf";
 import {InlineKeyboardButton, InlineKeyboardMarkup} from "typegram";
 import CallbackButton = InlineKeyboardButton.CallbackButton;
-class ScheduleMarkupViewCreator {
-    public getUserReplyMarkup (userScheduleObj: UserScheduleObj, scheduleConfirmed: boolean = false): Markup<InlineKeyboardMarkup> {
+
+export default class ScheduleMarkupViewCreator {
+    public getUserReplyMarkup (userScheduleObj: UserScheduleObj, scheduleConfirmed: boolean = false): Markup.Markup<InlineKeyboardMarkup> {
         const {monday, tuesday, wednesday, thursday, friday, saturday, sunday} = DayNames;
-        const inlineKeyboard: InlineKeyboardMarkup = {
-            inline_keyboard: [
+        const inlineKeyboard =  [
                 [
                     this.getChosenDayBtnMarkup(monday, monday, userScheduleObj[monday]),
                     this.getChosenDayBtnMarkup(tuesday, tuesday, userScheduleObj[tuesday]),
@@ -25,20 +25,19 @@ class ScheduleMarkupViewCreator {
                 ],
                 [this.getConfirmButtonMarkup(scheduleConfirmed)]
             ]
-        }
 
-        return new Markup(inlineKeyboard)
+
+        return Markup.inlineKeyboard(inlineKeyboard)
     };
 
     public getConfirmButtonMarkup(scheduleConfirmed: boolean = false): CallbackButton {
-        const btnText =
-            confirmScheduleBtnText + (scheduleConfirmed === false ? ' ➡' : '🔥');
+        const btnText = confirmScheduleBtnText + (!scheduleConfirmed ? ' ➡' : '🔥');
 
         return { text: btnText, callback_data: confirmScheduleBtnText };
     }
 
     public getChosenDayBtnMarkup(text: string, callbackData: string, showTick: boolean = false): CallbackButton {
-        const btnText = text + (showTick === true ? ' ✅' : '');
+        const btnText = text + (showTick ? ' ✅' : '');
 
         return { text: btnText, callback_data: callbackData };
     }

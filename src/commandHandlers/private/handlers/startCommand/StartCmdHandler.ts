@@ -4,9 +4,7 @@ import ReplyMsgCollection from "../../../../db/firestore/collectionManagers/impl
 
 export default class StartCmdHandler extends PrivateCmdHandler {
     constructor(userId: number) {
-        super(userId);
-
-        this._name = CMD_NAMES.START
+        super(userId, CMD_NAMES.START);
     }
 
     copy(): PrivateCmdHandler {

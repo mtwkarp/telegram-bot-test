@@ -8,16 +8,16 @@ abstract class PrivateCmdHandler extends PrivateUpdateHandler {
 
     protected readonly id: number
     protected readonly tg: Telegram
-    protected _name: CMD_NAME_TYPE
+    protected readonly _name: string
     protected readonly updateTypesImplementations: {
         [key in PRIVATE_UPDATE_TYPES]?: (contextDecorator: IPrivateContextDecorator) => void
     }
-    protected constructor(userId: number) {
+    protected constructor(userId: number, cmdName: string) {
         super()
 
         this.id = userId
         this.tg = new Telegram(process.env.TELEGRAM_BOT_TOKEN as string)
-        this._name = CMD_NAMES.NONE
+        this._name = cmdName
         this.updateTypesImplementations = {
             [PRIVATE_UPDATE_TYPES.text]: this.onText.bind(this),
             [PRIVATE_UPDATE_TYPES.callback_query]: this.onCallbackQuery.bind(this),
@@ -36,7 +36,7 @@ abstract class PrivateCmdHandler extends PrivateUpdateHandler {
 
     abstract copy(): PrivateCmdHandler
 
-    get name(): CMD_NAME_TYPE {
+    get name(): string {
         return this._name
     }
     async sendMessage(message: string): Promise<void> {
@@ -49,11 +49,6 @@ abstract class PrivateCmdHandler extends PrivateUpdateHandler {
         this.finishCmd()
     }
 
-    protected static readonly _name: CMD_NAME_TYPE = CMD_NAMES.NONE
-
-    static get handlerName():CMD_NAME_TYPE {
-        return this._name
-    }
     onUpdate(contextDecorator: IPrivateContextDecorator): void {
         if(this.updateTypesImplementations[contextDecorator.updateType] === undefined) {
             this.updateNotSupported(contextDecorator.updateType)

@@ -110,10 +110,12 @@ export default class PrivatePayloadCreator extends PrivateUpdateHandler implemen
     protected override onCallbackQuery(context: Context<Update>): IPrivateCbQueryPayload {
         const update = context.update as CallbackQueryUpdate
         const defaultObj: IPrivateContextPayload = this.getDefaultPayload(context, PAYLOAD_TYPES.callback_query, update.callback_query.from)
+        const message = update.callback_query.message as Message
 
         return {
             ...defaultObj,
-            callback_query: update.callback_query
+            callback_query: update.callback_query,
+            messageId: message.message_id
         }
     }
 
