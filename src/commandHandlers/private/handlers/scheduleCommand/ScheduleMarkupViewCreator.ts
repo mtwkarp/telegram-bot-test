@@ -1,4 +1,4 @@
-import {notAvailableInstructor, confirmScheduleBtnText} from "./static/scheduleSheetsConstants";
+import {notAvailableInstructor, confirmScheduleBtnText, markupDayNames} from "./static/scheduleSheetsConstants";
 import {DayNames} from "../../../../types/types";
 import {UserScheduleObj} from "./static/scheduleCmdTypes";
 import {Markup} from "telegraf";
@@ -21,7 +21,7 @@ export default class ScheduleMarkupViewCreator {
                 ],
                 [
                     this.getChosenDayBtnMarkup(sunday, sunday, userScheduleObj[sunday]),
-                    this.getChosenDayBtnMarkup(notAvailableInstructor, notAvailableInstructor, userScheduleObj[notAvailableInstructor])
+                    this.getBtnMarkup(notAvailableInstructor, notAvailableInstructor, userScheduleObj[notAvailableInstructor])
                 ],
                 [this.getConfirmButtonMarkup(scheduleConfirmed)]
             ]
@@ -36,10 +36,20 @@ export default class ScheduleMarkupViewCreator {
         return { text: btnText, callback_data: confirmScheduleBtnText };
     }
 
-    public getChosenDayBtnMarkup(text: string, callbackData: string, showTick: boolean = false): CallbackButton {
+    getBtnMarkup(text: string, callbackData: string, showTick: boolean = false) {
         const btnText = text + (showTick ? ' ✅' : '');
 
         return { text: btnText, callback_data: callbackData };
+    }
+
+    public getChosenDayBtnMarkup(text: DayNames, callbackData: string, showTick: boolean = false): CallbackButton {
+        let textValue: string = text
+
+        if(markupDayNames[text] !== undefined) {
+            textValue = markupDayNames[text]
+        }
+
+        return this.getBtnMarkup(textValue, callbackData, showTick)
     }
 }
 

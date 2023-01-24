@@ -11,7 +11,7 @@ export default class UsersCollection extends AbstractCollectionManager {
     }
 
     public getUserFullName(valueId: string): string {
-        return this.getValueFromDocument('names', valueId)
+        return this.getValueFromDocument('fullNames', valueId)
     }
     public static getInstance(): UsersCollection {
         if(UsersCollection.uniqueInstance === null) {

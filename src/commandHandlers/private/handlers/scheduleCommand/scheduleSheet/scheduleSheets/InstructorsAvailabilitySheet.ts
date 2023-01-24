@@ -33,6 +33,7 @@ export default class InstructorsAvailabilitySheet extends AbstractScheduleSheet 
 
     public async updateUserSchedule(userId: number, userSchedule: UserScheduleObj) {
         const userFullName: string = this.usersCollection.getUserFullName(userId.toString());
+        console.log(userFullName)
         const userRowIndex = await this.getUserRowIndexInAvailabilitySheet(userFullName);
 
         if(userRowIndex === null) {
