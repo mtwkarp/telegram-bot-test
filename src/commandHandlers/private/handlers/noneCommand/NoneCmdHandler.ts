@@ -1,7 +1,6 @@
 import PrivateCmdHandler from "../../PrivateCmdHandler";
-import {CMD_NAME_TYPE, CMD_NAMES} from "../../../../types/commandTypes";
-import {DefaultCmdHandler} from "../../../../types/types";
-
+import {CMD_NAMES} from "../../../../types/enums";
+import {DefaultCmdHandler} from "../../../../types/interfaces";
 class NoneCmdHandler extends PrivateCmdHandler implements DefaultCmdHandler{
 
     constructor(userId: number) {

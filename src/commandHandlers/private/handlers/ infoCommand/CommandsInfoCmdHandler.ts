@@ -1,7 +1,6 @@
 import PrivateCmdHandler from "../../PrivateCmdHandler";
-import {CMD_NAMES} from "../../../../types/commandTypes";
 import ReplyMsgCollection from "../../../../db/firestore/collectionManagers/implementations/ReplyMsgCollection";
-
+import {CMD_NAMES} from "../../../../types/enums";
 export default class CommandsInfoHandler extends PrivateCmdHandler {
     constructor(userId: number) {
         super(userId, CMD_NAMES.COMMANDS_INFO);

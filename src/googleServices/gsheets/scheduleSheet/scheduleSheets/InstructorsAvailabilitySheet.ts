@@ -1,9 +1,8 @@
 import AbstractScheduleSheet from "./AbstractScheduleSheet";
-import {dayNamesByCellsLettersInSheet, notAvailableInstructor, noResponseInstructorsColumn} from "../../static/scheduleSheetsConstants";
-import {DayNames} from "../../../../../../types/types";
-import {UserScheduleObj} from "../../static/scheduleCmdTypes";
-import UsersCollection from "../../../../../../db/firestore/collectionManagers/implementations/UsersCollection";
-
+import {dayNamesByCellsLettersInSheet, notAvailableInstructor, noResponseInstructorsColumn} from "../../../../commandHandlers/private/handlers/scheduleCommand/static/scheduleSheetsConstants";
+import {UserScheduleObj} from "../../../../commandHandlers/private/handlers/scheduleCommand/static/scheduleCmdTypes";
+import UsersCollection from "../../../../db/firestore/collectionManagers/implementations/UsersCollection";
+import {DayNames} from "../../../../types/enums";
 export default class InstructorsAvailabilitySheet extends AbstractScheduleSheet {
     private readonly usersCollection: UsersCollection
     constructor() {

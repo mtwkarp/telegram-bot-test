@@ -1,5 +1,4 @@
-import {DayNames} from "../types/types";
-
+import {DayNames} from "../types/enums";
 export default class DateHelper {
     static get dayNames(): DayNames[] {
         return [

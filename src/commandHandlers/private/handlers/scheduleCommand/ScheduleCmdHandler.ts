@@ -1,23 +1,25 @@
 import PrivateCmdHandler from "../../PrivateCmdHandler";
 import {IPrivateContextDecorator} from "../../../../tglib/tgTypes/contextDecoratorTypes";
-import {CMD_NAMES} from "../../../../types/commandTypes";
-import {DayNames, ITimeAccessController} from "../../../../types/types";
+import {CMD_NAMES} from "../../../../types/enums";
+import {DayNames} from "../../../../types/enums";
+import {ITimeAccessController} from "../../../../types/interfaces";
 import ScheduleCmdTimeAccessController from "./ScheduleCmdTimeAccessController";
 import {IPrivateCbQueryPayload} from "../../../../tglib/tgTypes/messagePayload/contextPayloadTypes";
 import {CallbackQuery, InlineKeyboardMarkup, Message} from "typegram";
 import DataQuery = CallbackQuery.DataQuery;
 import {confirmScheduleBtnText, notAvailableInstructor} from "./static/scheduleSheetsConstants";
-import ServiceMessage = Message.ServiceMessage;
 import {UserScheduleObj} from "./static/scheduleCmdTypes";
 import ScheduleMarkupViewCreator from "./ScheduleMarkupViewCreator";
 import ReplyMsgCollection from "../../../../db/firestore/collectionManagers/implementations/ReplyMsgCollection";
-import ScheduleSpreadSheet from "./scheduleSheet/ScheduleSpreadSheet";
+
+import InstructorsAvailabilitySheet
+    from "../../../../googleServices/gsheets/scheduleSheet/scheduleSheets/InstructorsAvailabilitySheet";
 
 export default class ScheduleCmdHandler extends PrivateCmdHandler {
 
     private readonly timeAccessController: ITimeAccessController
     private readonly markupViewCreator: ScheduleMarkupViewCreator
-    private readonly scheduleSpreadSheet: ScheduleSpreadSheet
+    private readonly scheduleSheet: InstructorsAvailabilitySheet
     private scheduleConfirmed: boolean
     private userSchedule: UserScheduleObj
     private previouslySentMarkup: InlineKeyboardMarkup
@@ -25,7 +27,7 @@ export default class ScheduleCmdHandler extends PrivateCmdHandler {
     constructor(userId: number) {
         super(userId, CMD_NAMES.SCHEDULE);
 
-        this.scheduleSpreadSheet = new ScheduleSpreadSheet()
+        this.scheduleSheet = new InstructorsAvailabilitySheet()
 
         this.repliesCollection = ReplyMsgCollection.getInstance()
 
@@ -63,7 +65,7 @@ export default class ScheduleCmdHandler extends PrivateCmdHandler {
     }
 
     async sendScheduleMarkup(): Promise<void> {
-        const userMarkup = this.markupViewCreator.getUserReplyMarkup(this.userSchedule);
+        const userMarkup = this.markupViewCreator.getMarkup(this.userSchedule);
 
         await this.tg.sendMessage(
             this.id,
@@ -98,10 +100,10 @@ export default class ScheduleCmdHandler extends PrivateCmdHandler {
             this.makeInstructorAvailable();
         }
 
-        const updatedUserMarkup = this.markupViewCreator.getUserReplyMarkup(this.userSchedule).reply_markup;
+        const updatedUserMarkup = this.markupViewCreator.getMarkup(this.userSchedule).reply_markup;
 
         const markupEqualityCheck = JSON.stringify(updatedUserMarkup) === JSON.stringify(this.previouslySentMarkup);
-        this.previouslySentMarkup = this.markupViewCreator.getUserReplyMarkup(this.userSchedule).reply_markup;
+        this.previouslySentMarkup = this.markupViewCreator.getMarkup(this.userSchedule).reply_markup;
 
         if (!markupEqualityCheck) {
             await this.tg.editMessageReplyMarkup(
@@ -137,7 +139,7 @@ export default class ScheduleCmdHandler extends PrivateCmdHandler {
     async updateScheduleMarkupAfterConfirm(messageId: number): Promise<void> {
         this.sendMessage(this.repliesCollection.getScheduleCmdReply( 'confirmed_schedule_reply'));
 
-        const updatedUserMarkup = this.markupViewCreator.getUserReplyMarkup(this.userSchedule, true).reply_markup;
+        const updatedUserMarkup = this.markupViewCreator.getMarkup(this.userSchedule, true).reply_markup;
 
         await this.tg.editMessageReplyMarkup(
             this.id,
@@ -148,7 +150,7 @@ export default class ScheduleCmdHandler extends PrivateCmdHandler {
     }
 
     sendConfirmedScheduleToSpreadsheet(): void {
-        this.scheduleSpreadSheet.sendConfirmedScheduleToSpreadsheet(this.id, this.userSchedule);
+        this.scheduleSheet.updateUserSchedule(this.id, this.userSchedule);
     }
 
     notifyUserAboutClosedSchedule(): void {

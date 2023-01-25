@@ -1,6 +1,6 @@
 import UserStrategy from "./userStrategies/UserStrategy";
 import InstructorUserStrategy from "./userStrategies/InstructorUserStrategy";
-import {UserPrivateScope} from "../types/types";
+import {UserPrivateScope} from "./ts/user_interfaces";
 import {IPrivateContextDecorator} from "../tglib/tgTypes/contextDecoratorTypes";
 
 class UserScope implements UserPrivateScope {

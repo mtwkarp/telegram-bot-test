@@ -1,6 +1,6 @@
 import InstructorsAvailabilitySheet from "./scheduleSheets/InstructorsAvailabilitySheet";
 import RenderedScheduleSheet from "./scheduleSheets/RenderedScheduleSheet";
-import {UserScheduleObj} from "../static/scheduleCmdTypes";
+import {UserScheduleObj} from "../../../commandHandlers/private/handlers/scheduleCommand/static/scheduleCmdTypes";
 
 //FACADE pattern
 export default class ScheduleSpreadSheet {
@@ -10,7 +10,5 @@ export default class ScheduleSpreadSheet {
         this.instructorsAvailabilitySheet = new InstructorsAvailabilitySheet()
         this.renderedScheduleSheet = new RenderedScheduleSheet()
     }
-    public sendConfirmedScheduleToSpreadsheet(userId: number, userScheduleObj: UserScheduleObj): void {
-        this.instructorsAvailabilitySheet.updateUserSchedule(userId, userScheduleObj)
-    }
+
 }

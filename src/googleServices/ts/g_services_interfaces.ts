@@ -1,6 +1,6 @@
+import {ValueInputOption} from "./g_services_types";
+import {Dimension} from "./g_services_types";
 
-export type ValueInputOption = 'INPUT_VALUE_OPTION_UNSPECIFIED' | 'RAW' | 'USER_ENTERED'
-export type Dimension = 'ROWS' | 'COLUMNS'
 export interface SheetUpdateParams  {
     range: string,
     valueInputOption?: ValueInputOption,

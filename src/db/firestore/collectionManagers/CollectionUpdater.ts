@@ -1,4 +1,4 @@
-import {ICollectionUpdater} from "../../types";
+import {ICollectionUpdater} from "../../ts/db_interfaces";
 import {getFirestore} from "firebase-admin/firestore";
 export default class CollectionUpdater implements ICollectionUpdater {
     private readonly collection: { [key: string]: FirebaseFirestore.DocumentData };

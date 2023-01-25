@@ -1,3 +1,9 @@
+export enum CMD_NAMES  {
+    SCHEDULE= 'schedule',
+    COMMANDS_INFO = 'commandsinfo',
+    NONE = 'none',
+    START = 'start'
+}
 
 export enum DayNames {
     sunday = 'Sunday',

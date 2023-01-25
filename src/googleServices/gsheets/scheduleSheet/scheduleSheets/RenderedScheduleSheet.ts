@@ -1,6 +1,6 @@
 import AbstractScheduleSheet from "./AbstractScheduleSheet";
-import {fullScheduleByDayLetters} from "../../static/scheduleSheetsConstants";
-import DateHelper from "../../../../../../helpers/DateHelper";
+import {fullScheduleByDayLetters} from "../../../../commandHandlers/private/handlers/scheduleCommand/static/scheduleSheetsConstants";
+import DateHelper from "../../../../helpers/DateHelper";
 
 export default class RenderedScheduleSheet extends AbstractScheduleSheet {
     constructor() {

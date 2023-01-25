@@ -1,5 +1,5 @@
 import PrivateCmdHandler from "../../PrivateCmdHandler";
-import {CMD_NAMES} from "../../../../types/commandTypes";
+import {CMD_NAMES} from "../../../../types/enums";
 import ReplyMsgCollection from "../../../../db/firestore/collectionManagers/implementations/ReplyMsgCollection";
 
 export default class StartCmdHandler extends PrivateCmdHandler {

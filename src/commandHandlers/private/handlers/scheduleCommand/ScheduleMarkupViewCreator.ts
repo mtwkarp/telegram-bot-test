@@ -1,12 +1,22 @@
-import {notAvailableInstructor, confirmScheduleBtnText, markupDayNames} from "./static/scheduleSheetsConstants";
-import {DayNames} from "../../../../types/types";
+import {notAvailableInstructor, confirmScheduleBtnText} from "./static/scheduleSheetsConstants";
+import {DayNames} from "../../../../types/enums";
+import {IMarkupViewCreator} from "../../../../types/interfaces";
 import {UserScheduleObj} from "./static/scheduleCmdTypes";
 import {Markup} from "telegraf";
 import {InlineKeyboardButton, InlineKeyboardMarkup} from "typegram";
 import CallbackButton = InlineKeyboardButton.CallbackButton;
 
-export default class ScheduleMarkupViewCreator {
-    public getUserReplyMarkup (userScheduleObj: UserScheduleObj, scheduleConfirmed: boolean = false): Markup.Markup<InlineKeyboardMarkup> {
+const markupDayNames = {
+    [DayNames.monday]: 'ПН',
+    [DayNames.tuesday]: 'ВТ',
+    [DayNames.wednesday]: 'СР',
+    [DayNames.thursday]: 'ЧТ',
+    [DayNames.friday]: 'ПТ',
+    [DayNames.saturday]: 'СБ',
+    [DayNames.sunday]: 'НД'
+};
+export default class ScheduleMarkupViewCreator implements IMarkupViewCreator{
+    public getMarkup (userScheduleObj: UserScheduleObj, scheduleConfirmed: boolean = false): Markup.Markup<InlineKeyboardMarkup> {
         const {monday, tuesday, wednesday, thursday, friday, saturday, sunday} = DayNames;
         const inlineKeyboard =  [
                 [
@@ -36,7 +46,7 @@ export default class ScheduleMarkupViewCreator {
         return { text: btnText, callback_data: confirmScheduleBtnText };
     }
 
-    getBtnMarkup(text: string, callbackData: string, showTick: boolean = false) {
+    public getBtnMarkup(text: string, callbackData: string, showTick: boolean = false) {
         const btnText = text + (showTick ? ' ✅' : '');
 
         return { text: btnText, callback_data: callbackData };
@@ -52,5 +62,3 @@ export default class ScheduleMarkupViewCreator {
         return this.getBtnMarkup(textValue, callbackData, showTick)
     }
 }
-
-module.exports = ScheduleMarkupViewCreator;

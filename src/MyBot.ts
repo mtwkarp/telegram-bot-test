@@ -10,7 +10,7 @@ import Sheets = sheets_v4.Sheets;
 import SheetsService from "./googleServices/services/SheetsService";
 import SheetsCollection from "./db/firestore/collectionManagers/implementations/SheetsCollection";
 import InstructorsAvailabilitySheet
-    from "./commandHandlers/private/handlers/scheduleCommand/scheduleSheet/scheduleSheets/InstructorsAvailabilitySheet";
+    from "./googleServices/gsheets/scheduleSheet/scheduleSheets/InstructorsAvailabilitySheet";
 import ScheduleCmdTimeAccessController
     from "./commandHandlers/private/handlers/scheduleCommand/ScheduleCmdTimeAccessController";
 

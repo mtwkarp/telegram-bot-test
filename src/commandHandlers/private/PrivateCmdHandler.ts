@@ -1,5 +1,4 @@
 import {Telegram} from "telegraf";
-import {CMD_NAME_TYPE, CMD_NAMES} from "../../types/commandTypes";
 import {IPrivateContextDecorator} from "../../tglib/tgTypes/contextDecoratorTypes";
 import {PRIVATE_UPDATE_TYPES} from "../../tglib/tgTypes/botUpdatesTypes";
 import PrivateUpdateHandler from "../../tglib/scopeUpdateHandlers/PrivateUpdateHandler";

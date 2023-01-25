@@ -1,6 +1,6 @@
 import AbstractCollectionManager from "./firestore/collectionManagers/AbstractCollectionManager";
 import TimeCollection from "./firestore/collectionManagers/implementations/TimeCollection";
-import {IDataBaseManager} from "./types";
+import {IDataBaseManager} from "./ts/db_interfaces";
 import FireStoreDB from "./firestore/FireStoreDB";
 import ReplyMsgCollection from "./firestore/collectionManagers/implementations/ReplyMsgCollection";
 import SheetsCollection from "./firestore/collectionManagers/implementations/SheetsCollection";

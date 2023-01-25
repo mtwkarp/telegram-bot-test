@@ -1,4 +1,4 @@
-import {IGoogleSheet, SheetUpdateParams, SheetValuesGetOptions} from "../types";
+import {IGoogleSheet, SheetUpdateParams, SheetValuesGetOptions} from "../ts/g_services_interfaces";
 import {google, sheets_v4} from "googleapis";
 import Sheets = sheets_v4.Sheets;
 import GoogleServicesManager from "../GoogleServicesManager";

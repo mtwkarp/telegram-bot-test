@@ -1,23 +1,17 @@
-import {CommandsDictionary, CommandDescription} from "./commandTypes";
-import {IPrivateContextDecorator} from "../tglib/tgTypes/contextDecoratorTypes";
-export {DayNames} from './dateTypes'
-interface UserPrivateScope {
-    onUpdate(contextDecorator: IPrivateContextDecorator): void
+import {CMD_NAMES} from "./enums";
+
+
+export type CommandDescription= {
+    readonly command: CMD_NAMES,
+    readonly description: string
 }
 
-interface DefaultCmdHandler {
-    sendNotAvailableCmdMessage(): void
+export type CommandsDictionary = {
+    [cmdName: string]: CommandDescription
 }
 
-interface ITimeAccessController {
-    init(): void,
-    readonly accessible: boolean
-}
-
-export {
-    CommandsDictionary,
-    CommandDescription,
-    UserPrivateScope,
-    DefaultCmdHandler,
-    ITimeAccessController
-}
+export type CMD_NAME_TYPE =
+    CMD_NAMES.SCHEDULE |
+    CMD_NAMES.COMMANDS_INFO |
+    CMD_NAMES.NONE |
+    CMD_NAMES.START

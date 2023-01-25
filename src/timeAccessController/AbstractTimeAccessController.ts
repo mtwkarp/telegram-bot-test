@@ -1,4 +1,4 @@
-import {ITimeAccessController} from "../types/types";
+import {ITimeAccessController} from "../types/interfaces";
 
 export default abstract class AbstractTimeAccessController implements ITimeAccessController{
     protected _accessible: boolean

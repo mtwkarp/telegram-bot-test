@@ -1,5 +1,5 @@
 import CollectionUpdater from "./CollectionUpdater";
-import {ICollectionManager} from "../../types";
+import {ICollectionManager} from "../../ts/db_interfaces";
 export default abstract class AbstractCollectionManager implements ICollectionManager{
     protected collection: { [key: string]: FirebaseFirestore.DocumentData };
 

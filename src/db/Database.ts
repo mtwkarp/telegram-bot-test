@@ -1,4 +1,4 @@
-import {IDatabase} from "./types";
+import {IDatabase} from "./ts/db_interfaces";
 
 export default abstract class Database implements IDatabase {
 
