@@ -12,9 +12,6 @@ export default class ScheduleEnrolmentMessenger extends ScheduleMessenger {
         super();
         this.repliesCollection = ReplyMsgCollection.getInstance()
         this.instructorsAvailabilitySheet = new InstructorsAvailabilitySheet()
-        this.sendScheduleStartReminderToChannel()
-        this.sendFirstScheduleStartReminderToChannel()
-        this.sendScheduleStartPrivateReminders()
     }
 
     setScheduledMessages() {

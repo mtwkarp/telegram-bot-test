@@ -7,8 +7,6 @@ export default class NextDayInstructorReminderMessenger extends ScheduleMessenge
     constructor() {
         super();
         this.repliesCollection = ReplyMsgCollection.getInstance()
-
-        this.sendTomorrowInstructorsReminders()
     }
 
     public setScheduledMessages() {

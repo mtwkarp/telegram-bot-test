@@ -5,7 +5,6 @@ import ScheduleMessenger from "./ScheduleMessenger";
 export default class EveryDayScheduleMessenger extends ScheduleMessenger {
     constructor() {
         super();
-        this.sendFullNextDaySchedule()
     }
 
     setScheduledMessages() {
