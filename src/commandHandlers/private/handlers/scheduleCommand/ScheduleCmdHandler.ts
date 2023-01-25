@@ -5,32 +5,31 @@ import {ITimeAccessController} from "../../../../types/interfaces";
 import ScheduleCmdTimeAccessController from "./ScheduleCmdTimeAccessController";
 import {IPrivateCbQueryPayload} from "../../../../tglib/tgTypes/messagePayload/contextPayloadTypes";
 import {CallbackQuery} from "typegram";
-import DataQuery = CallbackQuery.DataQuery;
 import {confirmScheduleBtnText} from "./static/scheduleSheetsConstants";
-import ReplyMsgCollection from "../../../../db/firestore/collectionManagers/implementations/ReplyMsgCollection";
-
 import InstructorsAvailabilitySheet
     from "../../../../googleServices/gsheets/scheduleSheet/scheduleSheets/InstructorsAvailabilitySheet";
 import ScheduleMarkupEditor from "./ScheduleMarkupEditor";
 import ScheduleCmdResponder from "./ScheduleCmdResponder";
+import {SCHEDULE_MARKUP_STATUS} from "./ts/schedule_cmd_enums";
+import DataQuery = CallbackQuery.DataQuery;
 
 export default class ScheduleCmdHandler extends PrivateCmdHandler {
 
     private readonly timeAccessController: ITimeAccessController
     private readonly scheduleSheet: InstructorsAvailabilitySheet
     private readonly msgResponder: ScheduleCmdResponder
-    private scheduleConfirmed: boolean
     private markupEditor: ScheduleMarkupEditor
+    private readonly markupStatus: {[key: number]: SCHEDULE_MARKUP_STATUS}
     constructor(userId: number) {
         super(userId, CMD_NAMES.SCHEDULE);
+
+        this.markupStatus = {}
 
         this.markupEditor = new ScheduleMarkupEditor()
 
         this.scheduleSheet = new InstructorsAvailabilitySheet()
 
         this.msgResponder = new ScheduleCmdResponder(userId)
-
-        this.scheduleConfirmed = false
 
         this.timeAccessController = new ScheduleCmdTimeAccessController()
         this.timeAccessController.init()
@@ -39,38 +38,40 @@ export default class ScheduleCmdHandler extends PrivateCmdHandler {
     copy(): PrivateCmdHandler {
         return new ScheduleCmdHandler(this.id)
     }
-
     protected override onCommand(contextDecorator: IPrivateContextDecorator): void {
-        this.scheduleConfirmed = false
-        this.requestScheduleMarkup()
+        this.requestScheduleMarkup(contextDecorator)
     }
 
     protected override onCallbackQuery(contextDecorator: IPrivateContextDecorator) {
         this.onButtonClick(contextDecorator);
     }
 
-    protected requestScheduleMarkup(): void {
+    protected requestScheduleMarkup(contextDecorator: IPrivateContextDecorator): void {
         if (!this.timeAccessController.accessible) {
             this.msgResponder.notifyUserAboutClosedSchedule()
 
             return;
         }
 
-        this.sendScheduleMarkup();
-    }
+        const payload = contextDecorator.payload as IPrivateCbQueryPayload
+        this.markupStatus[payload.messageId] = SCHEDULE_MARKUP_STATUS.active
 
-    protected sendScheduleMarkup(): void {
-        this.tg.sendMessage(
-            this.id,
-            ReplyMsgCollection.getInstance().getScheduleCmdReply('schedule_markup_description'),
-            this.markupEditor.getDefaultMarkup()
-        );
+        this.msgResponder.sendDefaultMarkupWithDescription(this.markupEditor.getDefaultMarkup())
     }
 
     protected async onButtonClick(contextDecorator: IPrivateContextDecorator): Promise<void> {
         const payload = contextDecorator.payload as IPrivateCbQueryPayload
         const cbQuery = payload.callback_query as DataQuery
         const data = cbQuery.data as string
+
+        if(this.markupStatus[payload.messageId] === SCHEDULE_MARKUP_STATUS.sending) {
+            return
+        }
+
+        if(this.markupStatus[payload.messageId] === SCHEDULE_MARKUP_STATUS.unactive) {
+            this.msgResponder.notifyUserAboutUnactiveMarkup()
+            return
+        }
 
         if (data === confirmScheduleBtnText) {
             await this.confirmSchedule(payload.messageId);
@@ -81,12 +82,7 @@ export default class ScheduleCmdHandler extends PrivateCmdHandler {
         this.markupEditor.handleDayChoiceClick(payload)
 
         if (!this.markupEditor.checkUpdatedMarkupEquality()) {
-            await this.tg.editMessageReplyMarkup(
-                this.id,
-                payload.messageId,
-                undefined,
-                this.markupEditor.getModifiedMarkup().reply_markup
-            );
+            await this.msgResponder.editMarkup(payload.messageId, undefined, this.markupEditor.getModifiedMarkup())
         }
     }
 
@@ -101,24 +97,18 @@ export default class ScheduleCmdHandler extends PrivateCmdHandler {
             return;
         }
 
-        this.scheduleConfirmed = true;
-
-        this.updateScheduleMarkupAfterConfirm(messageId);
-        this.sendConfirmedScheduleToSpreadsheet();
-    }
-
-    async updateScheduleMarkupAfterConfirm(messageId: number): Promise<void> {
-        this.msgResponder.sendConfirmedScheduleReply()
-
-        await this.tg.editMessageReplyMarkup(
-            this.id,
-            messageId,
-            undefined,
-            this.markupEditor.getConfirmedMarkup().reply_markup
-        );
-    }
-
-    protected sendConfirmedScheduleToSpreadsheet(): void {
-        this.scheduleSheet.updateUserSchedule(this.id, this.markupEditor.userSchedule);
+        this.markupStatus[messageId] = SCHEDULE_MARKUP_STATUS.sending
+        // await this.msgResponder.respondWithWaitForScheduleSending()
+        await this.msgResponder.editMarkup(messageId, undefined, this.markupEditor.getPendingMarkup())
+        await this.scheduleSheet.updateUserSchedule(this.id, this.markupEditor.userSchedule)
+            .then(() => {
+                this.msgResponder.sendConfirmedScheduleReply()
+                this.msgResponder.editMarkup(messageId, undefined, this.markupEditor.getConfirmedMarkup())
+                this.markupStatus[messageId] = SCHEDULE_MARKUP_STATUS.unactive
+            })
+            .catch(() => {
+                this.msgResponder.respondWithUnsuccessfulSpreadsheetInput()
+                this.markupStatus[messageId] = SCHEDULE_MARKUP_STATUS.unactive
+            });
     }
 }

@@ -16,32 +16,49 @@ const markupDayNames = {
     [DayNames.sunday]: 'НД'
 };
 export default class ScheduleMarkupViewCreator implements IMarkupViewCreator{
-    public getMarkup (userScheduleObj: UserScheduleObj, scheduleConfirmed: boolean = false): Markup.Markup<InlineKeyboardMarkup> {
-        const {monday, tuesday, wednesday, thursday, friday, saturday, sunday} = DayNames;
-        const inlineKeyboard =  [
-                [
-                    this.getChosenDayBtnMarkup(monday, monday, userScheduleObj[monday]),
-                    this.getChosenDayBtnMarkup(tuesday, tuesday, userScheduleObj[tuesday]),
-                    this.getChosenDayBtnMarkup(wednesday, wednesday, userScheduleObj[wednesday])
-                ],
-                [
-                    this.getChosenDayBtnMarkup(thursday, thursday, userScheduleObj[thursday]),
-                    this.getChosenDayBtnMarkup(friday, friday, userScheduleObj[friday]),
-                    this.getChosenDayBtnMarkup(saturday, saturday, userScheduleObj[saturday])
-                ],
-                [
-                    this.getChosenDayBtnMarkup(sunday, sunday, userScheduleObj[sunday]),
-                    this.getBtnMarkup(notAvailableInstructor, notAvailableInstructor, userScheduleObj[notAvailableInstructor])
-                ],
-                [this.getConfirmButtonMarkup(scheduleConfirmed)]
-            ]
+    public getDefaultMarkup (userScheduleObj: UserScheduleObj, scheduleConfirmed: boolean = false): Markup.Markup<InlineKeyboardMarkup> {
+        const inlineKeyboard = this.getMarkup(userScheduleObj)
 
+        inlineKeyboard.push([this.getConfirmButtonMarkup(scheduleConfirmed)])
 
         return Markup.inlineKeyboard(inlineKeyboard)
     };
 
+    getMarkup(userScheduleObj: UserScheduleObj): any[][] {
+        const {monday, tuesday, wednesday, thursday, friday, saturday, sunday} = DayNames;
+        return [
+            [
+                this.getChosenDayBtnMarkup(monday, monday, userScheduleObj[monday]),
+                this.getChosenDayBtnMarkup(tuesday, tuesday, userScheduleObj[tuesday]),
+                this.getChosenDayBtnMarkup(wednesday, wednesday, userScheduleObj[wednesday])
+            ],
+            [
+                this.getChosenDayBtnMarkup(thursday, thursday, userScheduleObj[thursday]),
+                this.getChosenDayBtnMarkup(friday, friday, userScheduleObj[friday]),
+                this.getChosenDayBtnMarkup(saturday, saturday, userScheduleObj[saturday])
+            ],
+            [
+                this.getChosenDayBtnMarkup(sunday, sunday, userScheduleObj[sunday]),
+                this.getBtnMarkup(notAvailableInstructor, notAvailableInstructor, userScheduleObj[notAvailableInstructor])
+            ],
+        ]
+    }
+    public getPendingMarkup(userScheduleObj: UserScheduleObj):  Markup.Markup<InlineKeyboardMarkup>{
+        const inlineKeyboard = this.getMarkup(userScheduleObj)
+
+        inlineKeyboard.push([this.getPendingConfirmButtonMarkup()])
+
+        return Markup.inlineKeyboard(inlineKeyboard)
+    }
+
     public getConfirmButtonMarkup(scheduleConfirmed: boolean = false): CallbackButton {
         const btnText = confirmScheduleBtnText + (!scheduleConfirmed ? ' ➡' : '🔥');
+
+        return { text: btnText, callback_data: confirmScheduleBtnText };
+    }
+
+    public getPendingConfirmButtonMarkup(): CallbackButton {
+        const btnText = confirmScheduleBtnText + '...';
 
         return { text: btnText, callback_data: confirmScheduleBtnText };
     }

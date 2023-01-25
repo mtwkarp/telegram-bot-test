@@ -5,6 +5,7 @@ import FireStoreDB from "./firestore/FireStoreDB";
 import ReplyMsgCollection from "./firestore/collectionManagers/implementations/ReplyMsgCollection";
 import SheetsCollection from "./firestore/collectionManagers/implementations/SheetsCollection";
 import UsersCollection from "./firestore/collectionManagers/implementations/UsersCollection";
+import StickersCollection from "./firestore/collectionManagers/implementations/StickersCollection";
 
 export default class DataBaseManager implements IDataBaseManager{
     public async init() {
@@ -17,7 +18,8 @@ export default class DataBaseManager implements IDataBaseManager{
             TimeCollection.getInstance(),
             ReplyMsgCollection.getInstance(),
             SheetsCollection.getInstance(),
-            UsersCollection.getInstance()
+            UsersCollection.getInstance(),
+            StickersCollection.getInstance()
         ]
 
         for (let i = 0; i < collectionManagers.length; i++) {

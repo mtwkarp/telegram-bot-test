@@ -13,7 +13,7 @@ export interface ITimeAccessController {
 }
 
 export interface IMarkupViewCreator {
-    getMarkup(parameters: any, options: any): Markup.Markup<InlineKeyboardMarkup | ReplyKeyboardMarkup>
+    getDefaultMarkup(parameters: any, options: any): Markup.Markup<InlineKeyboardMarkup | ReplyKeyboardMarkup>
 }
 
 export interface ITgMessageResponder {

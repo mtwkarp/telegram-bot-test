@@ -41,7 +41,8 @@ export default class InstructorsAvailabilitySheet extends AbstractScheduleSheet 
         }
 
         await this.clearPreviousSchedule(userRowIndex);
-        await this.setScheduleInSpreadsheet(userRowIndex, userSchedule);
+
+        return this.setScheduleInSpreadsheet(userRowIndex, userSchedule);
     }
 
     public async getUserRowIndexInAvailabilitySheet(userFullName: string): Promise<number | null> {

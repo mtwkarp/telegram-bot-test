@@ -23,19 +23,23 @@ export default class ScheduleMarkupEditor {
     public getDefaultMarkup(): Markup.Markup<InlineKeyboardMarkup> {
         this.setDefaultUserSchedule()
 
-        return this.markupViewCreator.getMarkup(this._userSchedule);
+        return this.markupViewCreator.getDefaultMarkup(this._userSchedule);
+    }
+
+    public getPendingMarkup(): Markup.Markup<InlineKeyboardMarkup> {
+        return this.markupViewCreator.getPendingMarkup(this._userSchedule)
     }
 
     public getModifiedMarkup(): Markup.Markup<InlineKeyboardMarkup>{
-        return this.markupViewCreator.getMarkup(this._userSchedule);
+        return this.markupViewCreator.getDefaultMarkup(this._userSchedule);
     }
 
     public checkUpdatedMarkupEquality(): boolean {
-        const updatedUserMarkup = this.markupViewCreator.getMarkup(this._userSchedule).reply_markup;
+        const updatedUserMarkup = this.markupViewCreator.getDefaultMarkup(this._userSchedule).reply_markup;
 
         const markupEqualityCheck = JSON.stringify(updatedUserMarkup) === JSON.stringify(this.previouslySentMarkup);
 
-        this.previouslySentMarkup = this.markupViewCreator.getMarkup(this._userSchedule).reply_markup;
+        this.previouslySentMarkup = this.markupViewCreator.getDefaultMarkup(this._userSchedule).reply_markup;
 
         return markupEqualityCheck
     }
@@ -70,7 +74,7 @@ export default class ScheduleMarkupEditor {
     }
 
     public getConfirmedMarkup(): Markup.Markup<InlineKeyboardMarkup>  {
-        return this.markupViewCreator.getMarkup(this._userSchedule, true)
+        return this.markupViewCreator.getDefaultMarkup(this._userSchedule, true)
     }
 
     public checkIfScheduleFilled(): boolean {
