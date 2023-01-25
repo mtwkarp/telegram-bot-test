@@ -1,7 +1,7 @@
 import {notAvailableInstructor, confirmScheduleBtnText} from "./static/scheduleSheetsConstants";
 import {DayNames} from "../../../../types/enums";
 import {IMarkupViewCreator} from "../../../../types/interfaces";
-import {UserScheduleObj} from "./static/scheduleCmdTypes";
+import {UserScheduleObj} from "./ts/schedule_cmd_types";
 import {Markup} from "telegraf";
 import {InlineKeyboardButton, InlineKeyboardMarkup} from "typegram";
 import CallbackButton = InlineKeyboardButton.CallbackButton;

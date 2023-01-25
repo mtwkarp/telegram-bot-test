@@ -1,6 +1,7 @@
 import {Markup} from "telegraf";
-import {InlineKeyboardMarkup, ReplyKeyboardMarkup} from "telegraf/src/core/types/typegram";
+import {InlineKeyboardMarkup, Message, ReplyKeyboardMarkup} from "telegraf/src/core/types/typegram";
 import {IPrivateContextDecorator} from "../tglib/tgTypes/contextDecoratorTypes";
+import TextMessage = Message.TextMessage;
 
 export interface DefaultCmdHandler {
     sendNotAvailableCmdMessage(): void
@@ -13,4 +14,8 @@ export interface ITimeAccessController {
 
 export interface IMarkupViewCreator {
     getMarkup(parameters: any, options: any): Markup.Markup<InlineKeyboardMarkup | ReplyKeyboardMarkup>
+}
+
+export interface ITgMessageResponder {
+    sendMessage(msg: string): Promise<TextMessage>
 }

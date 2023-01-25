@@ -1,4 +1,4 @@
-import {notAvailableInstructor} from "./scheduleSheetsConstants";
+import {notAvailableInstructor} from "../static/scheduleSheetsConstants";
 import {DayNames} from "../../../../../types/enums";
 
 export type UserScheduleObj = {
