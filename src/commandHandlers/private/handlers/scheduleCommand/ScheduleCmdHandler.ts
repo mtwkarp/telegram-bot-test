@@ -98,7 +98,7 @@ export default class ScheduleCmdHandler extends PrivateCmdHandler {
         }
 
         this.markupStatus[messageId] = SCHEDULE_MARKUP_STATUS.sending
-        // await this.msgResponder.respondWithWaitForScheduleSending()
+
         await this.msgResponder.editMarkup(messageId, undefined, this.markupEditor.getPendingMarkup())
         await this.scheduleSheet.updateUserSchedule(this.id, this.markupEditor.userSchedule)
             .then(() => {

@@ -13,6 +13,7 @@ import InstructorsAvailabilitySheet
     from "./googleServices/gsheets/scheduleSheet/scheduleSheets/InstructorsAvailabilitySheet";
 import ScheduleCmdTimeAccessController
     from "./commandHandlers/private/handlers/scheduleCommand/ScheduleCmdTimeAccessController";
+import AutoMessengersController from "./autoMessengers/AutoMessengersController";
 
 export default class MyBot {
     public bot: TelegrafBot
@@ -29,9 +30,16 @@ export default class MyBot {
         await this.initDatabase()
         await this.initGoogleServices()
         await this.initBot()
+        this.initAutoMessenger()
         this.initPrivateUpdateSubject()
         this.initUserScopeManager()
         this.subscribeForPrivateMessagesUpdates()
+    }
+
+    private initAutoMessenger() {
+        const autoMessenger = new AutoMessengersController()
+
+        autoMessenger.initMessengerModules()
     }
 
     private async initGoogleServices(): Promise<void> {
