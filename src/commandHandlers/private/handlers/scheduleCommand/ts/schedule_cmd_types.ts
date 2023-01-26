@@ -1,13 +1,13 @@
-import {notAvailableInstructor} from "../static/scheduleSheetsConstants";
-import {DayNames} from "../../../../../types/enums";
+import { type notAvailableInstructor } from '../static/scheduleSheetsConstants';
+import { type DayNames } from '../../../../../types/enums';
 
-export type UserScheduleObj = {
-    [DayNames.monday]: boolean,
-    [DayNames.tuesday]: boolean,
-    [DayNames.wednesday]: boolean,
-    [DayNames.thursday]: boolean,
-    [DayNames.friday]: boolean,
-    [DayNames.saturday]: boolean,
-    [DayNames.sunday]: boolean,
-    [notAvailableInstructor]: boolean
+export interface UserScheduleObj {
+  [DayNames.monday]: boolean
+  [DayNames.tuesday]: boolean
+  [DayNames.wednesday]: boolean
+  [DayNames.thursday]: boolean
+  [DayNames.friday]: boolean
+  [DayNames.saturday]: boolean
+  [DayNames.sunday]: boolean
+  [notAvailableInstructor]: boolean
 }

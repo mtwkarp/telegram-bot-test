@@ -1,36 +1,34 @@
-import UserScope from "./UserScope";
-import {IObserver} from "../tglib/lib/observer/observerTypes";
-import {IPrivateContextDecorator} from "../tglib/tgTypes/contextDecoratorTypes";
+import UserScope from './UserScope';
+import { type IObserver } from '../tglib/lib/observer/observerTypes';
+import { type IPrivateContextDecorator } from '../tglib/tgTypes/contextDecoratorTypes';
 
 class PrivateScopeManager implements IObserver {
+  protected users: Record<number, UserScope>;
+  constructor() {
+    this.users = {};
+  }
 
-    protected users: {
-        [userId: number]: UserScope
-    }
-    constructor() {
-        this.users = {}
-    }
-    private getUserById(userId: number): UserScope {
-        let user: UserScope | undefined = this.users[userId]
+  private getUserById(userId: number): UserScope {
+    let user: UserScope | undefined = this.users[userId];
 
-        if(user === undefined) user = this.createUserScope(userId)
+    if (user === undefined) user = this.createUserScope(userId);
 
-        return user
-    }
+    return user;
+  }
 
-    private createUserScope(userId: number): UserScope {
-        const newUser = new UserScope(userId)
+  private createUserScope(userId: number): UserScope {
+    const newUser = new UserScope(userId);
 
-        this.users[userId] = newUser
+    this.users[userId] = newUser;
 
-        return newUser
-    }
+    return newUser;
+  }
 
-    onUpdate(ctxDecorator: IPrivateContextDecorator): void {
-        const user: UserScope = this.getUserById(ctxDecorator.payload.senderId)
+  onUpdate(ctxDecorator: IPrivateContextDecorator): void {
+    const user: UserScope = this.getUserById(ctxDecorator.payload.senderId);
 
-        user.onUpdate(ctxDecorator)
-    }
+    user.onUpdate(ctxDecorator);
+  }
 }
 
-export default PrivateScopeManager
+export default PrivateScopeManager;

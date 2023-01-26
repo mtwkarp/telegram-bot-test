@@ -1,30 +1,31 @@
-import {ITimeAccessController} from "../types/interfaces";
+import { type ITimeAccessController } from '../types/interfaces';
 
-export default abstract class AbstractTimeAccessController implements ITimeAccessController{
-    protected _accessible: boolean
+export default abstract class AbstractTimeAccessController implements ITimeAccessController {
+  protected _accessible: boolean;
 
-    protected constructor() {
-        this._accessible = false
-    }
-    protected setUnAccessible(): void {
-        this.accessible = false
-    }
+  protected constructor() {
+    this._accessible = false;
+  }
 
-    public abstract init(): void
+  protected setUnAccessible(): void {
+    this.accessible = false;
+  }
 
-    protected setAccessible(): void {
-        this.accessible = true
-    }
+  public abstract init (): void
 
-    public get accessible(): boolean {
-        return this._accessible
-    }
+  protected setAccessible(): void {
+    this.accessible = true;
+  }
 
-    protected set accessible(state: boolean) {
-        this._accessible = state
-    }
+  public get accessible(): boolean {
+    return this._accessible;
+  }
 
-    protected abstract setAccessibilityStatusOnInit(): void
+  protected set accessible(state: boolean) {
+    this._accessible = state;
+  }
 
-    protected abstract setAccessibilityModifiers(): void
+  protected abstract setAccessibilityStatusOnInit (): void
+
+  protected abstract setAccessibilityModifiers (): void
 }

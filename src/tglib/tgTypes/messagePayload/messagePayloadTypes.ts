@@ -1,17 +1,17 @@
 export enum PAYLOAD_TYPES {
-    audio="audio_payload_type",
-    text="text_payload_type",
-    callback_query="callback_query_payload_type",
-    command='command_type',
-    animation='animation_type',
-    document='document_type',
-    photo='photo_type',
-    sticker='sticker_type',
-    video='video_type',
-    video_note='video_note_type',
-    voice='voice_type',
+  audio = 'audio_payload_type',
+  text = 'text_payload_type',
+  callback_query = 'callback_query_payload_type',
+  command = 'command_type',
+  animation = 'animation_type',
+  document = 'document_type',
+  photo = 'photo_type',
+  sticker = 'sticker_type',
+  video = 'video_type',
+  video_note = 'video_note_type',
+  voice = 'voice_type',
 
-    edited_message= 'edited_message_type'
+  edited_message = 'edited_message_type'
 }
 
 type MESSAGE_PAYLOAD_TYPE =
@@ -29,5 +29,4 @@ type MESSAGE_PAYLOAD_TYPE =
     | PAYLOAD_TYPES.voice
     | PAYLOAD_TYPES.edited_message
 
-
-export type {MESSAGE_PAYLOAD_TYPE}
+export type { MESSAGE_PAYLOAD_TYPE };

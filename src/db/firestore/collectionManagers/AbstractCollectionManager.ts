@@ -1,53 +1,54 @@
-import CollectionUpdater from "./CollectionUpdater";
-import {ICollectionManager} from "../../ts/db_interfaces";
-export default abstract class AbstractCollectionManager implements ICollectionManager{
-    protected collection: { [key: string]: FirebaseFirestore.DocumentData };
+import CollectionUpdater from './CollectionUpdater';
+import { type ICollectionManager } from '../../ts/db_interfaces';
+export default abstract class AbstractCollectionManager implements ICollectionManager {
+  protected collection: Record<string, FirebaseFirestore.DocumentData>;
 
-    protected collectionName: string
+  protected collectionName: string;
 
-    private initialized: boolean
-    protected constructor(collectionName: string) {
-        this.collectionName = collectionName
-        this.collection = {}
-        this.initialized = false
-    }
-    public async init(): Promise<void> {
-        if(this.initialized) return
+  private initialized: boolean;
+  protected constructor(collectionName: string) {
+    this.collectionName = collectionName;
+    this.collection = {};
+    this.initialized = false;
+  }
 
-        const collectionUpdater = new CollectionUpdater(this.collection, this.collectionName)
+  public async init(): Promise<void> {
+    if (this.initialized) return;
 
-        await collectionUpdater.setUpdates()
+    const collectionUpdater = new CollectionUpdater(this.collection, this.collectionName);
 
-        this.initialized = true
-    }
+    await collectionUpdater.setUpdates();
 
-    public getValueFromDocument(documentId: string, valueId: string): any {
-        const doc: FirebaseFirestore.DocumentData | undefined = this.getDocument(documentId)
+    this.initialized = true;
+  }
 
-        if(doc === undefined) {
-            return
-        }
+  public getValueFromDocument(documentId: string, valueId: string): any {
+    const doc: FirebaseFirestore.DocumentData | undefined = this.getDocument(documentId);
 
-        return this.getValue(doc, valueId)
-    }
-    public getAllDocumentValues(documentName: string): object {
-        const copy = Object.assign({}, this.collection[documentName])
-
-        return copy
+    if (doc === undefined) {
+      return;
     }
 
-    protected getValue(doc: FirebaseFirestore.DocumentData, valueId: string): any {
-        let value = doc[valueId]
+    return this.getValue(doc, valueId);
+  }
 
-        if (typeof value === 'string') {
-            value = value.replaceAll('<br />', '\n');
-        }
+  public getAllDocumentValues(documentName: string): object {
+    const copy = Object.assign({}, this.collection[documentName]);
 
-        return value
+    return copy;
+  }
+
+  protected getValue(doc: FirebaseFirestore.DocumentData, valueId: string): any {
+    let value = doc[valueId];
+
+    if (typeof value === 'string') {
+      value = value.replaceAll('<br />', '\n');
     }
-    public getDocument(documentId: string): FirebaseFirestore.DocumentData | undefined {
-        return this.collection[documentId]
-    }
 
+    return value;
+  }
+
+  public getDocument(documentId: string): FirebaseFirestore.DocumentData | undefined {
+    return this.collection[documentId];
+  }
 }
-

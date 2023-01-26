@@ -1,27 +1,26 @@
 
-import AbstractCollectionManager from "../AbstractCollectionManager";
-
+import AbstractCollectionManager from '../AbstractCollectionManager';
 
 export default class SheetsCollection extends AbstractCollectionManager {
-    protected constructor() {
-        super('google_sheets');
+  protected constructor() {
+    super('google_sheets');
+  }
+
+  public getSheetName(sheetName: string): string {
+    return this.getValueFromDocument('schedule_sheets_names', sheetName);
+  }
+
+  public static getInstance(): SheetsCollection {
+    if (SheetsCollection.uniqueInstance === null) {
+      const newInstance = new SheetsCollection();
+
+      SheetsCollection.uniqueInstance = newInstance;
+
+      return newInstance;
     }
 
-    public getSheetName(sheetName: string): string {
-        return this.getValueFromDocument('schedule_sheets_names', sheetName)
-    }
+    return SheetsCollection.uniqueInstance;
+  }
 
-    public static getInstance(): SheetsCollection {
-        if(SheetsCollection.uniqueInstance === null) {
-            const newInstance = new SheetsCollection()
-
-            SheetsCollection.uniqueInstance = newInstance
-
-            return newInstance
-        }
-
-        return SheetsCollection.uniqueInstance
-    }
-
-    private static uniqueInstance: SheetsCollection | null = null
+  private static uniqueInstance: SheetsCollection | null = null;
 }

@@ -1,10 +1,8 @@
-import {CHANNEL_UPDATE_TYPES, CHAT_UPDATE_TYPES, PRIVATE_UPDATE_TYPES, SCOPE_UPDATE_TYPES} from "./botUpdatesTypes";
-import {Context} from "telegraf";
-import {Update} from 'typegram'
-import {IContextDecorator, IEmptyContext} from "./contextDecoratorTypes";
-import {CONTEXT_PAYLOAD_TYPE, IContextPayload} from "./messagePayload/contextPayloadTypes";
+import { type SCOPE_UPDATE_TYPES } from './botUpdatesTypes';
+import { type Context } from 'telegraf';
+import { type Update } from 'typegram';
+import { type IContextDecorator } from './contextDecoratorTypes';
 
 export interface IContextDecoratorCreator<U extends SCOPE_UPDATE_TYPES> {
-    createDecorator(updateType: U, context: Context<Update>): IContextDecorator | null
+  createDecorator: (updateType: U, context: Context<Update>) => IContextDecorator | null
 }
-

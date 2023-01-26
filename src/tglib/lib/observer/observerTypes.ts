@@ -1,4 +1,4 @@
 
 export interface IObserver<A = any> {
-    onUpdate(update: A): void
+  onUpdate: (update: A) => void
 }

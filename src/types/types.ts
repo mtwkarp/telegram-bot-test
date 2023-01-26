@@ -1,14 +1,11 @@
-import {CMD_NAMES} from "./enums";
+import { type CMD_NAMES } from './enums';
 
-
-export type CommandDescription= {
-    readonly command: CMD_NAMES,
-    readonly description: string
+export interface CommandDescription {
+  readonly command: CMD_NAMES
+  readonly description: string
 }
 
-export type CommandsDictionary = {
-    [cmdName: string]: CommandDescription
-}
+export type CommandsDictionary = Record<string, CommandDescription>
 
 export type CMD_NAME_TYPE =
     CMD_NAMES.SCHEDULE |

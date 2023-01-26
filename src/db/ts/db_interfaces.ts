@@ -1,23 +1,22 @@
 export interface IDatabase {
-    initDataBase(): void,
-    loadRemoteData(): void,
+  initDataBase: () => void
+  loadRemoteData: () => void
 
-    get allRemoteData(): object
+  get allRemoteData(): object
 }
 
 export interface IDataBaseManager {
-    init(): void
+  init: () => void
 }
 
 export interface ICollectionUpdater {
-    setUpdates(): void
+  setUpdates: () => void
 }
 
 export interface ICollectionManager {
-    init(): void,
-    getValueFromDocument(documentId: string, valueId: string): any,
+  init: () => void
+  getValueFromDocument: (documentId: string, valueId: string) => any
 
-    getDocument(documentId: string): any
+  getDocument: (documentId: string) => any
 
 }
-

@@ -1,20 +1,20 @@
-import UserStrategy from "./userStrategies/UserStrategy";
-import InstructorUserStrategy from "./userStrategies/InstructorUserStrategy";
-import {UserPrivateScope} from "./ts/user_interfaces";
-import {IPrivateContextDecorator} from "../tglib/tgTypes/contextDecoratorTypes";
+import type UserStrategy from './userStrategies/UserStrategy';
+import InstructorUserStrategy from './userStrategies/InstructorUserStrategy';
+import { type UserPrivateScope } from './ts/user_interfaces';
+import { type IPrivateContextDecorator } from '../tglib/tgTypes/contextDecoratorTypes';
 
 class UserScope implements UserPrivateScope {
+  private readonly id: number;
+  private readonly strategy: UserStrategy;
 
-    private readonly id: number
-    private strategy: UserStrategy
+  constructor(id: number) {
+    this.id = id;
+    this.strategy = new InstructorUserStrategy(id);
+  }
 
-    constructor(id: number) {
-        this.id = id
-        this.strategy = new InstructorUserStrategy(id)
-    }
-    onUpdate(context: IPrivateContextDecorator) {
-        this.strategy.onUpdate(context)
-    }
+  onUpdate(context: IPrivateContextDecorator) {
+    this.strategy.onUpdate(context);
+  }
 }
 
-export default UserScope
+export default UserScope;

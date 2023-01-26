@@ -1,9 +1,8 @@
-import {UserPrivateScope} from "../ts/user_interfaces";
-import {IPrivateContextDecorator} from "../../tglib/tgTypes/contextDecoratorTypes";
+import { type UserPrivateScope } from '../ts/user_interfaces';
+import { type IPrivateContextDecorator } from '../../tglib/tgTypes/contextDecoratorTypes';
 
 abstract class UserStrategy implements UserPrivateScope {
-    onUpdate(context: IPrivateContextDecorator) {
-    }
+  abstract onUpdate(context: IPrivateContextDecorator): void
 }
 
-export default UserStrategy
+export default UserStrategy;

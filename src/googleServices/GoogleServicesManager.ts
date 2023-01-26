@@ -1,31 +1,30 @@
-import {GoogleAuth} from "google-auth-library";
-import {JSONClient} from "google-auth-library/build/src/auth/googleauth";
-import GoogleCredentialsManager from "../helpers/GoogleCredentialsManager";
+import { GoogleAuth } from 'google-auth-library';
+import { type JSONClient } from 'google-auth-library/build/src/auth/googleauth';
+import GoogleCredentialsManager from '../helpers/GoogleCredentialsManager';
 
 export default class GoogleServicesManager {
-
-    constructor() {
-        if(GoogleServicesManager.instance !== null) {
-            return GoogleServicesManager.instance
-        }
-
-        GoogleServicesManager.instance = this
+  constructor() {
+    if (GoogleServicesManager.instance !== null) {
+      return GoogleServicesManager.instance;
     }
 
-    public async authorize(): Promise<void> {
-        if(GoogleServicesManager.authObj) return
+    GoogleServicesManager.instance = this;
+  }
 
-        GoogleServicesManager.authObj = await new GoogleAuth({
-            credentials: GoogleCredentialsManager.serviceAccountCredentials,
-            scopes: ['https://www.googleapis.com/auth/spreadsheets']
-        });
-    }
+  public async authorize(): Promise<void> {
+    if (GoogleServicesManager.authObj) return;
 
-    private static instance: GoogleServicesManager | null = null;
+    GoogleServicesManager.authObj = await new GoogleAuth({
+      credentials: GoogleCredentialsManager.serviceAccountCredentials,
+      scopes: ['https://www.googleapis.com/auth/spreadsheets']
+    });
+  }
 
-    private static authObj: GoogleAuth<JSONClient>
+  private static instance: GoogleServicesManager | null = null;
 
-    public static get authenticationObject() {
-        return GoogleServicesManager.authObj
-    }
+  private static authObj: GoogleAuth<JSONClient>;
+
+  public static get authenticationObject() {
+    return GoogleServicesManager.authObj;
+  }
 }
