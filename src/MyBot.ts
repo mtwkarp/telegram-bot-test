@@ -49,7 +49,7 @@ export default class MyBot {
 
   private async initBot(): Promise<void> {
     this.bot = new TelegrafBot();
-    await this.bot.initBot();
+    await this.bot.initBot()
     await this.bot.launchBot();
   }
 
