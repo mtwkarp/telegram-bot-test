@@ -12,9 +12,6 @@
   "rules": {
     "semi": ["error", "always"],
     "quotes": ["error", "single"],
-    "max-len": ["warn", {
-      "code": 110
-    }],
     "unused-imports/no-unused-imports": "warn",
     "space-before-function-paren": ["warn", "never"],
     "@typescript-eslint/no-empty-function": "off"
