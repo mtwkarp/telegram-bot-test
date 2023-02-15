@@ -18,7 +18,7 @@ class ServerExpress {
 
         app.post('/', (req, res) => {
             // perform operation and return response.
-            console.log(req.body)
+            console.log(req.body);
             res.status(200).json({ message: 'It worked!' });
             console.log('hello boy');
         });
