@@ -31,6 +31,7 @@
     "@types/node-cron": "^3.0.7",
     "dotenv": "^16.0.3",
     "eventemitter3": "^5.0.0",
+    "express": "^4.18.2",
     "firebase-admin": "^11.2.1",
     "fs": "^0.0.1-security",
     "google-auth-library": "^8.7.0",
@@ -45,8 +46,11 @@
     "typegram": "^4.3.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.13",
     "@typescript-eslint/eslint-plugin": "^5.49.0",
     "@typescript-eslint/parser": "^5.49.0",
+    "body-parser": "^1.20.1",
+    "cors": "^2.8.5",
     "eslint": "^8.32.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-standard-with-typescript": "^32.0.0",
