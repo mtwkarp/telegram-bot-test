@@ -25,10 +25,10 @@ export default class NextDayInstructorReminderMessenger extends ScheduleMessenge
     const tomorrowInstructorsByBase = await this.renderedScheduleSheet.getTomorrowInstructorsByBase(DateHelper.nextDayName);
 
     const basesTranslation: Record<string, string> = {
-      blood: 'кров🩸',
-      lungs: 'легені🫁',
-      heart: 'серце❤',
-      evacuation: 'евакуація🚑'
+      ['blood']: 'M🩸',
+      ['lungs']: 'AR🫁',
+      ['heart']: 'CH❤',
+      ['evacuation']: 'еякуляція🚑'
     };
 
     const basesByInstructor: Record<string, string[]> = {};

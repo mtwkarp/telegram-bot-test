@@ -6,7 +6,7 @@ import { type PRIVATE_UPDATE_TYPES } from './tglib/tgTypes/botUpdatesTypes';
 import DataBaseManager from './db/DataBaseManager';
 import GoogleServicesManager from './googleServices/GoogleServicesManager';
 import AutoMessengersController from './autoMessengers/AutoMessengersController';
-import ServerExpress from './express/ServerExpress';
+import ServerExpress from './expressServer/ServerExpress';
 
 export default class MyBot {
   public bot: TelegrafBot;
