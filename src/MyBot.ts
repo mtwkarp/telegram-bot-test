@@ -6,6 +6,7 @@ import { type PRIVATE_UPDATE_TYPES } from './tglib/tgTypes/botUpdatesTypes';
 import DataBaseManager from './db/DataBaseManager';
 import GoogleServicesManager from './googleServices/GoogleServicesManager';
 import AutoMessengersController from './autoMessengers/AutoMessengersController';
+import ServerExpress from "./express/ServerExpress";
 
 export default class MyBot {
   public bot: TelegrafBot;
@@ -20,6 +21,7 @@ export default class MyBot {
 
   public async init(): Promise<void> {
     this.initEnvironmentVariables();
+    this.initServer()
     await this.initDatabase();
     await this.initGoogleServices();
     await this.initBot();
@@ -29,6 +31,9 @@ export default class MyBot {
     this.subscribeForPrivateMessagesUpdates();
   }
 
+  private initServer() {
+    const expressServer = new ServerExpress()
+  }
   private initAutoMessenger() {
     const autoMessenger = new AutoMessengersController();
 
