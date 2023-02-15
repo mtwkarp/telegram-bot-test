@@ -105,3 +105,6 @@ dist
 
 #google api sensitive data
 service-account.json
+
+#jetbrains
+.idea
