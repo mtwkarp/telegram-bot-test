@@ -11,6 +11,7 @@ class ServerExpress {
 
         app.use(cors());
         app.use(bodyParser.json());
+        app.use(bodyParser.urlencoded())
 
         app.get('/', function(req, res) {
             res.send('<button onclick="function myFunction() {console.log(\'hui\')}">Click me</button>');
@@ -18,7 +19,9 @@ class ServerExpress {
 
         app.post('/', (req, res) => {
             // perform operation and return response.
-            console.log(req.body)
+            // console.log(req)
+            console.log(req.body);
+            console.log(req.params)
             res.status(200).json({ message: 'It worked!' });
             console.log('hello boy');
         });
