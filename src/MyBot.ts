@@ -7,21 +7,27 @@ import DataBaseManager from './db/DataBaseManager';
 import GoogleServicesManager from './googleServices/GoogleServicesManager';
 import AutoMessengersController from './autoMessengers/AutoMessengersController';
 import ServerExpress from './expressServer/ServerExpress';
-
+import SpreadsheetRequestsSubject from "./spreadsheetObserver/SpreadsheetRequestsSubject";
+import RequestHandlersManager from "./requestHandlers/RequestHandlersManager";
 export default class MyBot {
   public bot: TelegrafBot;
   private privateUpdateSubject: PrivateUpdateSubject;
   private userScopeManager: PrivateScopeManager;
   private readonly privateMessagesTypes: PRIVATE_UPDATE_TYPES[];
   private readonly privateCommands: string[];
+  private readonly spreadsheetRequestSubject: SpreadsheetRequestsSubject
+  private readonly expressServer: ServerExpress
+  private readonly requestHandlersManager: RequestHandlersManager
   constructor(privateMessagesTypes: PRIVATE_UPDATE_TYPES[], privateCommands: string[]) {
     this.privateMessagesTypes = privateMessagesTypes;
     this.privateCommands = privateCommands;
+    this.spreadsheetRequestSubject = new SpreadsheetRequestsSubject()
+    this.expressServer = new ServerExpress();
+    this.requestHandlersManager = new RequestHandlersManager()
   }
 
   public async init(): Promise<void> {
     this.initEnvironmentVariables();
-    this.initServer();
     await this.initDatabase();
     await this.initGoogleServices();
     await this.initBot();
@@ -29,11 +35,18 @@ export default class MyBot {
     this.initPrivateUpdateSubject();
     this.initUserScopeManager();
     this.subscribeForPrivateMessagesUpdates();
+    this.subscribeSpreadsheetRequestSubjectForServerUpdates()
+    this.subscribeRequestHandlers()
   }
 
-  private initServer() {
-    new ServerExpress();
+  private subscribeRequestHandlers() {
+    this.requestHandlersManager.initSpreadsheetRequestHandlers(this.spreadsheetRequestSubject)
   }
+
+  private subscribeSpreadsheetRequestSubjectForServerUpdates() {
+    this.expressServer.subscribeSpreadSheetRequestSubject(this.spreadsheetRequestSubject)
+  }
+
   private initAutoMessenger() {
     const autoMessenger = new AutoMessengersController();
 

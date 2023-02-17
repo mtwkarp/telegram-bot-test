@@ -1,33 +1,35 @@
-import express from 'express';
+import express, {Express} from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import SpreadsheetRequestsSubject from "../spreadsheetObserver/SpreadsheetRequestsSubject";
 class ServerExpress {
+
+    private readonly app: Express
     constructor() {
+        this.app = express();
+
         this.init();
     }
 
     private init() {
-        const app = express();
 
-        app.use(cors());
-        app.use(bodyParser.json());
-        app.use(bodyParser.urlencoded());
+        this.app.use(cors());
+        this.app.use(bodyParser.json());
+        this.app.use(bodyParser.urlencoded());
 
-        app.get('/', function(req, res) {
+        this.app.get('/', function(req, res) {
             res.send('<button onclick="function myFunction() {console.log(\'hui\')}">Click me</button>');
         });
 
-        app.post('/', (req, res) => {
-            // perform operation and return response.
-            // console.log(req)
+        this.app.listen(process.env.PORT || 3000, () => console.log('Server is running...'));
+    }
+
+    public subscribeSpreadSheetRequestSubject(SpreadsheetSubject: SpreadsheetRequestsSubject) {
+        this.app.post('/spreadSheetUpdate', (req, res) => {
             console.log(req.body);
-            console.log(req.params);
+            SpreadsheetSubject.notifyObservers(req.body.requestName, req.body)
             res.status(200).json({ message: 'It worked!' });
-            console.log('hello boy');
         });
-// start the server listening for requests
-        app.listen(process.env.PORT || 3000,
-            () => console.log('Server is running...'));
     }
 }
 
