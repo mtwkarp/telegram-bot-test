@@ -4,7 +4,7 @@ import {
     fullScheduleByDayLetters
 } from '../../../../commandHandlers/private/handlers/scheduleCommand/static/scheduleSheetsConstants';
 import DateHelper from '../../../../helpers/DateHelper';
-import {DayNames} from "../../../../types/enums";
+import {DayNames} from '../../../../types/enums';
 
 export default class RenderedScheduleSheetTrips extends AbstractScheduleSheet {
     constructor() {

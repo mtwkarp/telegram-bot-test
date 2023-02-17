@@ -2,12 +2,12 @@ import ScheduleMessenger from '../ScheduleMessenger';
 import cron from 'node-cron';
 import DateHelper from '../../../helpers/DateHelper';
 import ReplyMsgCollection from '../../../db/firestore/collectionManagers/implementations/ReplyMsgCollection';
-import {renderNextDayInstructorReminderMessage} from "../helpers";
+import {renderNextDayInstructorReminderMessage} from '../helpers';
 import RenderedScheduleSheetTrips
-    from "../../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetTrips";
+    from '../../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetTrips';
 export default class NextDayTripInstructorReminder extends ScheduleMessenger {
     private readonly repliesCollection: ReplyMsgCollection;
-    private readonly tripRenderedScheduleSheet: RenderedScheduleSheetTrips
+    private readonly tripRenderedScheduleSheet: RenderedScheduleSheetTrips;
     constructor() {
         super();
         this.repliesCollection = ReplyMsgCollection.getInstance();
@@ -23,8 +23,8 @@ export default class NextDayTripInstructorReminder extends ScheduleMessenger {
 
     private prepareMessages(messagesArr: {chatId: string, message: string}[]): void {
         messagesArr.forEach(el => {
-            el.message = el.message.replace(/^/, '(ВИЇЗД)\n')
-        })
+            el.message = el.message.replace(/^/, '(ВИЇЗД)\n');
+        });
     }
     private async sendTomorrowTripInstructorsReminders() {
         const isTripAvailable = await this.tripRenderedScheduleSheet.isTripNextDayAvailable();
@@ -33,12 +33,12 @@ export default class NextDayTripInstructorReminder extends ScheduleMessenger {
 
         const tomorrowInstructorsByBase: Record<string, Array<{ name: string, chatId: string }>> = await this.tripRenderedScheduleSheet.getTomorrowTripInstructorsByBase(DateHelper.nextDayName);
 
-        const messagesArr: {chatId: string, message: string}[] = renderNextDayInstructorReminderMessage(tomorrowInstructorsByBase, this.repliesCollection)
+        const messagesArr: {chatId: string, message: string}[] = renderNextDayInstructorReminderMessage(tomorrowInstructorsByBase, this.repliesCollection);
 
-        this.prepareMessages(messagesArr)
+        this.prepareMessages(messagesArr);
 
         for (let i = 0; i < messagesArr.length; i++) {
-            const {chatId, message} = messagesArr[i]
+            const {chatId, message} = messagesArr[i];
 
             try {
                 await this.tg.sendMessage(chatId, message);

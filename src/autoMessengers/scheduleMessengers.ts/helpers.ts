@@ -1,4 +1,4 @@
-import ReplyMsgCollection from "../../db/firestore/collectionManagers/implementations/ReplyMsgCollection";
+import ReplyMsgCollection from '../../db/firestore/collectionManagers/implementations/ReplyMsgCollection';
 
 
 export function renderOneDayScheduleFromSheet(scheduleStrings: string[][]): string {
@@ -20,7 +20,7 @@ export function renderOneDayScheduleFromSheet(scheduleStrings: string[][]): stri
 
 //refactor
 export function renderNextDayInstructorReminderMessage(tomorrowInstructorsByBase: Record<string, Array<{ name: string, chatId: string }>>, repliesCollection: ReplyMsgCollection): {chatId: string, message: string}[] {
-    const finalMessagesArr: {chatId: string, message: string}[] = []
+    const finalMessagesArr: {chatId: string, message: string}[] = [];
 
     const basesTranslation: Record<string, string> = {
         ['blood']: 'M🩸',
@@ -72,8 +72,8 @@ export function renderNextDayInstructorReminderMessage(tomorrowInstructorsByBase
         message = message.replace('$1', firstName);
         message = message.replace('$2', replace2);
 
-        finalMessagesArr.push({chatId, message})
+        finalMessagesArr.push({chatId, message});
     }
 
-    return finalMessagesArr
+    return finalMessagesArr;
 }

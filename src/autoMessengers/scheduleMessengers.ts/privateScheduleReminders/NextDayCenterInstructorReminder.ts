@@ -2,7 +2,7 @@ import ScheduleMessenger from '../ScheduleMessenger';
 import cron from 'node-cron';
 import DateHelper from '../../../helpers/DateHelper';
 import ReplyMsgCollection from '../../../db/firestore/collectionManagers/implementations/ReplyMsgCollection';
-import {renderNextDayInstructorReminderMessage} from "../helpers";
+import {renderNextDayInstructorReminderMessage} from '../helpers';
 export default class NextDayCenterInstructorReminder extends ScheduleMessenger {
   private readonly repliesCollection: ReplyMsgCollection;
   constructor() {
@@ -19,8 +19,8 @@ export default class NextDayCenterInstructorReminder extends ScheduleMessenger {
 
   private prepareMessages(messagesArr: {chatId: string, message: string}[]): void {
     messagesArr.forEach(el => {
-      el.message = el.message.replace(/^/, '(ЦЕНТР)\n')
-    })
+      el.message = el.message.replace(/^/, '(ЦЕНТР)\n');
+    });
   }
   private async sendTomorrowInstructorsReminders() {
     const isDayWorkable = await this.renderedScheduleSheet.isCenterNextDayWorkable();
@@ -29,12 +29,12 @@ export default class NextDayCenterInstructorReminder extends ScheduleMessenger {
 
     const tomorrowInstructorsByBase: Record<string, Array<{ name: string, chatId: string }>> = await this.renderedScheduleSheet.getTomorrowCenterInstructorsByBase(DateHelper.nextDayName);
 
-    const messagesArr: {chatId: string, message: string}[] = renderNextDayInstructorReminderMessage(tomorrowInstructorsByBase, this.repliesCollection)
+    const messagesArr: {chatId: string, message: string}[] = renderNextDayInstructorReminderMessage(tomorrowInstructorsByBase, this.repliesCollection);
 
-    this.prepareMessages(messagesArr)
+    this.prepareMessages(messagesArr);
 
     for (let i = 0; i < messagesArr.length; i++) {
-      const {chatId, message} = messagesArr[i]
+      const {chatId, message} = messagesArr[i];
 
       try {
         await this.tg.sendMessage(chatId, message);
