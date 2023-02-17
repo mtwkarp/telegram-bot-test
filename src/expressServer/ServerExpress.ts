@@ -1,10 +1,10 @@
 import express, {Express} from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import SpreadsheetRequestsSubject from "../spreadsheetObserver/SpreadsheetRequestsSubject";
+import SpreadsheetRequestsSubject from '../spreadsheetObserver/SpreadsheetRequestsSubject';
 class ServerExpress {
 
-    private readonly app: Express
+    private readonly app: Express;
     constructor() {
         this.app = express();
 
@@ -27,7 +27,7 @@ class ServerExpress {
     public subscribeSpreadSheetRequestSubject(SpreadsheetSubject: SpreadsheetRequestsSubject) {
         this.app.post('/spreadSheetUpdate', (req, res) => {
             console.log(req.body);
-            SpreadsheetSubject.notifyObservers(req.body.requestName, req.body)
+            SpreadsheetSubject.notifyObservers(req.body.requestName, req.body);
             res.status(200).json({ message: 'It worked!' });
         });
     }

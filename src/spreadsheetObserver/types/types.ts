@@ -1,4 +1,4 @@
-import {SPREADSHEET_REQUESTS} from "./enums";
+import {SPREADSHEET_REQUESTS} from './enums';
 
 export type SpreadSheetUpdateObj = {
     requestName: SPREADSHEET_REQUESTS,
