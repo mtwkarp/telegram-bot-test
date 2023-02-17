@@ -32,7 +32,7 @@ export default class MyBot {
   }
 
   private initServer() {
-    const expressServer = new ServerExpress();
+    new ServerExpress();
   }
   private initAutoMessenger() {
     const autoMessenger = new AutoMessengersController();

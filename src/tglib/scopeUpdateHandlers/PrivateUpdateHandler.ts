@@ -1,3 +1,4 @@
+/*eslint-disable*/
 export default abstract class PrivateUpdateHandler {
   protected onText(update: any) {}
 
