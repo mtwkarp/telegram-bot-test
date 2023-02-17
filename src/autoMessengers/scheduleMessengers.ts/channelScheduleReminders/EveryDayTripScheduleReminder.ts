@@ -1,11 +1,11 @@
 import cron from 'node-cron';
 import ScheduleMessenger from '../ScheduleMessenger';
-import {renderOneDayScheduleFromSheet} from './helpers';
+import {renderOneDayScheduleFromSheet} from '../helpers';
 import RenderedScheduleSheetTrips
     from '../../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetTrips';
 
 export default class EveryDayTripScheduleReminder extends ScheduleMessenger {
-    tripRenderedScheduleSheet: RenderedScheduleSheetTrips;
+    private readonly tripRenderedScheduleSheet: RenderedScheduleSheetTrips;
     constructor() {
         super();
         this.tripRenderedScheduleSheet = new RenderedScheduleSheetTrips();

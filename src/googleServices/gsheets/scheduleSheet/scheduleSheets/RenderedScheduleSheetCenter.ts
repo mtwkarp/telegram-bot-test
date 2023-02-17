@@ -32,35 +32,9 @@ export default class RenderedScheduleSheetCenter extends AbstractScheduleSheet {
     return true;
   }
 
-  async getInstructorsIdsByNames(namesArr: string[] = []): Promise<Array<{ name: string, chatId: string }>> {
-    const allInstructorsInfo = await this.getSheetValues({
-      range: `${this.sheetCollection.getSheetName('instructors_list')}!$A:D`
-    });
 
-    const finalList = [];
-
-    for (let i = 0; i < namesArr.length; i++) {
-      const requestedName = namesArr[i];
-
-      for (let j = 0; j < allInstructorsInfo.length; j++) {
-        const name = allInstructorsInfo[j][0];
-
-        if (name === requestedName) {
-          const chatId = allInstructorsInfo[j][2];
-
-          finalList.push({
-            name,
-            chatId
-          });
-        }
-      }
-    }
-
-    return finalList;
-  }
-
-  async getTomorrowInstructorsByBase(dayName: DayNames): Promise<Record<string, Array<{ name: string, chatId: string }>>> {
-    console.log(dayName);
+//refactor
+  async getTomorrowCenterInstructorsByBase(dayName: DayNames): Promise<Record<string, Array<{ name: string, chatId: string }>>> {
     const sheetLetters = baseInstructorsByLetters[dayName];
     const namesByBase: Record<string, string[]> = { blood: [], lungs: [], heart: [], evacuation: [] };
     const baseNamesByNumbers: Record<number, string> = { 0: 'blood', 1: 'lungs', 2: 'heart', 3: 'evacuation' };

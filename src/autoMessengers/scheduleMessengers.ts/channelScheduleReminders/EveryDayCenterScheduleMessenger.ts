@@ -1,6 +1,6 @@
 import cron from 'node-cron';
 import ScheduleMessenger from '../ScheduleMessenger';
-import {renderOneDayScheduleFromSheet} from './helpers';
+import {renderOneDayScheduleFromSheet} from '../helpers';
 
 export default class EveryDayCenterScheduleMessenger extends ScheduleMessenger {
   constructor() {
