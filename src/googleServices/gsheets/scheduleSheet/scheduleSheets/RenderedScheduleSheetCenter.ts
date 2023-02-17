@@ -6,12 +6,12 @@ import {
 import DateHelper from '../../../../helpers/DateHelper';
 import { type DayNames } from '../../../../types/enums';
 
-export default class RenderedScheduleSheet extends AbstractScheduleSheet {
+export default class RenderedScheduleSheetCenter extends AbstractScheduleSheet {
   constructor() {
     super();
   }
 
-  public async getNextDayFullSchedule(): Promise<any[][]> {
+  public async getCenterNextDayFullSchedule(): Promise<any[][]> {
     const nextDayScheduleLetter = fullScheduleByDayLetters[DateHelper.nextDayName];
     const range = `${this.sheetCollection.getSheetName('schedule_rendered')}!${nextDayScheduleLetter}3:${nextDayScheduleLetter}100`;
 
@@ -20,7 +20,7 @@ export default class RenderedScheduleSheet extends AbstractScheduleSheet {
     return nextDaySchedule;
   }
 
-  public async isNextDayWorkable(): Promise<boolean> {
+  public async isCenterNextDayWorkable(): Promise<boolean> {
     const nextDayScheduleLetter = fullScheduleByDayLetters[DateHelper.nextDayName];
 
     const nextDayWorkStatus = await this.getSheetValues({

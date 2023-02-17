@@ -18,7 +18,7 @@ export default class NextDayInstructorReminderMessenger extends ScheduleMessenge
 
   // refactor
   private async sendTomorrowInstructorsReminders() {
-    const isDayWorkable = await this.renderedScheduleSheet.isNextDayWorkable();
+    const isDayWorkable = await this.renderedScheduleSheet.isCenterNextDayWorkable();
 
     if (!isDayWorkable) return;
 

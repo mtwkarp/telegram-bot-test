@@ -1,14 +1,14 @@
 import AbstractAutoMessenger from '../AbstractAutoMessenger';
 import TimeCollection from '../../db/firestore/collectionManagers/implementations/TimeCollection';
-import RenderedScheduleSheet from '../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheet';
+import RenderedScheduleSheetCenter from '../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetCenter';
 
 export default abstract class ScheduleMessenger extends AbstractAutoMessenger {
   protected readonly timeCollection: TimeCollection;
-  protected readonly renderedScheduleSheet: RenderedScheduleSheet;
+  protected readonly renderedScheduleSheet: RenderedScheduleSheetCenter;
   protected constructor() {
     super();
 
     this.timeCollection = TimeCollection.getInstance();
-    this.renderedScheduleSheet = new RenderedScheduleSheet();
+    this.renderedScheduleSheet = new RenderedScheduleSheetCenter();
   }
 }

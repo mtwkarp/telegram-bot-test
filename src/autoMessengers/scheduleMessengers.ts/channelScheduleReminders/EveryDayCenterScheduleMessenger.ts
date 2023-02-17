@@ -1,7 +1,8 @@
 import cron from 'node-cron';
-import ScheduleMessenger from './ScheduleMessenger';
+import ScheduleMessenger from '../ScheduleMessenger';
+import {renderOneDayScheduleFromSheet} from "./helpers";
 
-export default class EveryDayScheduleMessenger extends ScheduleMessenger {
+export default class EveryDayCenterScheduleMessenger extends ScheduleMessenger {
   constructor() {
     super();
   }
@@ -14,24 +15,16 @@ export default class EveryDayScheduleMessenger extends ScheduleMessenger {
   }
 
   private async sendFullNextDaySchedule() {
-    const isDayWorkable: boolean = await this.renderedScheduleSheet.isNextDayWorkable();
+    const isDayWorkable: boolean = await this.renderedScheduleSheet.isCenterNextDayWorkable();
 
     if (!isDayWorkable) return;
 
-    const nextDayFullSchedule: string[][] = await this.renderedScheduleSheet.getNextDayFullSchedule();
+    const nextDayFullSchedule: string[][] = await this.renderedScheduleSheet.getCenterNextDayFullSchedule();
 
-    let fullScheduleString = '';
+    let fullScheduleString = renderOneDayScheduleFromSheet(nextDayFullSchedule)
 
-    for (let i = 0; i < nextDayFullSchedule.length; i++) {
-      if (nextDayFullSchedule[i].length === 0) continue;
+    fullScheduleString = fullScheduleString.replace (/^/,'ЦЕНТР\n');
 
-      const str: string = nextDayFullSchedule[i][0];
-      let paragraph = '\n';
-
-      if (i > 1) paragraph = '\n\n';
-
-      fullScheduleString = fullScheduleString + paragraph + str;
-    }
     try {
       await this.tg.sendMessage(process.env.TELEGRAM_CHANNEL_ID as string, fullScheduleString);
     } catch (err) {
