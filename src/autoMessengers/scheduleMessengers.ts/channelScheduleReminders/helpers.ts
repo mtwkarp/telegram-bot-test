@@ -14,5 +14,5 @@ export function renderOneDayScheduleFromSheet(scheduleStrings: string[][]) {
         fullScheduleString = fullScheduleString + paragraph + str;
     }
 
-    return fullScheduleString
+    return fullScheduleString;
 }

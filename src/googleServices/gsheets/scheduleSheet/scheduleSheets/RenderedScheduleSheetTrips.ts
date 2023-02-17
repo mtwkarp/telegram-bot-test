@@ -1,10 +1,8 @@
 import AbstractScheduleSheet from './AbstractScheduleSheet';
 import {
-    baseInstructorsByLetters,
     fullScheduleByDayLetters
 } from '../../../../commandHandlers/private/handlers/scheduleCommand/static/scheduleSheetsConstants';
 import DateHelper from '../../../../helpers/DateHelper';
-import { type DayNames } from '../../../../types/enums';
 
 export default class RenderedScheduleSheetTrips extends AbstractScheduleSheet {
     constructor() {

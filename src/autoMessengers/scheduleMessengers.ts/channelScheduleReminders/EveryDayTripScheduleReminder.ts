@@ -1,14 +1,14 @@
 import cron from 'node-cron';
 import ScheduleMessenger from '../ScheduleMessenger';
-import {renderOneDayScheduleFromSheet} from "./helpers";
+import {renderOneDayScheduleFromSheet} from './helpers';
 import RenderedScheduleSheetTrips
-    from "../../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetTrips";
+    from '../../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetTrips';
 
 export default class EveryDayTripScheduleReminder extends ScheduleMessenger {
-    tripRenderedScheduleSheet: RenderedScheduleSheetTrips
+    tripRenderedScheduleSheet: RenderedScheduleSheetTrips;
     constructor() {
         super();
-        this.tripRenderedScheduleSheet = new RenderedScheduleSheetTrips()
+        this.tripRenderedScheduleSheet = new RenderedScheduleSheetTrips();
     }
 
     setScheduledMessages() {
@@ -25,7 +25,7 @@ export default class EveryDayTripScheduleReminder extends ScheduleMessenger {
 
         const nextDayFullSchedule: string[][] = await this.tripRenderedScheduleSheet.getTripNextDayFullSchedule();
 
-        let fullScheduleString = renderOneDayScheduleFromSheet(nextDayFullSchedule)
+        let fullScheduleString = renderOneDayScheduleFromSheet(nextDayFullSchedule);
 
         fullScheduleString = fullScheduleString.replace (/^/,'ВИЇЗД\n');
 

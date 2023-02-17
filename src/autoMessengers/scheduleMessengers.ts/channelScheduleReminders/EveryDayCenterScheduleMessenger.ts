@@ -1,6 +1,6 @@
 import cron from 'node-cron';
 import ScheduleMessenger from '../ScheduleMessenger';
-import {renderOneDayScheduleFromSheet} from "./helpers";
+import {renderOneDayScheduleFromSheet} from './helpers';
 
 export default class EveryDayCenterScheduleMessenger extends ScheduleMessenger {
   constructor() {
@@ -21,7 +21,7 @@ export default class EveryDayCenterScheduleMessenger extends ScheduleMessenger {
 
     const nextDayFullSchedule: string[][] = await this.renderedScheduleSheet.getCenterNextDayFullSchedule();
 
-    let fullScheduleString = renderOneDayScheduleFromSheet(nextDayFullSchedule)
+    let fullScheduleString = renderOneDayScheduleFromSheet(nextDayFullSchedule);
 
     fullScheduleString = fullScheduleString.replace (/^/,'ЦЕНТР\n');
 

@@ -3,7 +3,7 @@ import EveryDayCenterScheduleMessenger from './scheduleMessengers.ts/channelSche
 import NextDayInstructorReminderMessenger from './scheduleMessengers.ts/NextDayInstructorReminderMessenger';
 import ScheduleEnrolmentMessenger from './scheduleMessengers.ts/ScheduleEnrolmentMessenger';
 import EveryDayTripScheduleReminder
-  from "./scheduleMessengers.ts/channelScheduleReminders/EveryDayTripScheduleReminder";
+  from './scheduleMessengers.ts/channelScheduleReminders/EveryDayTripScheduleReminder';
 export default class AutoMessengersController {
   public initMessengerModules(): void {
     const messengerModules: Array<new() => AbstractAutoMessenger> = [
