@@ -1,10 +1,15 @@
 import cron from 'node-cron';
 import ScheduleMessenger from '../ScheduleMessenger';
 import {renderOneDayScheduleFromSheet} from '../helpers';
+import RenderedScheduleSheetCenter
+  from "../../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetCenter";
 
 export default class EveryDayCenterScheduleMessenger extends ScheduleMessenger {
+  protected readonly renderedScheduleSheet: RenderedScheduleSheetCenter;
+
   constructor() {
     super();
+    this.renderedScheduleSheet = new RenderedScheduleSheetCenter();
   }
 
   setScheduledMessages() {
@@ -15,11 +20,11 @@ export default class EveryDayCenterScheduleMessenger extends ScheduleMessenger {
   }
 
   private async sendFullNextDaySchedule() {
-    const isDayWorkable: boolean = await this.renderedScheduleSheet.isCenterNextDayWorkable();
+    const isDayWorkable: boolean = await this.renderedScheduleSheet.isNextDayWorkable();
 
     if (!isDayWorkable) return;
 
-    const nextDayFullSchedule: string[][] = await this.renderedScheduleSheet.getCenterNextDayFullSchedule();
+    const nextDayFullSchedule: string[][] = await this.renderedScheduleSheet.getNextDayFullSchedule();
 
     let fullScheduleString = renderOneDayScheduleFromSheet(nextDayFullSchedule);
 

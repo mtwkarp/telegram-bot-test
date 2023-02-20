@@ -3,11 +3,15 @@ import cron from 'node-cron';
 import DateHelper from '../../../helpers/DateHelper';
 import ReplyMsgCollection from '../../../db/firestore/collectionManagers/implementations/ReplyMsgCollection';
 import {renderNextDayInstructorReminderMessage} from '../helpers';
+import RenderedScheduleSheetCenter
+  from "../../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetCenter";
 export default class NextDayCenterInstructorReminder extends ScheduleMessenger {
   private readonly repliesCollection: ReplyMsgCollection;
+  protected readonly renderedScheduleSheet: RenderedScheduleSheetCenter;
   constructor() {
     super();
     this.repliesCollection = ReplyMsgCollection.getInstance();
+    this.renderedScheduleSheet = new RenderedScheduleSheetCenter();
   }
 
   public setScheduledMessages() {
@@ -23,11 +27,11 @@ export default class NextDayCenterInstructorReminder extends ScheduleMessenger {
     });
   }
   private async sendTomorrowInstructorsReminders() {
-    const isDayWorkable = await this.renderedScheduleSheet.isCenterNextDayWorkable();
+    const isDayWorkable = await this.renderedScheduleSheet.isNextDayWorkable();
 
     if (!isDayWorkable) return;
 
-    const tomorrowInstructorsByBase: Record<string, Array<{ name: string, chatId: string }>> = await this.renderedScheduleSheet.getTomorrowCenterInstructorsByBase(DateHelper.nextDayName);
+    const tomorrowInstructorsByBase: Record<string, Array<{ name: string, chatId: string }>> = await this.renderedScheduleSheet.getTomorrowInstructorsByBase(DateHelper.nextDayName);
 
     const messagesArr: {chatId: string, message: string}[] = renderNextDayInstructorReminderMessage(tomorrowInstructorsByBase, this.repliesCollection);
 

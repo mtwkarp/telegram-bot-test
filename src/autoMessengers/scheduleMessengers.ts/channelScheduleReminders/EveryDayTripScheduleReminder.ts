@@ -19,11 +19,11 @@ export default class EveryDayTripScheduleReminder extends ScheduleMessenger {
     }
 
     private async sendFullNextDayTripSchedule() {
-        const isTripAvailable: boolean = await this.tripRenderedScheduleSheet.isTripNextDayAvailable();
+        const isTripAvailable: boolean = await this.tripRenderedScheduleSheet.isNextDayWorkable();
 
         if (!isTripAvailable) return;
 
-        const nextDayFullSchedule: string[][] = await this.tripRenderedScheduleSheet.getTripNextDayFullSchedule();
+        const nextDayFullSchedule: string[][] = await this.tripRenderedScheduleSheet.getNextDayFullSchedule();
 
         let fullScheduleString = renderOneDayScheduleFromSheet(nextDayFullSchedule);
 

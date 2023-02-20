@@ -27,11 +27,11 @@ export default class NextDayTripInstructorReminder extends ScheduleMessenger {
         });
     }
     private async sendTomorrowTripInstructorsReminders() {
-        const isTripAvailable = await this.tripRenderedScheduleSheet.isTripNextDayAvailable();
+        const isTripAvailable = await this.tripRenderedScheduleSheet.isNextDayWorkable();
 
         if (!isTripAvailable) return;
 
-        const tomorrowInstructorsByBase: Record<string, Array<{ name: string, chatId: string }>> = await this.tripRenderedScheduleSheet.getTomorrowTripInstructorsByBase(DateHelper.nextDayName);
+        const tomorrowInstructorsByBase: Record<string, Array<{ name: string, chatId: string }>> = await this.tripRenderedScheduleSheet.getTomorrowInstructorsByBase(DateHelper.nextDayName);
 
         const messagesArr: {chatId: string, message: string}[] = renderNextDayInstructorReminderMessage(tomorrowInstructorsByBase, this.repliesCollection);
 

@@ -4,11 +4,9 @@ import RenderedScheduleSheetCenter from '../../googleServices/gsheets/scheduleSh
 
 export default abstract class ScheduleMessenger extends AbstractAutoMessenger {
   protected readonly timeCollection: TimeCollection;
-  protected readonly renderedScheduleSheet: RenderedScheduleSheetCenter;
   protected constructor() {
     super();
 
     this.timeCollection = TimeCollection.getInstance();
-    this.renderedScheduleSheet = new RenderedScheduleSheetCenter();
   }
 }

@@ -1,6 +1,6 @@
 import SpreadsheetRequestObserver from '../spreadsheetObserver/SpreadsheetRequestObserver';
 import SpreadsheetRequestsSubject from '../spreadsheetObserver/SpreadsheetRequestsSubject';
-import SendFullScheduleRequestHandler from '../spreadsheetObserver/implementations/SendFullScheduleRequestHandler';
+import SendFullScheduleRequestHandler from './implementations/SendFullScheduleRequestHandler';
 
 
 export default class RequestHandlersManager {
