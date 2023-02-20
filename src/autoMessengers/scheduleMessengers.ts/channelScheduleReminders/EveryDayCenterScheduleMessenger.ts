@@ -2,7 +2,7 @@ import cron from 'node-cron';
 import ScheduleMessenger from '../ScheduleMessenger';
 import {renderOneDayScheduleFromSheet} from '../helpers';
 import RenderedScheduleSheetCenter
-  from "../../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetCenter";
+  from '../../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetCenter';
 
 export default class EveryDayCenterScheduleMessenger extends ScheduleMessenger {
   protected readonly renderedScheduleSheet: RenderedScheduleSheetCenter;

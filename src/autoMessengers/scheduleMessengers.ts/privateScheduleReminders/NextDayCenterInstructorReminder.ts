@@ -4,7 +4,7 @@ import DateHelper from '../../../helpers/DateHelper';
 import ReplyMsgCollection from '../../../db/firestore/collectionManagers/implementations/ReplyMsgCollection';
 import {renderNextDayInstructorReminderMessage} from '../helpers';
 import RenderedScheduleSheetCenter
-  from "../../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetCenter";
+  from '../../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetCenter';
 export default class NextDayCenterInstructorReminder extends ScheduleMessenger {
   private readonly repliesCollection: ReplyMsgCollection;
   protected readonly renderedScheduleSheet: RenderedScheduleSheetCenter;

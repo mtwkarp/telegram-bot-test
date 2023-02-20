@@ -8,8 +8,8 @@ import {DayNames} from '../../../../types/enums';
 
 export default class RenderedScheduleSheet extends AbstractScheduleSheet {
 
-    protected renderedSheetName: string
-    protected instructorsByBaseSheetName: string
+    protected renderedSheetName: string;
+    protected instructorsByBaseSheetName: string;
     constructor() {
         super();
     }

@@ -12,12 +12,12 @@ export default class SendFullScheduleRequestHandler extends SpreadsheetRequestOb
 
     }
     onUpdate(update: SpreadSheetUpdateObj): void {
-        this.sendFullScheduleToTgChannel()
+        this.sendFullScheduleToTgChannel();
     }
 
     private sendFullScheduleToTgChannel(): void {
-        this.sendCenterScheduleToChannel()
-        this.sendTripsScheduleToChannel()
+        this.sendCenterScheduleToChannel();
+        this.sendTripsScheduleToChannel();
     }
 
     private sendCenterScheduleToChannel() {
