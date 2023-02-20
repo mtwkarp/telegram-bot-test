@@ -1,5 +1,6 @@
 import SheetsService from '../../../services/SheetsService';
 import SheetsCollection from '../../../../db/firestore/collectionManagers/implementations/SheetsCollection';
+import UsersCollection from "../../../../db/firestore/collectionManagers/implementations/UsersCollection";
 
 export default abstract class AbstractScheduleSheet extends SheetsService {
   protected readonly sheetCollection: SheetsCollection;
@@ -10,28 +11,18 @@ export default abstract class AbstractScheduleSheet extends SheetsService {
     this.sheetCollection = SheetsCollection.getInstance();
   }
 
-  async getInstructorsIdsByNames(namesArr: string[] = []): Promise<Array<{ name: string, chatId: string }>> {
-    const allInstructorsInfo = await this.getSheetValues({
-      range: `${this.sheetCollection.getSheetName('instructors_list')}!$A:D`
-    });
-
+  getInstructorsIdsByNames(namesArr: string[] = []): Array<{ name: string, chatId: string }> {
+    const allInstructorsInfo = UsersCollection.getInstance().getAllDocumentValues('ids') as Record<string, string>
     const finalList = [];
 
     for (let i = 0; i < namesArr.length; i++) {
-      const requestedName = namesArr[i];
+      const name = namesArr[i];
+      const chatId = allInstructorsInfo[name]
 
-      for (let j = 0; j < allInstructorsInfo.length; j++) {
-        const name = allInstructorsInfo[j][0];
-
-        if (name === requestedName) {
-          const chatId = allInstructorsInfo[j][2];
-
-          finalList.push({
-            name,
-            chatId
-          });
-        }
-      }
+      finalList.push({
+        name,
+        chatId
+      });
     }
 
     return finalList;

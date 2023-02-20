@@ -31,7 +31,7 @@ export default class NextDayTripInstructorReminder extends ScheduleMessenger {
 
         if (!isTripAvailable) return;
 
-        const tomorrowInstructorsByBase: Record<string, Array<{ name: string, chatId: string }>> = await this.tripRenderedScheduleSheet.getTomorrowInstructorsByBase(DateHelper.nextDayName);
+        const tomorrowInstructorsByBase: Record<string, Array<{ name: string, chatId: string }>> = await this.tripRenderedScheduleSheet.getTomorrowInstructorsByBase();
 
         const messagesArr: {chatId: string, message: string}[] = renderNextDayInstructorReminderMessage(tomorrowInstructorsByBase, this.repliesCollection);
 

@@ -18,32 +18,85 @@ export default class RenderedScheduleSheet extends AbstractScheduleSheet {
         const nextDayScheduleLetter = fullScheduleByDayLetters[DateHelper.nextDayName];
         const range = `${this.sheetCollection.getSheetName(this.renderedSheetName)}!${nextDayScheduleLetter}3:${nextDayScheduleLetter}100`;
 
-        const nextDaySchedule = await this.getSheetValues({ range });
-
-        return nextDaySchedule;
+        return await this.getSheetValues({ range });
     }
 
+    public async getNextWeekWorkableDaysSchedule(): Promise<any[][]> {
+        const workableDays = await this.getWorkableDaysNumbers()
+        const mondayLetter = fullScheduleByDayLetters[DayNames.monday]
+        const sundayLetter = fullScheduleByDayLetters[DayNames.sunday]
 
-    public async isNextDayWorkable(): Promise<boolean> {
-        const nextDayScheduleLetter = fullScheduleByDayLetters[DateHelper.nextDayName];
+        const fullSchedule = await this.getSheetValues({
+            range: `${this.sheetCollection.getSheetName(this.renderedSheetName)}!${mondayLetter}3:${sundayLetter}20`
+        });
+
+        const rawWorkableSchedule: any[][] = []
+
+        for (let i = 0; i < workableDays.length; i++) {
+            const dayIndex = workableDays[i]
+            rawWorkableSchedule.push([])
+            for (let j = 0; j < fullSchedule.length; j++) {
+                const row = fullSchedule[j]
+                let arr = []
+
+                if(row[dayIndex] !== undefined) arr.push(row[dayIndex])
+
+                rawWorkableSchedule[i].push(arr)
+            }
+        }
+
+        return rawWorkableSchedule
+    }
+
+    public async getWorkableDaysNumbers(): Promise<number[] | []> {
+        const mondayLetter = fullScheduleByDayLetters[DayNames.monday]
+        const sundayLetter = fullScheduleByDayLetters[DayNames.sunday]
 
         const nextDayWorkStatus = await this.getSheetValues({
-            range: `${this.sheetCollection.getSheetName(this.renderedSheetName)}!${nextDayScheduleLetter}2`
+            range: `${this.sheetCollection.getSheetName(this.renderedSheetName)}!${mondayLetter}2:${sundayLetter}2`
         });
 
-        if (nextDayWorkStatus[0][0] === 'FALSE') return false;
+        const workableDays: number[] = []
 
-        return true;
+        nextDayWorkStatus[0].forEach((el, i) => {
+            if(el === 'TRUE') workableDays.push(i)
+        })
+
+        return workableDays
     }
-//refactor
-    async getTomorrowInstructorsByBase(dayName: DayNames): Promise<Record<string, Array<{ name: string, chatId: string }>>> {
-        const sheetLetters = baseInstructorsByLetters[dayName];
-        const namesByBase: Record<string, string[]> = { blood: [], lungs: [], heart: [], evacuation: [] };
-        const baseNamesByNumbers: Record<number, string> = { 0: 'blood', 1: 'lungs', 2: 'heart', 3: 'evacuation' };
 
-        const instructorsByBase = await this.getSheetValues({
+    public async isDayWorkable(dayName: DayNames) {
+        const dayLetter = fullScheduleByDayLetters[dayName];
+
+        const nextDayWorkStatus = await this.getSheetValues({
+            range: `${this.sheetCollection.getSheetName(this.renderedSheetName)}!${dayLetter}2`
+        });
+
+        return nextDayWorkStatus[0][0] !== 'FALSE';
+    }
+
+    public async isNextDayWorkable(): Promise<boolean> {
+        return await this.isDayWorkable(DateHelper.nextDayName);
+    }
+
+
+    public async getInstructorsByBase(dayName: DayNames): Promise<any[][]> {
+        const sheetLetters = baseInstructorsByLetters[dayName];
+
+        return  await this.getSheetValues({
             range: `${this.sheetCollection.getSheetName(this.instructorsByBaseSheetName)}!${sheetLetters.blood}3:${sheetLetters.evacuation}100`
         });
+    }
+    async getTomorrowInstructorsByBase(): Promise<Record<string, Array<{ name: string, chatId: string }>>> {
+        const instructorsByBase = await this.getInstructorsByBase(DateHelper.nextDayName)
+
+        return this.prepareInstructorsByBase(instructorsByBase);
+    }
+//refactor
+
+    public prepareInstructorsByBase(instructorsByBase: any[][]): Record<string, Array<{ name: string, chatId: string }>> {
+        const namesByBase: Record<string, string[]> = { blood: [], lungs: [], heart: [], evacuation: [] };
+        const baseNamesByNumbers: Record<number, string> = { 0: 'blood', 1: 'lungs', 2: 'heart', 3: 'evacuation' };
 
         const allNames: string[] = [];
 
@@ -61,7 +114,7 @@ export default class RenderedScheduleSheet extends AbstractScheduleSheet {
             }
         }
 
-        const namesWithIds: Array<{ name: string, chatId: string }> = await this.getInstructorsIdsByNames(allNames);
+        const namesWithIds: Array<{ name: string, chatId: string }> = this.getInstructorsIdsByNames(allNames);
 
         const finalObj: Record<string, Array<{ name: string, chatId: string }>> = {
             blood: [], lungs: [], heart: [], evacuation: []

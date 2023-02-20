@@ -31,7 +31,7 @@ export default class NextDayCenterInstructorReminder extends ScheduleMessenger {
 
     if (!isDayWorkable) return;
 
-    const tomorrowInstructorsByBase: Record<string, Array<{ name: string, chatId: string }>> = await this.renderedScheduleSheet.getTomorrowInstructorsByBase(DateHelper.nextDayName);
+    const tomorrowInstructorsByBase: Record<string, Array<{ name: string, chatId: string }>> = await this.renderedScheduleSheet.getTomorrowInstructorsByBase();
 
     const messagesArr: {chatId: string, message: string}[] = renderNextDayInstructorReminderMessage(tomorrowInstructorsByBase, this.repliesCollection);
 

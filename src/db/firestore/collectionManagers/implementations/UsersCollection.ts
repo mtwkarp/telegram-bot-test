@@ -13,6 +13,10 @@ export default class UsersCollection extends AbstractCollectionManager {
     return this.getValueFromDocument('fullNames', valueId);
   }
 
+  public getUserId(userFullName: string): string {
+    return this.getValueFromDocument('ids', userFullName);
+  }
+
   public static getInstance(): UsersCollection {
     if (UsersCollection.uniqueInstance === null) {
       const newInstance = new UsersCollection();
