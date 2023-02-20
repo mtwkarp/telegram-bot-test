@@ -21,13 +21,13 @@ export default class DateHelper {
   }
   //0 - monday 6 - sunday
   static getDayByNumber(num: number): DayNames {
-    const dayNames = DateHelper.dayNames
-    const modifiedNum = num + 1
+    const dayNames = DateHelper.dayNames;
+    const modifiedNum = num + 1;
 
-    if(modifiedNum > 7) return dayNames[1] //monday
-    if(modifiedNum > 6) return dayNames[0] // sunday
+    if(modifiedNum > 7) return dayNames[1]; //monday
+    if(modifiedNum > 6) return dayNames[0]; // sunday
 
-    return dayNames[modifiedNum]
+    return dayNames[modifiedNum];
   }
 
   static get currentDayName(): DayNames {

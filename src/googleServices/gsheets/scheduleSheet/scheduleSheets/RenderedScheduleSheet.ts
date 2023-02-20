@@ -22,47 +22,47 @@ export default class RenderedScheduleSheet extends AbstractScheduleSheet {
     }
 
     public async getNextWeekWorkableDaysSchedule(): Promise<any[][]> {
-        const workableDays = await this.getWorkableDaysNumbers()
-        const mondayLetter = fullScheduleByDayLetters[DayNames.monday]
-        const sundayLetter = fullScheduleByDayLetters[DayNames.sunday]
+        const workableDays = await this.getWorkableDaysNumbers();
+        const mondayLetter = fullScheduleByDayLetters[DayNames.monday];
+        const sundayLetter = fullScheduleByDayLetters[DayNames.sunday];
 
         const fullSchedule = await this.getSheetValues({
             range: `${this.sheetCollection.getSheetName(this.renderedSheetName)}!${mondayLetter}3:${sundayLetter}20`
         });
 
-        const rawWorkableSchedule: any[][] = []
+        const rawWorkableSchedule: any[][] = [];
 
         for (let i = 0; i < workableDays.length; i++) {
-            const dayIndex = workableDays[i]
-            rawWorkableSchedule.push([])
+            const dayIndex = workableDays[i];
+            rawWorkableSchedule.push([]);
             for (let j = 0; j < fullSchedule.length; j++) {
-                const row = fullSchedule[j]
-                let arr = []
+                const row = fullSchedule[j];
+                const arr = [];
 
-                if(row[dayIndex] !== undefined) arr.push(row[dayIndex])
+                if(row[dayIndex] !== undefined) arr.push(row[dayIndex]);
 
-                rawWorkableSchedule[i].push(arr)
+                rawWorkableSchedule[i].push(arr);
             }
         }
 
-        return rawWorkableSchedule
+        return rawWorkableSchedule;
     }
 
     public async getWorkableDaysNumbers(): Promise<number[] | []> {
-        const mondayLetter = fullScheduleByDayLetters[DayNames.monday]
-        const sundayLetter = fullScheduleByDayLetters[DayNames.sunday]
+        const mondayLetter = fullScheduleByDayLetters[DayNames.monday];
+        const sundayLetter = fullScheduleByDayLetters[DayNames.sunday];
 
         const nextDayWorkStatus = await this.getSheetValues({
             range: `${this.sheetCollection.getSheetName(this.renderedSheetName)}!${mondayLetter}2:${sundayLetter}2`
         });
 
-        const workableDays: number[] = []
+        const workableDays: number[] = [];
 
         nextDayWorkStatus[0].forEach((el, i) => {
-            if(el === 'TRUE') workableDays.push(i)
-        })
+            if(el === 'TRUE') workableDays.push(i);
+        });
 
-        return workableDays
+        return workableDays;
     }
 
     public async isDayWorkable(dayName: DayNames) {
@@ -88,7 +88,7 @@ export default class RenderedScheduleSheet extends AbstractScheduleSheet {
         });
     }
     async getTomorrowInstructorsByBase(): Promise<Record<string, Array<{ name: string, chatId: string }>>> {
-        const instructorsByBase = await this.getInstructorsByBase(DateHelper.nextDayName)
+        const instructorsByBase = await this.getInstructorsByBase(DateHelper.nextDayName);
 
         return this.prepareInstructorsByBase(instructorsByBase);
     }

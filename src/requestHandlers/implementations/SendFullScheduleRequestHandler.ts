@@ -2,25 +2,25 @@ import SpreadsheetRequestObserver from '../../spreadsheetObserver/SpreadsheetReq
 import {SpreadSheetUpdateObj} from '../../spreadsheetObserver/types/types';
 import {SPREADSHEET_REQUESTS} from '../../spreadsheetObserver/types/enums';
 import RenderedScheduleSheetCenter
-    from "../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetCenter";
-import RenderedScheduleSheet from "../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheet";
-import {Telegram} from "telegraf";
-import {renderOneDayScheduleFromSheet} from "../../autoMessengers/scheduleMessengers.ts/helpers";
+    from '../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetCenter';
+import RenderedScheduleSheet from '../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheet';
+import {Telegram} from 'telegraf';
+import {renderOneDayScheduleFromSheet} from '../../autoMessengers/scheduleMessengers.ts/helpers';
 import RenderedScheduleSheetTrips
-    from "../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetTrips";
+    from '../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetTrips';
 
 export default class SendFullScheduleRequestHandler extends SpreadsheetRequestObserver {
 
-    private centerRenderedScheduleSheet: RenderedScheduleSheet
-    private tripRenderedScheduleSheet: RenderedScheduleSheet
-    private tg: Telegram
+    private centerRenderedScheduleSheet: RenderedScheduleSheet;
+    private tripRenderedScheduleSheet: RenderedScheduleSheet;
+    private tg: Telegram;
     constructor() {
         super();
 
         this.requestsNames = [SPREADSHEET_REQUESTS.send_full_schedule_to_tg_channel];
-        this.centerRenderedScheduleSheet = new RenderedScheduleSheetCenter()
-        this.tripRenderedScheduleSheet = new RenderedScheduleSheetTrips()
-        this.tg = new Telegram(process.env.TELEGRAM_BOT_TOKEN as string)
+        this.centerRenderedScheduleSheet = new RenderedScheduleSheetCenter();
+        this.tripRenderedScheduleSheet = new RenderedScheduleSheetTrips();
+        this.tg = new Telegram(process.env.TELEGRAM_BOT_TOKEN as string);
     }
     public onUpdate(update: SpreadSheetUpdateObj): void {
         this.sendFullScheduleToTgChannel();
@@ -32,25 +32,25 @@ export default class SendFullScheduleRequestHandler extends SpreadsheetRequestOb
     }
 
     private async sendCenterScheduleToChannel(): Promise<void> {
-        const centerWorkDays = await this.centerRenderedScheduleSheet.getNextWeekWorkableDaysSchedule()
-        this.sendScheduleMessage(centerWorkDays, 'ЦЕНТР')
+        const centerWorkDays = await this.centerRenderedScheduleSheet.getNextWeekWorkableDaysSchedule();
+        this.sendScheduleMessage(centerWorkDays, 'ЦЕНТР');
     }
 
     private async sendTripsScheduleToChannel(): Promise<void>  {
-        const tripWorkDays = await this.tripRenderedScheduleSheet.getNextWeekWorkableDaysSchedule()
-        this.sendScheduleMessage(tripWorkDays,  'ВИЇЗДИ')
+        const tripWorkDays = await this.tripRenderedScheduleSheet.getNextWeekWorkableDaysSchedule();
+        this.sendScheduleMessage(tripWorkDays,  'ВИЇЗДИ');
     }
 
     private async sendScheduleMessage(workableDays: any[][], header: string): Promise<void>  {
-        let finalString = ''
+        let finalString = '';
 
         for (let i = 0; i < workableDays.length; i++) {
-            const day = workableDays[i]
+            const day = workableDays[i];
 
-            finalString += `${renderOneDayScheduleFromSheet(day)}\n`
+            finalString += `${renderOneDayScheduleFromSheet(day)}\n`;
         }
 
-        finalString = finalString.replace(/^/, `${header}\n`)
+        finalString = finalString.replace(/^/, `${header}\n`);
 
         try {
             await this.tg.sendMessage(process.env.TELEGRAM_CHANNEL_ID as string, finalString);

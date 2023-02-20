@@ -1,6 +1,5 @@
 import ScheduleMessenger from '../ScheduleMessenger';
 import cron from 'node-cron';
-import DateHelper from '../../../helpers/DateHelper';
 import ReplyMsgCollection from '../../../db/firestore/collectionManagers/implementations/ReplyMsgCollection';
 import {renderNextDayInstructorReminderMessage} from '../helpers';
 import RenderedScheduleSheetTrips

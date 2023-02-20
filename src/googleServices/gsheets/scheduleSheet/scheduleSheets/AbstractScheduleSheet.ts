@@ -1,6 +1,6 @@
 import SheetsService from '../../../services/SheetsService';
 import SheetsCollection from '../../../../db/firestore/collectionManagers/implementations/SheetsCollection';
-import UsersCollection from "../../../../db/firestore/collectionManagers/implementations/UsersCollection";
+import UsersCollection from '../../../../db/firestore/collectionManagers/implementations/UsersCollection';
 
 export default abstract class AbstractScheduleSheet extends SheetsService {
   protected readonly sheetCollection: SheetsCollection;
@@ -12,12 +12,12 @@ export default abstract class AbstractScheduleSheet extends SheetsService {
   }
 
   getInstructorsIdsByNames(namesArr: string[] = []): Array<{ name: string, chatId: string }> {
-    const allInstructorsInfo = UsersCollection.getInstance().getAllDocumentValues('ids') as Record<string, string>
+    const allInstructorsInfo = UsersCollection.getInstance().getAllDocumentValues('ids') as Record<string, string>;
     const finalList = [];
 
     for (let i = 0; i < namesArr.length; i++) {
       const name = namesArr[i];
-      const chatId = allInstructorsInfo[name]
+      const chatId = allInstructorsInfo[name];
 
       finalList.push({
         name,
