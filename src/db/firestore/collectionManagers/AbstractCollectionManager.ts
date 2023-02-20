@@ -1,6 +1,6 @@
 import CollectionUpdater from './CollectionUpdater';
 import { type ICollectionManager } from '../../ts/db_interfaces';
-import {getFirestore} from "firebase-admin/firestore";
+import {getFirestore} from 'firebase-admin/firestore';
 export default abstract class AbstractCollectionManager implements ICollectionManager {
   protected collection: Record<string, FirebaseFirestore.DocumentData>;
 
@@ -50,16 +50,16 @@ export default abstract class AbstractCollectionManager implements ICollectionMa
   }
 
   protected async updateValue(docId: string, key: string, value: any): Promise<FirebaseFirestore.WriteResult> {
-    const db = getFirestore()
-    const collection = await db.collection(this.collectionName)
-    const doc = collection.doc(docId)
+    const db = getFirestore();
+    const collection = await db.collection(this.collectionName);
+    const doc = collection.doc(docId);
     //
     // if(!doc) {
     //   console.log('No such document: ', docId)
     //   return
     // }
 
-    return  doc.update({[key]: value})
+    return  doc.update({[key]: value});
   }
 
   public getDocument(documentId: string): FirebaseFirestore.DocumentData | undefined {

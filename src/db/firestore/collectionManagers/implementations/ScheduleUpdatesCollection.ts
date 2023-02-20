@@ -1,6 +1,6 @@
 
 import AbstractCollectionManager from '../AbstractCollectionManager';
-import {DayNames} from "../../../../types/enums";
+import {DayNames} from '../../../../types/enums';
 
 export default class ScheduleUpdatesCollection extends AbstractCollectionManager {
     protected constructor() {
@@ -24,28 +24,28 @@ export default class ScheduleUpdatesCollection extends AbstractCollectionManager
     }
 
     public setCenterFullScheduleId(msgId: number): Promise<FirebaseFirestore.WriteResult> {
-        return this.updateCenterScheduleValue('lastFullScheduleMessageId', msgId)
+        return this.updateCenterScheduleValue('lastFullScheduleMessageId', msgId);
 
     }
 
     public setTripFullScheduleId(msgId: number): Promise<FirebaseFirestore.WriteResult> {
-        return this.updateTripScheduleValue('lastFullScheduleMessageId', msgId)
+        return this.updateTripScheduleValue('lastFullScheduleMessageId', msgId);
 
     }
 
     public setCenterOneDayScheduleMessageId(dayName: DayNames, msgId: number): Promise<FirebaseFirestore.WriteResult>{
-        return this.updateCenterScheduleValue(dayName, msgId)
+        return this.updateCenterScheduleValue(dayName, msgId);
     }
     public setTripOneDayScheduleMessageId(dayName: DayNames, msgId: number): Promise<FirebaseFirestore.WriteResult>  {
-        return this.updateTripScheduleValue(dayName, msgId)
+        return this.updateTripScheduleValue(dayName, msgId);
     }
 
     private async updateCenterScheduleValue(key: string, value: any): Promise<FirebaseFirestore.WriteResult>  {
-        return this.updateValue('center', key, value)
+        return this.updateValue('center', key, value);
     }
 
     private async updateTripScheduleValue(key: string, value: any): Promise<FirebaseFirestore.WriteResult>  {
-        return this.updateValue('trip', key, value)
+        return this.updateValue('trip', key, value);
     }
     public static getInstance(): ScheduleUpdatesCollection {
         if (ScheduleUpdatesCollection.uniqueInstance === null) {

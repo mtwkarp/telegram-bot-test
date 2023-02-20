@@ -6,7 +6,7 @@ import ReplyMsgCollection from './firestore/collectionManagers/implementations/R
 import SheetsCollection from './firestore/collectionManagers/implementations/SheetsCollection';
 import UsersCollection from './firestore/collectionManagers/implementations/UsersCollection';
 import StickersCollection from './firestore/collectionManagers/implementations/StickersCollection';
-import ScheduleUpdatesCollection from "./firestore/collectionManagers/implementations/ScheduleUpdatesCollection";
+import ScheduleUpdatesCollection from './firestore/collectionManagers/implementations/ScheduleUpdatesCollection';
 
 export default class DataBaseManager implements IDataBaseManager {
   public async init() {
