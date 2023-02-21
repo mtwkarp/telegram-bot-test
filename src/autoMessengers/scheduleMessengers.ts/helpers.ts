@@ -1,7 +1,7 @@
 import ReplyMsgCollection from '../../db/firestore/collectionManagers/implementations/ReplyMsgCollection';
 
 
-export function renderOneDayScheduleFromSheet(scheduleStrings: string[][]): string {
+export function renderOneDayScheduleFromSheet(scheduleStrings: string[][], header?: string): string {
     let fullScheduleString = '';
 
     for (let i = 0; i < scheduleStrings.length; i++) {
@@ -15,7 +15,25 @@ export function renderOneDayScheduleFromSheet(scheduleStrings: string[][]): stri
         fullScheduleString = fullScheduleString + paragraph + str;
     }
 
+    if(header) {
+        fullScheduleString = fullScheduleString.replace(/^/, `${header}\n`);
+    }
+
     return fullScheduleString;
+}
+
+export function renderFullWorkableDaysSchedule(workableDays: any[][], header: string) {
+    let finalString = '';
+
+    for (let i = 0; i < workableDays.length; i++) {
+        const day = workableDays[i];
+
+        finalString += `${renderOneDayScheduleFromSheet(day)}\n`;
+    }
+
+    finalString = finalString.replace(/^/, `${header}\n`);
+
+    return finalString
 }
 
 //refactor

@@ -50,16 +50,22 @@ export default abstract class AbstractCollectionManager implements ICollectionMa
   }
 
   protected async updateValue(docId: string, key: string, value: any): Promise<FirebaseFirestore.WriteResult> {
+    const doc = await this.getDocumentClass(docId)
+
+    return  doc.update({[key]: value});
+  }
+  protected async updateMultipleValues(docId: string, updateObj: Record<string, any>): Promise<FirebaseFirestore.WriteResult> {
+    const doc = await this.getDocumentClass(docId);
+
+    return doc.update(updateObj);
+  }
+
+  protected async getDocumentClass(docId: string): Promise<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>>  {
     const db = getFirestore();
     const collection = await db.collection(this.collectionName);
     const doc = collection.doc(docId);
-    //
-    // if(!doc) {
-    //   console.log('No such document: ', docId)
-    //   return
-    // }
 
-    return  doc.update({[key]: value});
+    return doc
   }
 
   public getDocument(documentId: string): FirebaseFirestore.DocumentData | undefined {

@@ -1,14 +1,16 @@
 import SpreadsheetRequestObserver from '../spreadsheetObserver/SpreadsheetRequestObserver';
 import SpreadsheetRequestsSubject from '../spreadsheetObserver/SpreadsheetRequestsSubject';
 import SendFullScheduleRequestHandler from './implementations/SendFullScheduleRequestHandler';
-import UpdateScheduleRequestHandler from './implementations/UpdateScheduleRequestHandler';
+import CenterScheduleUpdateHandler from "./implementations/updateScheduleRequestHandlers/CenterScheduleUpdateHandler";
+import TripsScheduleUpdateHandler from "./implementations/updateScheduleRequestHandlers/TripsScheduleUpdateHandler";
 
 
 export default class RequestHandlersManager {
     initSpreadsheetRequestHandlers(SpreadsheetRequestObserver: SpreadsheetRequestsSubject) {
         const handlers: Array<new() => SpreadsheetRequestObserver> = [
             SendFullScheduleRequestHandler,
-            UpdateScheduleRequestHandler
+            CenterScheduleUpdateHandler,
+            TripsScheduleUpdateHandler
         ];
 
         handlers.forEach(H => {

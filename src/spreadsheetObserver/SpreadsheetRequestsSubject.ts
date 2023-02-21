@@ -24,6 +24,8 @@ export default class SpreadsheetRequestsSubject {
                 console.warn('This observer already registered');
             }
         });
+
+        // console.log(this.requestObservers)
     }
 
     public removeObserver(observer: SpreadsheetRequestObserver): void {

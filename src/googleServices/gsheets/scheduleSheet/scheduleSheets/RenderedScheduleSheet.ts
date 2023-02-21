@@ -14,11 +14,15 @@ export default class RenderedScheduleSheet extends AbstractScheduleSheet {
         super();
     }
 
-    public async getNextDayFullSchedule(): Promise<any[][]> {
-        const nextDayScheduleLetter = fullScheduleByDayLetters[DateHelper.nextDayName];
+    public async getOneDaySchedule(dayName: DayNames): Promise<any[][]> {
+        const nextDayScheduleLetter = fullScheduleByDayLetters[dayName];
         const range = `${this.sheetCollection.getSheetName(this.renderedSheetName)}!${nextDayScheduleLetter}3:${nextDayScheduleLetter}100`;
 
         return await this.getSheetValues({ range });
+    }
+
+    public async getNextDayFullSchedule(): Promise<any[][]> {
+        return this.getOneDaySchedule(DateHelper.nextDayName)
     }
 
     public async getNextWeekWorkableDaysSchedule(): Promise<any[][]> {
