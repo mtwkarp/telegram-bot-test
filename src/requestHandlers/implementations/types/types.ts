@@ -1,4 +1,4 @@
-import {Message} from "typegram";
+import {Message} from 'typegram';
 
 export type ScheduleFullMessages = {
     fullScheduleCenterMsg: Message.TextMessage | undefined,

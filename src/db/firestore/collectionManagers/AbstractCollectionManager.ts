@@ -50,7 +50,7 @@ export default abstract class AbstractCollectionManager implements ICollectionMa
   }
 
   protected async updateValue(docId: string, key: string, value: any): Promise<FirebaseFirestore.WriteResult> {
-    const doc = await this.getDocumentClass(docId)
+    const doc = await this.getDocumentClass(docId);
 
     return  doc.update({[key]: value});
   }
@@ -65,7 +65,7 @@ export default abstract class AbstractCollectionManager implements ICollectionMa
     const collection = await db.collection(this.collectionName);
     const doc = collection.doc(docId);
 
-    return doc
+    return doc;
   }
 
   public getDocument(documentId: string): FirebaseFirestore.DocumentData | undefined {

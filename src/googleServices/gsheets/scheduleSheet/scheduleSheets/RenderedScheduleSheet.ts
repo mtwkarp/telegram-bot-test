@@ -22,7 +22,7 @@ export default class RenderedScheduleSheet extends AbstractScheduleSheet {
     }
 
     public async getNextDayFullSchedule(): Promise<any[][]> {
-        return this.getOneDaySchedule(DateHelper.nextDayName)
+        return this.getOneDaySchedule(DateHelper.nextDayName);
     }
 
     public async getNextWeekWorkableDaysSchedule(): Promise<any[][]> {

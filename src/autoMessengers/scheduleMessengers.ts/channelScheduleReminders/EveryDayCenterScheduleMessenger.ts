@@ -4,8 +4,8 @@ import {renderOneDayScheduleFromSheet} from '../helpers';
 import RenderedScheduleSheetCenter
   from '../../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetCenter';
 import ScheduleUpdatesCollection
-  from "../../../db/firestore/collectionManagers/implementations/ScheduleUpdatesCollection";
-import DateHelper from "../../../helpers/DateHelper";
+  from '../../../db/firestore/collectionManagers/implementations/ScheduleUpdatesCollection';
+import DateHelper from '../../../helpers/DateHelper';
 
 export default class EveryDayCenterScheduleMessenger extends ScheduleMessenger {
   protected readonly renderedScheduleSheet: RenderedScheduleSheetCenter;
@@ -35,7 +35,7 @@ export default class EveryDayCenterScheduleMessenger extends ScheduleMessenger {
 
     try {
       const message = await this.tg.sendMessage(process.env.TELEGRAM_CHANNEL_ID as string, fullScheduleString);
-      ScheduleUpdatesCollection.getInstance().setCenterOneDayScheduleMessageId(DateHelper.nextDayName, message.message_id)
+      ScheduleUpdatesCollection.getInstance().setCenterOneDayScheduleMessageId(DateHelper.nextDayName, message.message_id);
     } catch (err) {
       console.log('Error on sending everyday schedule to channel', err);
     }

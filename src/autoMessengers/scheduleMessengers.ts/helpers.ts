@@ -33,7 +33,7 @@ export function renderFullWorkableDaysSchedule(workableDays: any[][], header: st
 
     finalString = finalString.replace(/^/, `${header}\n`);
 
-    return finalString
+    return finalString;
 }
 
 //refactor

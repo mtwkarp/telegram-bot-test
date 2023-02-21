@@ -1,23 +1,23 @@
 
 import AbstractCollectionManager from '../AbstractCollectionManager';
 import {DayNames} from '../../../../types/enums';
-import {ScheduleFullMessages} from "../../../../requestHandlers/implementations/types/types";
-import cron from "node-cron";
+import {ScheduleFullMessages} from '../../../../requestHandlers/implementations/types/types';
+import cron from 'node-cron';
 
 export default class ScheduleUpdatesCollection extends AbstractCollectionManager {
     protected constructor() {
         super('schedule_updates');
 
-        this.setupDelayedUpdates()
+        this.setupDelayedUpdates();
     }
 
     private setupDelayedUpdates() {
-        const config = {scheduled: true, timeZone: 'Europe/Kiev'}
-        const autoEraseTime = '0 0 0 * * Sunday'
-        const autoAllowEditingTime = '0 0 20 * * Sunday'
+        const config = {scheduled: true, timeZone: 'Europe/Kiev'};
+        const autoEraseTime = '0 0 0 * * Sunday';
+        const autoAllowEditingTime = '0 0 20 * * Sunday';
         
-        cron.schedule(autoEraseTime, this.eraseLastWeekMessagesData.bind(this), config)
-        cron.schedule(autoAllowEditingTime, this.allowMessagesEditing.bind(this), config)
+        cron.schedule(autoEraseTime, this.eraseLastWeekMessagesData.bind(this), config);
+        cron.schedule(autoAllowEditingTime, this.allowMessagesEditing.bind(this), config);
     }
 
     private async eraseLastWeekMessagesData() {
@@ -30,35 +30,35 @@ export default class ScheduleUpdatesCollection extends AbstractCollectionManager
             [DayNames.saturday]: 0,
             [DayNames.sunday]: 0,
             lastFullScheduleMessageId: 0
-        }
+        };
 
-        await this.updateMultipleValues('center', updateObj)
-        await this.updateMultipleValues('trips', updateObj)
+        await this.updateMultipleValues('center', updateObj);
+        await this.updateMultipleValues('trips', updateObj);
     }
 
     private allowMessagesEditing() {
-        this.setUpdateAvailability(true)
+        this.setUpdateAvailability(true);
     }
 
     public async updateScheduleMessagesIdsAndAllowEdit(messages: ScheduleFullMessages): Promise<void> {
         const {fullScheduleTripsMsg, fullScheduleCenterMsg} = messages;
 
         if(fullScheduleCenterMsg || fullScheduleTripsMsg) {
-            await this.setUpdateAvailability(true)
-            await this.eraseLastWeekMessagesData()
+            await this.setUpdateAvailability(true);
+            await this.eraseLastWeekMessagesData();
         }
 
         if(fullScheduleCenterMsg !== undefined) {
-            await this.setCenterFullScheduleId(fullScheduleCenterMsg.message_id)
+            await this.setCenterFullScheduleId(fullScheduleCenterMsg.message_id);
         }
 
         if(fullScheduleTripsMsg !== undefined) {
-            await this.setTripFullScheduleId(fullScheduleTripsMsg.message_id)
+            await this.setTripFullScheduleId(fullScheduleTripsMsg.message_id);
         }
     }
 
     public get isUpdateAvailable() {
-        return this.getValueFromDocument('options', 'updateAvailable')
+        return this.getValueFromDocument('options', 'updateAvailable');
     }
 
     public getCenterOneDayScheduleMsgId(dayName: DayNames): number {
@@ -95,7 +95,7 @@ export default class ScheduleUpdatesCollection extends AbstractCollectionManager
     }
 
     public setUpdateAvailability(isAvailable: boolean) {
-        return this.updateValue('options', 'updateAvailable', isAvailable)
+        return this.updateValue('options', 'updateAvailable', isAvailable);
     }
 
     private async updateCenterScheduleValue(key: string, value: any): Promise<FirebaseFirestore.WriteResult>  {

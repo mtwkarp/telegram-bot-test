@@ -8,9 +8,9 @@ import {Telegram} from 'telegraf';
 import {renderFullWorkableDaysSchedule} from '../../autoMessengers/scheduleMessengers.ts/helpers';
 import RenderedScheduleSheetTrips
     from '../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetTrips';
-import {Message} from "typegram";
-import ScheduleUpdatesCollection from "../../db/firestore/collectionManagers/implementations/ScheduleUpdatesCollection";
-import {ScheduleFullMessages} from "./types/types";
+import {Message} from 'typegram';
+import ScheduleUpdatesCollection from '../../db/firestore/collectionManagers/implementations/ScheduleUpdatesCollection';
+import {ScheduleFullMessages} from './types/types';
 
 export default class SendFullScheduleRequestHandler extends SpreadsheetRequestObserver {
 
@@ -27,7 +27,7 @@ export default class SendFullScheduleRequestHandler extends SpreadsheetRequestOb
     }
     public async onUpdate(update: SpreadSheetUpdateObj): Promise<void> {
         const messages = await this.sendFullScheduleToTgChannel();
-        ScheduleUpdatesCollection.getInstance().updateScheduleMessagesIdsAndAllowEdit(messages)
+        ScheduleUpdatesCollection.getInstance().updateScheduleMessagesIdsAndAllowEdit(messages);
     }
 
     private async sendFullScheduleToTgChannel(): Promise<ScheduleFullMessages> {
@@ -37,7 +37,7 @@ export default class SendFullScheduleRequestHandler extends SpreadsheetRequestOb
         return {
             fullScheduleCenterMsg,
             fullScheduleTripsMsg
-        }
+        };
     }
 
     private async sendCenterScheduleToChannel(): Promise<Message.TextMessage | undefined>  {
@@ -53,11 +53,11 @@ export default class SendFullScheduleRequestHandler extends SpreadsheetRequestOb
     }
 
     private async sendScheduleMessage(workableDays: any[][], header: string): Promise<Message.TextMessage | undefined>  {
-        let finalString = renderFullWorkableDaysSchedule(workableDays, header)
+        const finalString = renderFullWorkableDaysSchedule(workableDays, header);
 
         if(finalString === '') {
-            console.log('Empty full schedule', header)
-            return
+            console.log('Empty full schedule', header);
+            return;
         }
 
         try {

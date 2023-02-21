@@ -4,8 +4,8 @@ import {renderOneDayScheduleFromSheet} from '../helpers';
 import RenderedScheduleSheetTrips
     from '../../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetTrips';
 import ScheduleUpdatesCollection
-    from "../../../db/firestore/collectionManagers/implementations/ScheduleUpdatesCollection";
-import DateHelper from "../../../helpers/DateHelper";
+    from '../../../db/firestore/collectionManagers/implementations/ScheduleUpdatesCollection';
+import DateHelper from '../../../helpers/DateHelper';
 
 export default class EveryDayTripScheduleReminder extends ScheduleMessenger {
     private readonly tripRenderedScheduleSheet: RenderedScheduleSheetTrips;
@@ -34,7 +34,7 @@ export default class EveryDayTripScheduleReminder extends ScheduleMessenger {
 
         try {
             const message = await this.tg.sendMessage(process.env.TELEGRAM_CHANNEL_ID as string, fullScheduleString);
-            ScheduleUpdatesCollection.getInstance().setTripOneDayScheduleMessageId(DateHelper.nextDayName, message.message_id)
+            ScheduleUpdatesCollection.getInstance().setTripOneDayScheduleMessageId(DateHelper.nextDayName, message.message_id);
         } catch (err) {
             console.log('Error on sending everyday schedule to channel', err);
         }
