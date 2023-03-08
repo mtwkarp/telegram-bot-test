@@ -1,4 +1,4 @@
-import { DayNames } from '../types/enums';
+import {DayNames, MonthNames} from '../types/enums';
 export default class DateHelper {
   static get dayNames(): DayNames[] {
     return [
@@ -10,6 +10,23 @@ export default class DateHelper {
       DayNames.friday,
       DayNames.saturday
     ];
+  }
+
+  static getMonthNames(): MonthNames[] {
+    return [
+      MonthNames.january,
+      MonthNames.february,
+      MonthNames.march,
+      MonthNames.april,
+      MonthNames.may,
+      MonthNames.june,
+      MonthNames.july,
+      MonthNames.august,
+      MonthNames.september,
+      MonthNames.october,
+      MonthNames.november,
+      MonthNames.december
+    ]
   }
 
   static get nextDayName(): DayNames {

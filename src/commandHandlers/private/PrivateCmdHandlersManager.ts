@@ -5,6 +5,7 @@ import { type IPrivateContextDecorator } from '../../tglib/tgTypes/contextDecora
 import { PRIVATE_UPDATE_TYPES } from '../../tglib/tgTypes/botUpdatesTypes';
 import { type IPrivateCommandPayload } from '../../tglib/tgTypes/messagePayload/contextPayloadTypes';
 import SavePhotosCommandHandler from './handlers/savePhotosCommand/SavePhotosCommandHandler';
+import NoneCmdHandler from "./handlers/noneCommand/NoneCmdHandler";
 class PrivateCmdHandlersManager extends EventEmitter implements IPrivateCmdHandler {
   private readonly id: number;
   // name: one of cmd_names
@@ -17,8 +18,7 @@ class PrivateCmdHandlersManager extends EventEmitter implements IPrivateCmdHandl
 
     this.id = userId;
     this.handlers = {};
-    // this.defaultHandler = new NoneCmdHandler(this.id);
-    this.defaultHandler = new SavePhotosCommandHandler(this.id);
+    this.defaultHandler = new NoneCmdHandler(this.id);
 
     this.setDefaultHandler();
     this.initHandlers(cmdHandlers);
