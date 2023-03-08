@@ -1,40 +1,50 @@
 import DriveService from '../services/DriveService';
-import {Readable} from 'stream';
+import {Readable, Transform} from 'stream';
+import https from "https";
 
 export default class PhotosSaverDrive extends DriveService {
     constructor() {
         super();
     }
 
-    async savePhoto(buffer: Readable) {
+    async savePhotoFromURL(url: string, pathname: string): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            https.request(url, (response) => {
+                const data = new Transform();
 
-            // const media = {
-            //     mimeType: 'image/jpeg',
-            //     name: 'ddddd',
-            //     body: fs.createReadStream(buffer),
-            //     parents: ['1J6u-SBx3WpG61_71kOYNX1glFKWCVSAk']
-            // }
-            //
-            // const fileMetadata = {
-            //     name: 'photo.jpg',
-            // };
+                response.on('data', (chunk) => {
+                    data.push(chunk);
+                });
 
-            this.drive.files.create({
-                // @ts-ignore
-                // resource: fileMetadata,
-                // fields: 'id, name',
-                // media
+                response.on('end', async () => {
+                    const result = await this.savePhotoToDriveFolder(Readable.from(data.read()), {name: pathname});
+                    resolve(result)
+                });
 
-                uploadType: 'media',
-                requestBody: {
-                    name: 'somephoto.jpg',
-                    parents: ['1J6u-SBx3WpG61_71kOYNX1glFKWCVSAk']
-                },
-                media: {
-                    body: buffer
-                }
-            }).then((e) => console.log('photo uploaded', e))
-                .catch(err => console.log(err));
+            }).end();
+        })
+    }
 
+    async savePhotoToDriveFolder(buffer: Readable, options: {name: string}): Promise<boolean> {
+            try {
+                await this.drive.files.create({
+                    // @ts-ignore
+                    uploadType: 'media',
+                    requestBody: {
+                        name: options.name,
+                        parents: [process.env.PHOTOS_DRIVE_FOLDER_ID as string]
+                    },
+                    media: {
+                        body: buffer
+                    }
+                })
+
+                console.log("Photo saved successfully")
+                return true
+            }catch(err) {
+                console.warn("Can't save photos", err)
+
+                return false
+            }
     }
 }

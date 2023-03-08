@@ -9,6 +9,11 @@ export default class ReplyMsgCollection extends AbstractCollectionManager {
     return this.getValueFromDocument('schedule', valueId);
   }
 
+  public getSavePhotoCmdReply(valueId: string): string {
+    return this.getValueFromDocument('save_photos', valueId);
+
+  }
+
   public static getInstance(): ReplyMsgCollection {
     if (ReplyMsgCollection.uniqueInstance === null) {
       const newInstance = new ReplyMsgCollection();
