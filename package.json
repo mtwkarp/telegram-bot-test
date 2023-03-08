@@ -19,8 +19,11 @@
     }
   },
   "lint-staged": {
-  "*.js": ["./node_modules/.bin/eslint — fix", "git add"]
-},
+    "*.js": [
+      "./node_modules/.bin/eslint — fix",
+      "git add"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MatthewKarpenko/telegram-bot-test.git"
@@ -64,6 +67,7 @@
     "eslint-config-standard-with-typescript": "^32.0.0",
     "eslint-plugin-unused-imports": "^2.0.0",
     "husky": "^8.0.0",
+    "lint-staged": "^13.1.2",
     "prettier": "^2.7.1",
     "ts-loader": "^9.4.2",
     "ts-node": "^10.9.1",

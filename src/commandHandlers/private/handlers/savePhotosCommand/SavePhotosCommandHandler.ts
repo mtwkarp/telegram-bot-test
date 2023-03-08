@@ -35,10 +35,12 @@ export default class SavePhotosCommandHandler extends PrivateCmdHandler {
             const data = new Transform();
 
             response.on('data', (chunk) => {
-                data.push(chunk);
+                data.push(chunk)
             });
             response.on('end', () => {
-                this.drivePhotosSaver.savePhoto(Readable.from(data.read()));
+
+
+                this.drivePhotosSaver.savePhoto(Readable.from(data.read()))
             });
 
         }).end();
