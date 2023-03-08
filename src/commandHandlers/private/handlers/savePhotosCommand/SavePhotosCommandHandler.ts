@@ -32,7 +32,7 @@ export default class SavePhotosCommandHandler extends PrivateCmdHandler {
         const fileLink = await this.tg.getFileLink(file.file_id);
 
         https.request(fileLink.href, (response) => {
-            const data = new Transform();
+            const data = new Transform()
 
             response.on('data', (chunk) => {
                 data.push(chunk)
