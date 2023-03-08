@@ -4,6 +4,8 @@ import PrivateCmdHandlersManager from '../../commandHandlers/private/PrivateCmdH
 import ScheduleCmdHandler from '../../commandHandlers/private/handlers/scheduleCommand/ScheduleCmdHandler';
 import CommandsInfoHandler from '../../commandHandlers/private/handlers/ infoCommand/CommandsInfoCmdHandler';
 import StartCmdHandler from '../../commandHandlers/private/handlers/startCommand/StartCmdHandler';
+import SavePhotosCommandHandler
+  from '../../commandHandlers/private/handlers/savePhotosCommand/SavePhotosCommandHandler';
 
 class InstructorUserStrategy extends UserStrategy {
   protected cmdHandlerManager: PrivateCmdHandlersManager;
@@ -11,9 +13,10 @@ class InstructorUserStrategy extends UserStrategy {
     super();
 
     this.cmdHandlerManager = new PrivateCmdHandlersManager(userId, [
-      ScheduleCmdHandler,
-      CommandsInfoHandler,
-      StartCmdHandler
+        ScheduleCmdHandler,
+        CommandsInfoHandler,
+        StartCmdHandler,
+        SavePhotosCommandHandler
     ]);
   }
 

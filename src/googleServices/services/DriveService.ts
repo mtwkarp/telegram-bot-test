@@ -1,7 +1,12 @@
-import { type GoogleAuth } from 'google-auth-library';
-import { type JSONClient } from 'google-auth-library/build/src/auth/googleauth';
+import {google, drive_v3} from 'googleapis';
+import GoogleServicesManager from '../GoogleServicesManager';
 export default class DriveService {
-// eslint-disable-next-line
-  initService(authenticationObj: GoogleAuth<JSONClient>): void {
+
+  protected readonly drive: drive_v3.Drive;
+  constructor() {
+    this.drive = google.drive({
+      version: 'v3',
+      auth: GoogleServicesManager.authenticationObject
+    });
   }
 }

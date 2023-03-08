@@ -2,7 +2,8 @@ export enum CMD_NAMES {
   SCHEDULE = 'schedule',
   COMMANDS_INFO = 'commandsinfo',
   NONE = 'none',
-  START = 'start'
+  START = 'start',
+  SAVE_PHOTO= 'savephoto'
 }
 
 export enum DayNames {

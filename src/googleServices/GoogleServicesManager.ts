@@ -16,7 +16,7 @@ export default class GoogleServicesManager {
 
     GoogleServicesManager.authObj = await new GoogleAuth({
       credentials: GoogleCredentialsManager.serviceAccountCredentials,
-      scopes: ['https://www.googleapis.com/auth/spreadsheets']
+      scopes: ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
     });
   }
 

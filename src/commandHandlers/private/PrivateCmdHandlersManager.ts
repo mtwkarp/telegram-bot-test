@@ -1,23 +1,24 @@
 import EventEmitter from 'eventemitter3';
 import type PrivateCmdHandler from './PrivateCmdHandler';
-import NoneCmdHandler from './handlers/noneCommand/NoneCmdHandler';
 import { type IPrivateCmdHandler } from './ts/private_cmd_handlers_interfaces';
 import { type IPrivateContextDecorator } from '../../tglib/tgTypes/contextDecoratorTypes';
 import { PRIVATE_UPDATE_TYPES } from '../../tglib/tgTypes/botUpdatesTypes';
 import { type IPrivateCommandPayload } from '../../tglib/tgTypes/messagePayload/contextPayloadTypes';
-import { type DefaultCmdHandler } from '../../types/interfaces';
+import SavePhotosCommandHandler from './handlers/savePhotosCommand/SavePhotosCommandHandler';
 class PrivateCmdHandlersManager extends EventEmitter implements IPrivateCmdHandler {
   private readonly id: number;
   // name: one of cmd_names
   private readonly handlers: Record<string, PrivateCmdHandler>;
   private currentHandler: PrivateCmdHandler;
-  private readonly defaultHandler: PrivateCmdHandler & DefaultCmdHandler;
+  // private readonly defaultHandler: PrivateCmdHandler & DefaultCmdHandler;
+  private readonly defaultHandler: PrivateCmdHandler;
   constructor(userId: number, cmdHandlers: Array<new(userId: number) => PrivateCmdHandler>) {
     super();
 
     this.id = userId;
     this.handlers = {};
-    this.defaultHandler = new NoneCmdHandler(this.id);
+    // this.defaultHandler = new NoneCmdHandler(this.id);
+    this.defaultHandler = new SavePhotosCommandHandler(this.id);
 
     this.setDefaultHandler();
     this.initHandlers(cmdHandlers);
@@ -65,7 +66,7 @@ class PrivateCmdHandlersManager extends EventEmitter implements IPrivateCmdHandl
   private noCommandHandlerAvailable() {
     this.currentHandler.finishCmd();
     this.setDefaultHandler();
-    this.defaultHandler.sendNotAvailableCmdMessage();
+    // this.defaultHandler.sendNotAvailableCmdMessage();
   }
 
   private findHandlerByName(cmdName: string): PrivateCmdHandler | undefined {

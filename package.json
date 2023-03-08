@@ -13,6 +13,14 @@
     "prepare": "husky install",
     "build": "webpack"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+  "*.js": ["./node_modules/.bin/eslint — fix", "git add"]
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MatthewKarpenko/telegram-bot-test.git"
