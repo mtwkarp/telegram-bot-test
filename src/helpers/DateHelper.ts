@@ -26,7 +26,7 @@ export default class DateHelper {
       MonthNames.october,
       MonthNames.november,
       MonthNames.december
-    ]
+    ];
   }
 
   static get nextDayName(): DayNames {

@@ -4,8 +4,7 @@ import { type IPrivateCmdHandler } from './ts/private_cmd_handlers_interfaces';
 import { type IPrivateContextDecorator } from '../../tglib/tgTypes/contextDecoratorTypes';
 import { PRIVATE_UPDATE_TYPES } from '../../tglib/tgTypes/botUpdatesTypes';
 import { type IPrivateCommandPayload } from '../../tglib/tgTypes/messagePayload/contextPayloadTypes';
-import SavePhotosCommandHandler from './handlers/savePhotosCommand/SavePhotosCommandHandler';
-import NoneCmdHandler from "./handlers/noneCommand/NoneCmdHandler";
+import NoneCmdHandler from './handlers/noneCommand/NoneCmdHandler';
 class PrivateCmdHandlersManager extends EventEmitter implements IPrivateCmdHandler {
   private readonly id: number;
   // name: one of cmd_names

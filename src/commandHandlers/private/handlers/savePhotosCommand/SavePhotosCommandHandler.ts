@@ -3,22 +3,22 @@ import ReplyMsgCollection from '../../../../db/firestore/collectionManagers/impl
 import { CMD_NAMES } from '../../../../types/enums';
 import {IPrivateContextDecorator} from '../../../../tglib/tgTypes/contextDecoratorTypes';
 import {IPrivatePhotoPayload} from '../../../../tglib/tgTypes/messagePayload/contextPayloadTypes';
-import PhotosSaverDrive from '../../../../googleServices/gdrive/PhotosSaverDrive';
-import {InputMediaPhoto, PhotoSize} from "typegram";
+import {InputMediaPhoto, PhotoSize} from 'typegram';
+import CenterPhotosDrive from '../../../../googleServices/gdrive/CenterPhotosDrive';
 export default class SavePhotosCommandHandler extends PrivateCmdHandler {
 
-    private drivePhotosSaver: PhotosSaverDrive;
+    private drivePhotosSaver: CenterPhotosDrive;
     private allowResponseOnDocumentLoad: boolean;
-    private uploadedImagesCounter: number
-    private notLoadedImagesIds: string[]
+    private uploadedImagesCounter: number;
+    private notLoadedImagesIds: string[];
     constructor(userId: number) {
         super(userId, CMD_NAMES.SAVE_PHOTO);
 
-        this.uploadedImagesCounter = 0
+        this.uploadedImagesCounter = 0;
         this.allowResponseOnDocumentLoad = true;
-        this.notLoadedImagesIds = []
+        this.notLoadedImagesIds = [];
 
-        this.drivePhotosSaver = new PhotosSaverDrive();
+        this.drivePhotosSaver = new CenterPhotosDrive();
     }
 
     copy() {
@@ -26,55 +26,54 @@ export default class SavePhotosCommandHandler extends PrivateCmdHandler {
     }
 
     onCommand() {
-        const reply = ReplyMsgCollection.getInstance().getSavePhotoCmdReply('command_reply');
-
-        this.sendMessage(reply); // this.sendMessage(this.id, FirebaseDB.getReplyMessage('commands', 'commands_description'));
+        this.sendMessage(ReplyMsgCollection.getInstance().getSavePhotoCmdReply('command_reply'));
     }
 
     protected override async onPhoto(contextDecorator: IPrivateContextDecorator): Promise<void> {
         const payload = contextDecorator.payload as IPrivatePhotoPayload;
-        const photo = payload.photo.pop() as PhotoSize
-        const file = await this.tg.getFile(photo.file_id);
-        const fileLink = await this.tg.getFileLink(file.file_id);
+        const photo = payload.photo.pop() as PhotoSize;
+        const fileLink = await this.tg.getFileLink(photo.file_id);
+        const name = Math.random() + fileLink.pathname.slice(fileLink.pathname.lastIndexOf('/'));
 
-        this.uploadedImagesCounter ++
-        this.drivePhotosSaver.savePhotoFromURL(fileLink.href, fileLink.pathname)
+        this.uploadedImagesCounter ++;
+
+        this.drivePhotosSaver.savePhotoFromUrlToCurrentMonthFolder({url: fileLink.href, name})
             .then((loadedSuccessfully: boolean) => {
-                this.onImageLoadFinish(loadedSuccessfully, photo.file_id)
+                this.onImageLoadFinish(loadedSuccessfully, photo.file_id);
             });
     }
 
     private onImageLoadFinish(loadedSuccessfully: boolean, photoId: string): void {
-        this.uploadedImagesCounter --
+        this.uploadedImagesCounter --;
 
-        if(!loadedSuccessfully) this.notLoadedImagesIds.push(photoId)
+        if(!loadedSuccessfully) this.notLoadedImagesIds.push(photoId);
 
         if(this.uploadedImagesCounter === 0) {
-            this.onAllImagesUploadFinish(photoId)
+            this.onAllImagesUploadFinish(photoId);
         }
     }
 
     private onAllImagesUploadFinish(photoId: string): void {
         if(this.notLoadedImagesIds.length > 0) {
-            this.sendBackNotUploadedImages()
+            this.sendBackNotUploadedImages();
 
-            return
+            return;
         }
 
         this.sendMessage(ReplyMsgCollection.getInstance().getSavePhotoCmdReply('photos_finished_load'));
     }
 
     private async sendBackNotUploadedImages(): Promise<void> {
-        const notLoadedImagesConfigs: InputMediaPhoto[]= []
+        const notLoadedImagesConfigs: InputMediaPhoto[]= [];
 
         this.notLoadedImagesIds.forEach(imageId => {
-            notLoadedImagesConfigs.push({type: 'photo', media: imageId})
-        })
+            notLoadedImagesConfigs.push({type: 'photo', media: imageId});
+        });
 
-        this.notLoadedImagesIds = []
+        this.notLoadedImagesIds = [];
 
-        await this.sendMessage(ReplyMsgCollection.getInstance().getSavePhotoCmdReply('some_photos_not_loaded'))
-        this.tg.sendMediaGroup(this.id, notLoadedImagesConfigs)
+        await this.sendMessage(ReplyMsgCollection.getInstance().getSavePhotoCmdReply('some_photos_not_loaded'));
+        this.tg.sendMediaGroup(this.id, notLoadedImagesConfigs);
     }
     protected override onDocument(contextDecorator: IPrivateContextDecorator) {
         if(this.allowResponseOnDocumentLoad) {
