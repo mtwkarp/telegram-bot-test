@@ -16,6 +16,7 @@
     "space-before-function-paren": ["warn", "never"],
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/ban-ts-comment": "off"
+    "@typescript-eslint/ban-ts-comment": "off",
+    "no-async-promise-executor": "warn"
   }
 }
