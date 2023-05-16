@@ -14,6 +14,17 @@ export default class RenderedScheduleSheet extends AbstractScheduleSheet {
         super();
     }
 
+    public async setAllDaysUnworkable() {
+        const mondayLetter = fullScheduleByDayLetters[DayNames.monday];
+        const sundayLetter = fullScheduleByDayLetters[DayNames.sunday];
+
+        await this.updateSheetValues({
+            range: `${this.sheetCollection.getSheetName(this.renderedSheetName)}!${mondayLetter}2:${sundayLetter}2`,
+            values: [['FALSE'], ['FALSE'], ['FALSE'], ['FALSE'], ['FALSE'], ['FALSE'], ['FALSE']],
+            // majorDimension: 'COLUMNS'
+        });
+    }
+
     public async getOneDaySchedule(dayName: DayNames): Promise<any[][]> {
         const nextDayScheduleLetter = fullScheduleByDayLetters[dayName];
         const range = `${this.sheetCollection.getSheetName(this.renderedSheetName)}!${nextDayScheduleLetter}3:${nextDayScheduleLetter}100`;

@@ -32,7 +32,7 @@ export default class SheetsService implements IGoogleSheet {
     return values;
   }
 
-  public async updateSheetValues(params: SheetUpdateParams): Promise<any> {
+  public async  updateSheetValues(params: SheetUpdateParams): Promise<any> {
     const inputOptions = params.valueInputOption || 'USER_ENTERED';
     const mDimension = params.majorDimension || 'COLUMNS';
 
