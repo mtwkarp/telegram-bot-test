@@ -4,7 +4,6 @@ import cron from 'node-cron';
 import ReplyMsgCollection from '../../db/firestore/collectionManagers/implementations/ReplyMsgCollection';
 import InstructorsAvailabilitySheet
   from '../../googleServices/gsheets/scheduleSheet/scheduleSheets/InstructorsAvailabilitySheet';
-import RenderedScheduleSheet from '../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheet';
 import RenderedScheduleSheetCenter
   from '../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetCenter';
 import RenderedScheduleSheetTrips
@@ -16,7 +15,7 @@ export default class ScheduleEnrolmentMessenger extends ScheduleMessenger {
     super();
     this.repliesCollection = ReplyMsgCollection.getInstance();
     this.instructorsAvailabilitySheet = new InstructorsAvailabilitySheet();
-    this.clearAllPreviousScheduleReplies()
+    this.clearAllPreviousScheduleReplies();
   }
 
   setScheduledMessages() {
