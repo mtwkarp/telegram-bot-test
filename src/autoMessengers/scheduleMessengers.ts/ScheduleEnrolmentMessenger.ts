@@ -4,6 +4,11 @@ import cron from 'node-cron';
 import ReplyMsgCollection from '../../db/firestore/collectionManagers/implementations/ReplyMsgCollection';
 import InstructorsAvailabilitySheet
   from '../../googleServices/gsheets/scheduleSheet/scheduleSheets/InstructorsAvailabilitySheet';
+import RenderedScheduleSheet from '../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheet';
+import RenderedScheduleSheetCenter
+  from '../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetCenter';
+import RenderedScheduleSheetTrips
+  from '../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetTrips';
 export default class ScheduleEnrolmentMessenger extends ScheduleMessenger {
   protected readonly repliesCollection: ReplyMsgCollection;
   protected readonly instructorsAvailabilitySheet: InstructorsAvailabilitySheet;
@@ -11,6 +16,7 @@ export default class ScheduleEnrolmentMessenger extends ScheduleMessenger {
     super();
     this.repliesCollection = ReplyMsgCollection.getInstance();
     this.instructorsAvailabilitySheet = new InstructorsAvailabilitySheet();
+    this.clearAllPreviousScheduleReplies()
   }
 
   setScheduledMessages() {
@@ -32,6 +38,7 @@ export default class ScheduleEnrolmentMessenger extends ScheduleMessenger {
     const channelScheduleReminder2 = this.timeCollection.getScheduleTime('channel_schedule_reminder_2');
     const timeConfig = this.timeCollection.getTimeConfig('kyiv_time');
 
+    cron.schedule(channelScheduleReminder1, this.clearAllPreviousScheduleReplies.bind(this), timeConfig);
     cron.schedule(channelScheduleReminder1, this.sendFirstScheduleStartReminderToChannel.bind(this), timeConfig);
     cron.schedule(channelScheduleReminder2, this.sendScheduleStartReminderToChannel.bind(this), timeConfig);
   }
@@ -60,8 +67,17 @@ export default class ScheduleEnrolmentMessenger extends ScheduleMessenger {
     this.tg.sendMessage(process.env.TELEGRAM_CHANNEL_ID as string, this.repliesCollection.getScheduleCmdReply('channel_schedule_reminder'));
   }
 
-  async sendFirstScheduleStartReminderToChannel() {
+  async clearAllPreviousScheduleReplies() {
+    const renderedScheduleSheetTrips = new RenderedScheduleSheetTrips();
+    const renderedScheduleSheetCenter = new RenderedScheduleSheetCenter();
+
+    await renderedScheduleSheetCenter.setAllDaysUnworkable();
+    await renderedScheduleSheetTrips.setAllDaysUnworkable();
     await this.instructorsAvailabilitySheet.clearAllPreviousScheduleReplies();
+
+  }
+
+  async sendFirstScheduleStartReminderToChannel() {
     this.sendScheduleStartReminderToChannel();
   }
 }
