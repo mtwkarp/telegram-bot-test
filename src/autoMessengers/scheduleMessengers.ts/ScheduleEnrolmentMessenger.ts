@@ -15,7 +15,6 @@ export default class ScheduleEnrolmentMessenger extends ScheduleMessenger {
     super();
     this.repliesCollection = ReplyMsgCollection.getInstance();
     this.instructorsAvailabilitySheet = new InstructorsAvailabilitySheet();
-    this.clearAllPreviousScheduleReplies();
   }
 
   setScheduledMessages() {
