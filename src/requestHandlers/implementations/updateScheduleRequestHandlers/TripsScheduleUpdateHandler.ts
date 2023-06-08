@@ -13,6 +13,6 @@ export default class TripsScheduleUpdateHandler extends UpdateScheduleRequestHan
     }
 
     protected override getFullScheduleMsgId(): number {
-        return this.scheduleUpdateCollection.getTripFullScheduleMsgId()
+        return this.scheduleUpdateCollection.getTripFullScheduleMsgId();
     }
 }

@@ -1,5 +1,4 @@
 import SpreadsheetRequestObserver from '../../spreadsheetObserver/SpreadsheetRequestObserver';
-import {SpreadSheetUpdateObj} from '../../spreadsheetObserver/types/types';
 import {SPREADSHEET_REQUESTS} from '../../spreadsheetObserver/types/enums';
 import RenderedScheduleSheetCenter
     from '../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetCenter';
@@ -43,7 +42,7 @@ export default class SendFullScheduleRequestHandler extends SpreadsheetRequestOb
     private async sendCenterScheduleToChannel(): Promise<Message.TextMessage | undefined>  {
         const centerWorkDays = await this.centerRenderedScheduleSheet.getNextWeekWorkableDaysSchedule();
 
-        if(!centerWorkDays.length) return
+        if(!centerWorkDays.length) return;
 
         return this.sendScheduleMessage(centerWorkDays, 'ЦЕНТР');
     }
@@ -51,7 +50,7 @@ export default class SendFullScheduleRequestHandler extends SpreadsheetRequestOb
     private async sendTripsScheduleToChannel(): Promise<Message.TextMessage | undefined>   {
         const tripWorkDays = await this.tripRenderedScheduleSheet.getNextWeekWorkableDaysSchedule();
 
-        if(!tripWorkDays.length) return
+        if(!tripWorkDays.length) return;
 
         return this.sendScheduleMessage(tripWorkDays,  'ВИЇЗДИ');
     }

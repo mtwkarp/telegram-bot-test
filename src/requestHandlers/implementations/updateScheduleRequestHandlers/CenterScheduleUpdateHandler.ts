@@ -13,6 +13,6 @@ export default class CenterScheduleUpdateHandler extends UpdateScheduleRequestHa
     }
 
     protected override getFullScheduleMsgId(): number {
-        return this.scheduleUpdateCollection.getCenterFullScheduleMsgId()
+        return this.scheduleUpdateCollection.getCenterFullScheduleMsgId();
     }
 }
