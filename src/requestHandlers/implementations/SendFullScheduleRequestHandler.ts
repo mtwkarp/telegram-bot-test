@@ -25,7 +25,7 @@ export default class SendFullScheduleRequestHandler extends SpreadsheetRequestOb
         this.tripRenderedScheduleSheet = new RenderedScheduleSheetTrips();
         this.tg = new Telegram(process.env.TELEGRAM_BOT_TOKEN as string);
     }
-    public async onUpdate(update: SpreadSheetUpdateObj): Promise<void> {
+    public async onUpdate(): Promise<void> {
         const messages = await this.sendFullScheduleToTgChannel();
         ScheduleUpdatesCollection.getInstance().updateScheduleMessagesIdsAndAllowEdit(messages);
     }
@@ -43,11 +43,15 @@ export default class SendFullScheduleRequestHandler extends SpreadsheetRequestOb
     private async sendCenterScheduleToChannel(): Promise<Message.TextMessage | undefined>  {
         const centerWorkDays = await this.centerRenderedScheduleSheet.getNextWeekWorkableDaysSchedule();
 
+        if(!centerWorkDays.length) return
+
         return this.sendScheduleMessage(centerWorkDays, 'ЦЕНТР');
     }
 
     private async sendTripsScheduleToChannel(): Promise<Message.TextMessage | undefined>   {
         const tripWorkDays = await this.tripRenderedScheduleSheet.getNextWeekWorkableDaysSchedule();
+
+        if(!tripWorkDays.length) return
 
         return this.sendScheduleMessage(tripWorkDays,  'ВИЇЗДИ');
     }

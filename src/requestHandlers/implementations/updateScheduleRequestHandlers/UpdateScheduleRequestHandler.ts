@@ -12,14 +12,14 @@ import {
 import {DayNames} from '../../../types/enums';
 import DateHelper from '../../../helpers/DateHelper';
 
-export default class UpdateScheduleRequestHandler extends SpreadsheetRequestObserver {
+export default abstract class UpdateScheduleRequestHandler extends SpreadsheetRequestObserver {
 
     protected readonly scheduleUpdateCollection: ScheduleUpdatesCollection;
     protected renderedScheduleSheet: RenderedScheduleSheet;
     protected readonly tg: Telegram;
 
     protected header: string;
-    constructor() {
+    protected constructor() {
         super();
 
         this.scheduleUpdateCollection = ScheduleUpdatesCollection.getInstance();
@@ -39,8 +39,10 @@ export default class UpdateScheduleRequestHandler extends SpreadsheetRequestObse
         this.updateScheduleByDays();
     }
 
+    protected abstract getFullScheduleMsgId(): number
+
     protected async updateFullSchedule(): Promise<void> {
-        const fullScheduleId = this.scheduleUpdateCollection.getCenterFullScheduleMsgId();
+        const fullScheduleId = this.getFullScheduleMsgId();
 
         if(fullScheduleId === 0) return;
 

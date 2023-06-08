@@ -11,4 +11,8 @@ export default class CenterScheduleUpdateHandler extends UpdateScheduleRequestHa
         this.requestsNames = [SPREADSHEET_REQUESTS.update_center_schedule_in_tg_channel];
         this.renderedScheduleSheet = new RenderedScheduleSheetCenter();
     }
+
+    protected override getFullScheduleMsgId(): number {
+        return this.scheduleUpdateCollection.getCenterFullScheduleMsgId()
+    }
 }
