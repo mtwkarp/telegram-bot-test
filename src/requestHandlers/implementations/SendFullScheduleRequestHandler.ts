@@ -5,7 +5,7 @@ import RenderedScheduleSheetCenter
     from '../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetCenter';
 import RenderedScheduleSheet from '../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheet';
 import {Telegram} from 'telegraf';
-import {renderFullWorkableDaysSchedule} from '../../autoMessengers/scheduleMessengers.ts/helpers';
+import {renderFullWorkableDaysSchedule} from '../../autoMessengers/scheduleMessengers/helpers';
 import RenderedScheduleSheetTrips
     from '../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetTrips';
 import {Message} from 'typegram';

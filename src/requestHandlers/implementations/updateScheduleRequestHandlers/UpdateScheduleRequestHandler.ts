@@ -8,7 +8,7 @@ import {Telegram} from 'telegraf';
 import {
     renderFullWorkableDaysSchedule,
     renderOneDayScheduleFromSheet
-} from '../../../autoMessengers/scheduleMessengers.ts/helpers';
+} from '../../../autoMessengers/scheduleMessengers/helpers';
 import {DayNames} from '../../../types/enums';
 import DateHelper from '../../../helpers/DateHelper';
 

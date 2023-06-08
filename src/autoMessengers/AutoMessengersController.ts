@@ -1,11 +1,13 @@
 import type AbstractAutoMessenger from './AbstractAutoMessenger';
-import EveryDayCenterScheduleMessenger from './scheduleMessengers.ts/channelScheduleReminders/EveryDayCenterScheduleMessenger';
-import NextDayCenterInstructorReminder from './scheduleMessengers.ts/privateScheduleReminders/NextDayCenterInstructorReminder';
-import ScheduleEnrolmentMessenger from './scheduleMessengers.ts/ScheduleEnrolmentMessenger';
+import EveryDayCenterScheduleMessenger from './scheduleMessengers/channelScheduleReminders/EveryDayCenterScheduleMessenger';
+import NextDayCenterInstructorReminder from './scheduleMessengers/privateScheduleReminders/NextDayCenterInstructorReminder';
+import ScheduleEnrolmentMessenger from './scheduleMessengers/ScheduleEnrolmentMessenger';
 import EveryDayTripScheduleReminder
-  from './scheduleMessengers.ts/channelScheduleReminders/EveryDayTripScheduleReminder';
+  from './scheduleMessengers/channelScheduleReminders/EveryDayTripScheduleReminder';
 import NextDayTripInstructorReminder
-    from './scheduleMessengers.ts/privateScheduleReminders/NextDayTripInstructorReminder';
+    from './scheduleMessengers/privateScheduleReminders/NextDayTripInstructorReminder';
+import ScheduleCleaner from './scheduleMessengers/ScheduleCleaner';
+
 export default class AutoMessengersController {
   public initMessengerModules(): void {
     const messengerModules: Array<new() => AbstractAutoMessenger> = [
@@ -13,7 +15,8 @@ export default class AutoMessengersController {
         NextDayCenterInstructorReminder,
         ScheduleEnrolmentMessenger,
         EveryDayTripScheduleReminder,
-        NextDayTripInstructorReminder
+        NextDayTripInstructorReminder,
+        ScheduleCleaner
     ];
 
     messengerModules.forEach((M) => {
