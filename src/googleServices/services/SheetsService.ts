@@ -4,7 +4,7 @@ import Sheets = sheets_v4.Sheets
 import GoogleServicesManager from '../GoogleServicesManager';
 
 export default class SheetsService implements IGoogleSheet {
-  private readonly spreadsheet: Sheets;
+  protected readonly spreadsheet: Sheets;
   private readonly values: sheets_v4.Resource$Spreadsheets$Values;
   private readonly spreadsheetId: string;
   constructor(spreadsheetId: string) {

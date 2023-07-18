@@ -1,25 +1,20 @@
-import DriveService from "../services/DriveService";
-import {format, parse} from "ts-date";
-import SheetsService from "../services/SheetsService";
-import {DayNames} from "../../types/enums";
-import {
-    notAvailableInstructor
-} from "../../commandHandlers/private/handlers/scheduleCommand/static/scheduleSheetsConstants";
-import UsersCollection from "../../db/firestore/collectionManagers/implementations/UsersCollection";
+import DriveService from '../services/DriveService';
+import {format} from 'ts-date';
+import TeachingTrackingSheet from "../gsheets/teachingTracking/TeachingTrackingSheet";
 
 export default class TeachingTrackingDrive extends DriveService {
-    name: string
+    name: string;
     constructor(name: string) {
         super();
 
-        this.name = name
+        this.name = name;
     }
 
     get numberOfDaysInCurrentMonth(): number {
-        return new Date(new Date().getFullYear(), new Date().getMonth()+1, 0).getDate()
+        return new Date(new Date().getFullYear(), new Date().getMonth()+1, 0).getDate();
     }
 
-    async getCurrentMonthSheetId() {
+    private async getCurrentMonthSheetId() {
         const query = `mimeType='application/vnd.google-apps.spreadsheet' and '${process.env.ACCOUNTING_DRIVE_FOLDER_ID}' in parents and name='${this.currentMonthSheetName}'`;
         const files = await this.drive.files.list({
             spaces: 'drive',
@@ -31,17 +26,16 @@ export default class TeachingTrackingDrive extends DriveService {
 
         if(files.data.files?.length === 1) {
             id = files.data.files[0].id as string;
-            this.fillNewSheetWithDatesAndInstructorNames(id)
         }else if(files.data.files?.length === 0) {
             id = await this.createSheetForCurrentMonth();
         }
 
         return id;
     }
-    get currentMonthSheetName() {
-        return `${this.name}${format(new Date(), 'MM.YYYY')}`
+    private get currentMonthSheetName() {
+        return `${this.name}${format(new Date(), 'MM.YYYY')}`;
     }
-    async createSheetForCurrentMonth() {
+    private async createSheetForCurrentMonth() {
         const fileMetadata = {
             name: this.currentMonthSheetName,
             mimeType: 'application/vnd.google-apps.spreadsheet',
@@ -56,7 +50,7 @@ export default class TeachingTrackingDrive extends DriveService {
             });
 
             // @ts-ignore
-            await this.fillNewSheetWithDatesAndInstructorNames(file.data.id)
+            await new TeachingTrackingSheet(file.data.id).fillNewSheetWithDatesAndInstructorNames(this.numberOfDaysInCurrentMonth);
 
             // @ts-ignore
             return file.data.id;
@@ -67,34 +61,10 @@ export default class TeachingTrackingDrive extends DriveService {
         return '';
     }
 
-    async fillNewSheetWithDatesAndInstructorNames(sheetId: string) {
-        const SpreadSheet = new SheetsService(sheetId)
+    async writeTomorrowInstructorsToAccountingSheet(instructorNames: string[]) {
+        const SpreadSheet = new TeachingTrackingSheet(await this.getCurrentMonthSheetId())
 
-        const range = `B1`;
-        const values = [];
-
-        for (let i = 1; i < this.numberOfDaysInCurrentMonth; i++) {
-            values.push([`${i}/${format(new Date(), 'MM')}`])
-        }
-
-        const allInstructorsNames = Object.values(
-            UsersCollection.getInstance()
-            .getAllDocumentValues('fullNames')) as string[];
-
-        const instructorNamesSheetValues = allInstructorsNames.map(el => [el])
-
-        try {
-            await SpreadSheet.updateSheetValues({ values: instructorNamesSheetValues, range: 'A2', majorDimension: 'ROWS' })
-                .then(() => {
-                    console.log('Accounting spreadsheet filled with raw data');
-                });
-            await SpreadSheet.updateSheetValues({ values, range })
-                .then(() => {
-                    console.log('Accounting spreadsheet filled with raw data');
-                });
-        } catch (err) {
-            console.log('Accounting spreadsheet fill unsuccessful, abort !');
-            throw err;
-        }
+        await SpreadSheet.writeTomorrowInstructorsToSpreadsheet(instructorNames)
     }
+
 }

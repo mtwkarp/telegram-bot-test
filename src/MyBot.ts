@@ -9,7 +9,7 @@ import AutoMessengersController from './autoMessengers/AutoMessengersController'
 import ServerExpress from './expressServer/ServerExpress';
 import SpreadsheetRequestsSubject from './spreadsheetObserver/SpreadsheetRequestsSubject';
 import RequestHandlersManager from './requestHandlers/RequestHandlersManager';
-import AbstractTeachingTracker from "./teachingTracker/AbstractTeachingTracker";
+import AbstractTeachingTracker from './teachingTracker/AbstractTeachingTracker';
 export default class MyBot {
   public bot: TelegrafBot;
   private privateUpdateSubject: PrivateUpdateSubject;
@@ -39,8 +39,6 @@ export default class MyBot {
     this.subscribeForPrivateMessagesUpdates();
     this.subscribeSpreadsheetRequestSubjectForServerUpdates();
     this.subscribeRequestHandlers();
-    const t = new AbstractTeachingTracker()
-    // t.createSheetForCurrentMonth()
   }
 
   private subscribeRequestHandlers() {

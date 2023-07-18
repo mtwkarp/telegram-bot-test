@@ -6,6 +6,7 @@ import RenderedScheduleSheetCenter
 import ScheduleUpdatesCollection
   from '../../../db/firestore/collectionManagers/implementations/ScheduleUpdatesCollection';
 import DateHelper from '../../../helpers/DateHelper';
+import CenterTracker from "../../../teachingTracker/CenterTracker";
 
 export default class EveryDayCenterScheduleMessenger extends ScheduleMessenger {
   protected readonly renderedScheduleSheet: RenderedScheduleSheetCenter;
@@ -35,6 +36,7 @@ export default class EveryDayCenterScheduleMessenger extends ScheduleMessenger {
 
     try {
       const message = await this.tg.sendMessage(process.env.TELEGRAM_CHANNEL_ID as string, fullScheduleString);
+      new CenterTracker().writeInstructorsToAccountingSheet()
       ScheduleUpdatesCollection.getInstance().setCenterOneDayScheduleMessageId(DateHelper.nextDayName, message.message_id);
     } catch (err) {
       console.log('Error on sending everyday schedule to channel', err);
