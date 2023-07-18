@@ -1,7 +1,7 @@
-import AbstractTeachingTracker from "./AbstractTeachingTracker";
+import AbstractTeachingTracker from './AbstractTeachingTracker';
 import RenderedScheduleSheetCenter
-    from "../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetCenter";
-import RenderedScheduleSheet from "../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheet";
+    from '../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetCenter';
+import RenderedScheduleSheet from '../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheet';
 
 
 export default class CenterTracker extends AbstractTeachingTracker {

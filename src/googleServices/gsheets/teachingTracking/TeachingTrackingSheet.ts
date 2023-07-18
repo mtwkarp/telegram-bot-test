@@ -1,6 +1,6 @@
-import SheetsService from "../../services/SheetsService";
-import {format} from "ts-date";
-import UsersCollection from "../../../db/firestore/collectionManagers/implementations/UsersCollection";
+import SheetsService from '../../services/SheetsService';
+import {format} from 'ts-date';
+import UsersCollection from '../../../db/firestore/collectionManagers/implementations/UsersCollection';
 
 export default class TeachingTrackingSheet extends SheetsService {
     constructor(sheetId: string) {
@@ -37,30 +37,30 @@ export default class TeachingTrackingSheet extends SheetsService {
     }
 
     async writeTomorrowInstructorsToSpreadsheet(instructorNames: string[]) {
-        const day = Number(format(new Date(), 'D')) + 1
-        const instructorIndexes = []
-        const columnLetter = this.getColumnLetter(day)
+        const day = Number(format(new Date(), 'D')) + 1;
+        const instructorIndexes = [];
+        const columnLetter = this.getColumnLetter(day);
 
         for (let i = 0; i < instructorNames.length; i++) {
-            const rowIndex = await this.getUserRowIndexInSheet(instructorNames[i])
+            const rowIndex = await this.getUserRowIndexInSheet(instructorNames[i]);
 
-            if(rowIndex === null) continue
+            if(rowIndex === null) continue;
 
-            instructorIndexes.push(rowIndex)
+            instructorIndexes.push(rowIndex);
         }
 
-        const biggestIndex = Math.max(...instructorIndexes)
+        const biggestIndex = Math.max(...instructorIndexes);
 
-        const values: number[][] = Array.from({length: biggestIndex}, () => [])
+        const values: number[][] = Array.from({length: biggestIndex}, () => []);
 
-        instructorIndexes.forEach(index => values[index - 1].push(1))
+        instructorIndexes.forEach(index => values[index - 1].push(1));
 
         await this.updateSheetValues({range: `${columnLetter}:${columnLetter}`, values, majorDimension: 'ROWS'})
-            .then(() => console.log('Accounting info was sent.'))
+            .then(() => console.log('Accounting info was sent.'));
     }
 
     private async getUserRowIndexInSheet(userFullName: string): Promise<number | null> {
-        const range = `!A:A`;
+        const range = '!A:A';
         const namesList = await this.getSheetValues({ range });
 
         let rowIndex: null | number = null;
@@ -78,10 +78,10 @@ export default class TeachingTrackingSheet extends SheetsService {
     }
 
     private getColumnLetter(columnNumber: number) {
-        let columnLetter = "";
+        let columnLetter = '';
 
         while (columnNumber > 0) {
-            let remainder = (columnNumber - 1) % 26;
+            const remainder = (columnNumber - 1) % 26;
             columnLetter = String.fromCharCode(65 + remainder) + columnLetter;
             columnNumber = Math.floor((columnNumber - 1) / 26);
         }

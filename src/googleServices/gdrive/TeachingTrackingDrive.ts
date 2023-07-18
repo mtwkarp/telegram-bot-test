@@ -1,6 +1,6 @@
 import DriveService from '../services/DriveService';
 import {format} from 'ts-date';
-import TeachingTrackingSheet from "../gsheets/teachingTracking/TeachingTrackingSheet";
+import TeachingTrackingSheet from '../gsheets/teachingTracking/TeachingTrackingSheet';
 
 export default class TeachingTrackingDrive extends DriveService {
     name: string;
@@ -62,9 +62,9 @@ export default class TeachingTrackingDrive extends DriveService {
     }
 
     async writeTomorrowInstructorsToAccountingSheet(instructorNames: string[]) {
-        const SpreadSheet = new TeachingTrackingSheet(await this.getCurrentMonthSheetId())
+        const SpreadSheet = new TeachingTrackingSheet(await this.getCurrentMonthSheetId());
 
-        await SpreadSheet.writeTomorrowInstructorsToSpreadsheet(instructorNames)
+        await SpreadSheet.writeTomorrowInstructorsToSpreadsheet(instructorNames);
     }
 
 }

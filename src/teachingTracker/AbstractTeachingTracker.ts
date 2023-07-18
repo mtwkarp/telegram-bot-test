@@ -1,5 +1,5 @@
 import TeachingTrackingDrive from '../googleServices/gdrive/TeachingTrackingDrive';
-import RenderedScheduleSheet from "../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheet";
+import RenderedScheduleSheet from '../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheet';
 
 export default abstract class AbstractTeachingTracker {
     protected readonly name: string;
@@ -12,27 +12,27 @@ export default abstract class AbstractTeachingTracker {
     }
 
     async writeInstructorsToAccountingSheet() {
-        const instructorNames = await this.sortInstructors()
+        const instructorNames = await this.sortInstructors();
 
-        await this.driveService.writeTomorrowInstructorsToAccountingSheet(instructorNames)
+        await this.driveService.writeTomorrowInstructorsToAccountingSheet(instructorNames);
     }
 
     protected async sortInstructors(): Promise<string[]> {
         const nextDayFullSchedule = await this.renderedScheduleSheet.getTomorrowInstructorsByBase();
-        let instructorsArr: string[]= []
+        const instructorsArr: string[]= [];
 
         for (const key in nextDayFullSchedule) {
-            const base = nextDayFullSchedule[key]
+            const base = nextDayFullSchedule[key];
 
             for (let i = 0; i < base.length; i++) {
-                const {name} = base[i]
+                const {name} = base[i];
 
                 if(!instructorsArr.includes(name)) {
-                    instructorsArr.push(name)
+                    instructorsArr.push(name);
                 }
             }
         }
 
-        return instructorsArr
+        return instructorsArr;
     }
 }

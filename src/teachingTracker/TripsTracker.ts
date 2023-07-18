@@ -1,9 +1,8 @@
-import AbstractTeachingTracker from "./AbstractTeachingTracker";
-import RenderedScheduleSheetCenter
-    from "../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetCenter";
-import RenderedScheduleSheet from "../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheet";
+import AbstractTeachingTracker from './AbstractTeachingTracker';
+
+import RenderedScheduleSheet from '../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheet';
 import RenderedScheduleSheetTrips
-    from "../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetTrips";
+    from '../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetTrips';
 
 
 export default class TripsTracker extends AbstractTeachingTracker {
