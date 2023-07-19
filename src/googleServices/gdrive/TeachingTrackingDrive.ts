@@ -33,7 +33,7 @@ export default class TeachingTrackingDrive extends DriveService {
         return id;
     }
     private get currentMonthSheetName() {
-        const nextDayDate = addHours(new Date(), 24)
+        const nextDayDate = addHours(new Date(), 24);
         return `${this.name}${format(nextDayDate, 'MM.YYYY')}`;
     }
     private async createSheetForCurrentMonth() {
