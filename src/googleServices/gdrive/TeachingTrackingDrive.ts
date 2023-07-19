@@ -1,5 +1,5 @@
 import DriveService from '../services/DriveService';
-import {format} from 'ts-date';
+import {addHours, format} from 'ts-date';
 import TeachingTrackingSheet from '../gsheets/teachingTracking/TeachingTrackingSheet';
 
 export default class TeachingTrackingDrive extends DriveService {
@@ -33,7 +33,8 @@ export default class TeachingTrackingDrive extends DriveService {
         return id;
     }
     private get currentMonthSheetName() {
-        return `${this.name}${format(new Date(), 'MM.YYYY')}`;
+        const nextDayDate = addHours(new Date(), 24)
+        return `${this.name}${format(nextDayDate, 'MM.YYYY')}`;
     }
     private async createSheetForCurrentMonth() {
         const fileMetadata = {

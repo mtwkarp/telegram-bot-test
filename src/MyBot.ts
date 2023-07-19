@@ -9,6 +9,7 @@ import AutoMessengersController from './autoMessengers/AutoMessengersController'
 import ServerExpress from './expressServer/ServerExpress';
 import SpreadsheetRequestsSubject from './spreadsheetObserver/SpreadsheetRequestsSubject';
 import RequestHandlersManager from './requestHandlers/RequestHandlersManager';
+import TeachingTrackingDrive from "./googleServices/gdrive/TeachingTrackingDrive";
 export default class MyBot {
   public bot: TelegrafBot;
   private privateUpdateSubject: PrivateUpdateSubject;

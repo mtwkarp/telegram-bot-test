@@ -37,7 +37,7 @@ export default class TeachingTrackingSheet extends SheetsService {
     }
 
     async writeTomorrowInstructorsToSpreadsheet(instructorNames: string[]) {
-        const day = Number(format(new Date(), 'D')) + 1;
+        const day = Number(format(new Date(), 'D')) + 2;
         const instructorIndexes = [];
         const columnLetter = this.getColumnLetter(day);
 
