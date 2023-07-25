@@ -11,7 +11,10 @@ export default class ReplyMsgCollection extends AbstractCollectionManager {
 
   public getSavePhotoCmdReply(valueId: string): string {
     return this.getValueFromDocument('save_photos', valueId);
+  }
 
+  public getMakingPhotosReply(valueId: string): string {
+    return this.getValueFromDocument('makePhotosReminder', valueId);
   }
 
   public static getInstance(): ReplyMsgCollection {
