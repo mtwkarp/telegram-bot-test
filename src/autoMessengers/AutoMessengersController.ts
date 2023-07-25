@@ -7,6 +7,7 @@ import EveryDayTripScheduleReminder
 import NextDayTripInstructorReminder
     from './scheduleMessengers/privateScheduleReminders/NextDayTripInstructorReminder';
 import ScheduleCleaner from './scheduleMessengers/ScheduleCleaner';
+import MakePhotosReminder from './scheduleMessengers/privateMakePhotosReminder /MakePhotosReminder';
 
 export default class AutoMessengersController {
   public initMessengerModules(): void {
@@ -16,7 +17,8 @@ export default class AutoMessengersController {
         ScheduleEnrolmentMessenger,
         EveryDayTripScheduleReminder,
         NextDayTripInstructorReminder,
-        ScheduleCleaner
+        ScheduleCleaner,
+        MakePhotosReminder
     ];
 
     messengerModules.forEach((M) => {

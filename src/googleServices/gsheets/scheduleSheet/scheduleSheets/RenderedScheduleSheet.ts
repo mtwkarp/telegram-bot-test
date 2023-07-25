@@ -94,7 +94,9 @@ export default class RenderedScheduleSheet extends AbstractScheduleSheet {
         return await this.isDayWorkable(DateHelper.nextDayName);
     }
 
-
+    public async isTodayWorkable(): Promise<boolean> {
+        return await this.isDayWorkable(DateHelper.today);
+    }
     public async getInstructorsByBase(dayName: DayNames): Promise<any[][]> {
         const sheetLetters = baseInstructorsByLetters[dayName];
 
@@ -106,6 +108,17 @@ export default class RenderedScheduleSheet extends AbstractScheduleSheet {
         const instructorsByBase = await this.getInstructorsByBase(DateHelper.nextDayName);
 
         return this.prepareInstructorsByBase(instructorsByBase);
+    }
+
+    async getTodayInstructors(): Promise<string[]> {
+        if(!await this.isTodayWorkable()) return [];
+
+        const instructorsByBase = await this.getInstructorsByBase(DateHelper.today);
+        const sortedInstructors = [...new Set(instructorsByBase[0])].filter(name => {
+            return name !== '#N/A';
+        });
+
+        return sortedInstructors;
     }
 //refactor
 

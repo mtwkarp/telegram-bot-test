@@ -13,6 +13,10 @@ export default class TimeCollection extends AbstractCollectionManager {
     return this.getValueFromDocument('time_configs', valueId);
   }
 
+  public getMakingPhotosReminder(valueId: string): string {
+    return this.getValueFromDocument('reminders', valueId);
+  }
+
   public static getInstance(): TimeCollection {
     if (TimeCollection.uniqueInstance === null) {
       const newInstance = new TimeCollection();

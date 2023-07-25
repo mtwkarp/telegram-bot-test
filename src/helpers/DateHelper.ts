@@ -36,6 +36,12 @@ export default class DateHelper {
 
     return DateHelper.dayNames[nextDayNumber];
   }
+
+  static get today(): DayNames {
+    const nextDayNumber = new Date().getDay();
+
+    return DateHelper.dayNames[nextDayNumber];
+  }
   //0 - monday 6 - sunday
   static getDayByNumber(num: number): DayNames {
     const dayNames = DateHelper.dayNames;
