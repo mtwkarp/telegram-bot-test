@@ -111,14 +111,14 @@ export default class RenderedScheduleSheet extends AbstractScheduleSheet {
     }
 
     async getTodayInstructors(): Promise<string[]> {
-        if(!await this.isTodayWorkable()) return []
+        if(!await this.isTodayWorkable()) return [];
 
         const instructorsByBase = await this.getInstructorsByBase(DateHelper.today);
         const sortedInstructors = [...new Set(instructorsByBase[0])].filter(name => {
-            return name !== '#N/A'
-        })
+            return name !== '#N/A';
+        });
 
-        return sortedInstructors
+        return sortedInstructors;
     }
 //refactor
 

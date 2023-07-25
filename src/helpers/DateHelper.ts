@@ -38,7 +38,7 @@ export default class DateHelper {
   }
 
   static get today(): DayNames {
-    let nextDayNumber = new Date().getDay();
+    const nextDayNumber = new Date().getDay();
 
     return DateHelper.dayNames[nextDayNumber];
   }

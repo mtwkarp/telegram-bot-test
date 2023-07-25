@@ -7,7 +7,7 @@ import EveryDayTripScheduleReminder
 import NextDayTripInstructorReminder
     from './scheduleMessengers/privateScheduleReminders/NextDayTripInstructorReminder';
 import ScheduleCleaner from './scheduleMessengers/ScheduleCleaner';
-import MakePhotosReminder from "./scheduleMessengers/privateMakePhotosReminder /MakePhotosReminder";
+import MakePhotosReminder from './scheduleMessengers/privateMakePhotosReminder /MakePhotosReminder';
 
 export default class AutoMessengersController {
   public initMessengerModules(): void {

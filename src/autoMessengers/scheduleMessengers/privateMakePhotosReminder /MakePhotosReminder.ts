@@ -1,11 +1,11 @@
-import ScheduleMessenger from "../ScheduleMessenger";
-import ReplyMsgCollection from "../../../db/firestore/collectionManagers/implementations/ReplyMsgCollection";
+import ScheduleMessenger from '../ScheduleMessenger';
+import ReplyMsgCollection from '../../../db/firestore/collectionManagers/implementations/ReplyMsgCollection';
 import RenderedScheduleSheetCenter
-    from "../../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetCenter";
+    from '../../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetCenter';
 import RenderedScheduleSheetTrips
-    from "../../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetTrips";
-import cron from "node-cron";
-import UsersCollection from "../../../db/firestore/collectionManagers/implementations/UsersCollection";
+    from '../../../googleServices/gsheets/scheduleSheet/scheduleSheets/RenderedScheduleSheetTrips';
+import cron from 'node-cron';
+import UsersCollection from '../../../db/firestore/collectionManagers/implementations/UsersCollection';
 
 export default class MakePhotosReminder extends ScheduleMessenger {
     protected readonly centerRenderedScheduleSheet: RenderedScheduleSheetCenter;
@@ -27,35 +27,35 @@ export default class MakePhotosReminder extends ScheduleMessenger {
     }
 
     private async getAllTodayInstructorsIds(): Promise<string[]> {
-        const centerInstructors = await this.centerRenderedScheduleSheet.getTodayInstructors()
-        const tripInstructors = await this.tripRenderedScheduleSheet.getTodayInstructors()
-        const allInstructors = [...centerInstructors, ...tripInstructors]
-        const instructorIds: string[] = []
+        const centerInstructors = await this.centerRenderedScheduleSheet.getTodayInstructors();
+        const tripInstructors = await this.tripRenderedScheduleSheet.getTodayInstructors();
+        const allInstructors = [...centerInstructors, ...tripInstructors];
+        const instructorIds: string[] = [];
 
         allInstructors.forEach(name => {
-            const id = UsersCollection.getInstance().getUserId(name)
+            const id = UsersCollection.getInstance().getUserId(name);
 
             if(id) {
-                instructorIds.push(id)
+                instructorIds.push(id);
             }
-        })
+        });
 
-        return instructorIds
+        return instructorIds;
     }
     private async notifyInstructorsToMakePictures(): Promise<void> {
         const message = ReplyMsgCollection.getInstance().getMakingPhotosReply('second_reminder');
 
-        await this.notifyInstructors(message)
+        await this.notifyInstructors(message);
     }
 
     private async notifyInstructorsToSendPictures(): Promise<void> {
         const message = ReplyMsgCollection.getInstance().getMakingPhotosReply('first_reminder');
 
-        await this.notifyInstructors(message)
+        await this.notifyInstructors(message);
     }
 
     private async notifyInstructors(message: string): Promise<void> {
-        const instructorIds = await this.getAllTodayInstructorsIds()
+        const instructorIds = await this.getAllTodayInstructorsIds();
 
         for (let i = 0; i < instructorIds.length; i++) {
             try {
