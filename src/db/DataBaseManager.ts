@@ -7,6 +7,7 @@ import SheetsCollection from './firestore/collectionManagers/implementations/She
 import UsersCollection from './firestore/collectionManagers/implementations/UsersCollection';
 import StickersCollection from './firestore/collectionManagers/implementations/StickersCollection';
 import ScheduleUpdatesCollection from './firestore/collectionManagers/implementations/ScheduleUpdatesCollection';
+import TimingsCollection from './firestore/collectionManagers/implementations/TimingsCollection';
 
 export default class DataBaseManager implements IDataBaseManager {
   public async init() {
@@ -21,7 +22,8 @@ export default class DataBaseManager implements IDataBaseManager {
         SheetsCollection.getInstance(),
         UsersCollection.getInstance(),
         StickersCollection.getInstance(),
-        ScheduleUpdatesCollection.getInstance()
+        ScheduleUpdatesCollection.getInstance(),
+        TimingsCollection.getInstance()
     ];
 
     for (let i = 0; i < collectionManagers.length; i++) {

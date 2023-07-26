@@ -27,7 +27,6 @@ export default class MyBot {
   }
 
   public async init(): Promise<void> {
-
     this.initEnvironmentVariables();
     await this.initDatabase();
     await this.initGoogleServices();
