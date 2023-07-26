@@ -1,7 +1,7 @@
 import MyBot from './MyBot';
-import { PRIVATE_UPDATE_TYPES } from './tglib/tgTypes/botUpdatesTypes';
-import { type CMD_NAME_TYPE } from './types/types';
-import { CMD_NAMES } from './types/enums';
+import {PRIVATE_UPDATE_TYPES} from './tglib/tgTypes/botUpdatesTypes';
+import {type CMD_NAME_TYPE} from './types/types';
+import {CMD_NAMES} from './types/enums';
 
 const {
   text, callback_query, command, animation, audio, document, photo, sticker, video, video_note, voice,
@@ -25,7 +25,7 @@ const privateMessagesTypes: PRIVATE_UPDATE_TYPES[] = [
   location
 ];
 
-const privateCommands: CMD_NAME_TYPE[] = [CMD_NAMES.SCHEDULE, CMD_NAMES.COMMANDS_INFO, CMD_NAMES.START, CMD_NAMES.SAVE_PHOTO];
+const privateCommands: CMD_NAMES[] = [CMD_NAMES.SCHEDULE, CMD_NAMES.COMMANDS_INFO, CMD_NAMES.START, CMD_NAMES.SAVE_PHOTO, CMD_NAMES.SEND_TIMING];
 
 new MyBot(privateMessagesTypes, privateCommands).init()
   .then(() => { console.log('Successful APPLICATION start'); })
