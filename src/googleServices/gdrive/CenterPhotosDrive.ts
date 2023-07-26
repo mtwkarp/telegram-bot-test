@@ -5,22 +5,22 @@ import {PhotoFromUrlNoFolder} from './types/types';
 
 export default class CenterPhotosDrive extends PhotosSaverDrive {
 
-    private existingFolderNames: string[]
+    private existingFolderNames: string[];
     private folderCreationPromise: Promise<string> | null;
     constructor() {
         super();
         this.folderCreationPromise = null;
-        this.existingFolderNames = []
+        this.existingFolderNames = [];
     }
 
     private checkCurrentMonthFolderExistenceLocal(): boolean {
-        return this.existingFolderNames.includes(this.currentMonthFolderName)
+        return this.existingFolderNames.includes(this.currentMonthFolderName);
     }
 
     private async saveImageImmediatelyToDriveFolder(params: PhotoFromUrlNoFolder): Promise<boolean> {
-        const folderId = await this.getCurrentMonthFolderId()
-        console.log('folder exists huli')
-        return super.savePhotoFromURL({url: params.url, name: params.name, folderId})
+        const folderId = await this.getCurrentMonthFolderId();
+        console.log('folder exists huli');
+        return super.savePhotoFromURL({url: params.url, name: params.name, folderId});
     }
 
     private async createDriveFolderAndSaveImage(params: PhotoFromUrlNoFolder): Promise<boolean> {
@@ -46,7 +46,7 @@ export default class CenterPhotosDrive extends PhotosSaverDrive {
 
     async savePhotoFromUrlToCurrentMonthFolder(params: PhotoFromUrlNoFolder): Promise<boolean> {
         if(this.checkCurrentMonthFolderExistenceLocal()) {
-           return this.saveImageImmediatelyToDriveFolder(params)
+           return this.saveImageImmediatelyToDriveFolder(params);
         }
 
         return this.createDriveFolderAndSaveImage(params);
