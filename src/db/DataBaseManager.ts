@@ -7,7 +7,7 @@ import SheetsCollection from './firestore/collectionManagers/implementations/She
 import UsersCollection from './firestore/collectionManagers/implementations/UsersCollection';
 import StickersCollection from './firestore/collectionManagers/implementations/StickersCollection';
 import ScheduleUpdatesCollection from './firestore/collectionManagers/implementations/ScheduleUpdatesCollection';
-import TimingsCollection from "./firestore/collectionManagers/implementations/TimingsCollection";
+import TimingsCollection from './firestore/collectionManagers/implementations/TimingsCollection';
 
 export default class DataBaseManager implements IDataBaseManager {
   public async init() {

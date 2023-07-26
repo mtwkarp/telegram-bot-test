@@ -2,8 +2,8 @@ import PrivateCmdHandler from '../../PrivateCmdHandler';
 import {CMD_NAMES} from '../../../../types/enums';
 import {IPrivateContextDecorator} from '../../../../tglib/tgTypes/contextDecoratorTypes';
 import {IPrivateTextPayload} from '../../../../tglib/tgTypes/messagePayload/contextPayloadTypes';
-import {addMinutes, format, newValidDate} from "ts-date";
-import TimingsCollection from "../../../../db/firestore/collectionManagers/implementations/TimingsCollection";
+import {addMinutes, format, newValidDate} from 'ts-date';
+import TimingsCollection from '../../../../db/firestore/collectionManagers/implementations/TimingsCollection';
 
 export default class TimingCmdHandler extends PrivateCmdHandler {
     constructor(userId: number) {
@@ -28,35 +28,35 @@ export default class TimingCmdHandler extends PrivateCmdHandler {
     }
 
     private generateTiming(startTime: string): string {
-        const splitTime = startTime.split(':')
-        const hour = Number(splitTime[0])
-        const minute = Number(splitTime[1])
-        const timingMinutes = TimingsCollection.getInstance().getCenterTiming()
+        const splitTime = startTime.split(':');
+        const hour = Number(splitTime[0]);
+        const minute = Number(splitTime[1]);
+        const timingMinutes = TimingsCollection.getInstance().getCenterTiming();
 
-        const timingsArr: string[] = []
-        let validDate = newValidDate(2022, 6, 3, hour, minute)
-        let previousDate = newValidDate(2022, 6, 3, hour, minute)
+        const timingsArr: string[] = [];
+        let validDate = newValidDate(2022, 6, 3, hour, minute);
+        let previousDate = newValidDate(2022, 6, 3, hour, minute);
 
         // @ts-ignore
-        timingsArr.push(format(validDate, 'HH:mm'))
+        timingsArr.push(format(validDate, 'HH:mm'));
 
         for (let i = 0; i < timingMinutes.length; i++) {
-            validDate = addMinutes(validDate, timingMinutes[i])
+            validDate = addMinutes(validDate, timingMinutes[i]);
 
-            const formatted = format(validDate, 'HH:mm')
-            const formattedPrevious = format(previousDate, 'HH:mm')
+            const formatted = format(validDate, 'HH:mm');
+            const formattedPrevious = format(previousDate, 'HH:mm');
 
             if(formatted) {
                 if(i > 0 && formattedPrevious) {
-                    timingsArr.push(formattedPrevious)
+                    timingsArr.push(formattedPrevious);
                 }
-                timingsArr.push(formatted)
+                timingsArr.push(formatted);
             }
 
-            previousDate = validDate
+            previousDate = validDate;
         }
 
-        return this.generateMessage(timingsArr)
+        return this.generateMessage(timingsArr);
     }
 
     private generateMessage(timings: string[]): string {
@@ -88,7 +88,7 @@ export default class TimingCmdHandler extends PrivateCmdHandler {
 📣Дебрифінг по симуляції з курсантами ${timings[24]} - ${timings[25]}\n
             
 Збір стафу (веселіться скільки хочете).
-        `
+        `;
     }
 
     private validateTimeFormat(timeString: string): string | boolean {

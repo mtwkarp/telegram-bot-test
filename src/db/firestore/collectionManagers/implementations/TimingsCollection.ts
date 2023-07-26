@@ -6,7 +6,7 @@ export default class TimingsCollection extends AbstractCollectionManager {
     }
 
     getCenterTiming(): number[] {
-        return this.getValueFromDocument('center', 'classes_timing')
+        return this.getValueFromDocument('center', 'classes_timing');
     }
 
     public static getInstance(): TimingsCollection {
