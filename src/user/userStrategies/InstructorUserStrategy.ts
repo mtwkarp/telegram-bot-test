@@ -6,7 +6,7 @@ import CommandsInfoHandler from '../../commandHandlers/private/handlers/ infoCom
 import StartCmdHandler from '../../commandHandlers/private/handlers/startCommand/StartCmdHandler';
 import SavePhotosCommandHandler
   from '../../commandHandlers/private/handlers/savePhotosCommand/SavePhotosCommandHandler';
-import TimingCmdHandler from "../../commandHandlers/private/handlers/timingCommand/TimingCmdHandler";
+import TimingCmdHandler from '../../commandHandlers/private/handlers/timingCommand/TimingCmdHandler';
 
 class InstructorUserStrategy extends UserStrategy {
   protected cmdHandlerManager: PrivateCmdHandlersManager;

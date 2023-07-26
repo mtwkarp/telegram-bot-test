@@ -1,6 +1,5 @@
 import MyBot from './MyBot';
 import {PRIVATE_UPDATE_TYPES} from './tglib/tgTypes/botUpdatesTypes';
-import {type CMD_NAME_TYPE} from './types/types';
 import {CMD_NAMES} from './types/enums';
 
 const {

@@ -1,7 +1,7 @@
-import PrivateCmdHandler from "../../PrivateCmdHandler";
-import {CMD_NAMES} from "../../../../types/enums";
-import {IPrivateContextDecorator} from "../../../../tglib/tgTypes/contextDecoratorTypes";
-import {IPrivateTextPayload} from "../../../../tglib/tgTypes/messagePayload/contextPayloadTypes";
+import PrivateCmdHandler from '../../PrivateCmdHandler';
+import {CMD_NAMES} from '../../../../types/enums';
+import {IPrivateContextDecorator} from '../../../../tglib/tgTypes/contextDecoratorTypes';
+import {IPrivateTextPayload} from '../../../../tglib/tgTypes/messagePayload/contextPayloadTypes';
 
 export default class TimingCmdHandler extends PrivateCmdHandler {
     constructor(userId: number) {
@@ -9,22 +9,22 @@ export default class TimingCmdHandler extends PrivateCmdHandler {
     }
 
     protected override onCommand(contextDecorator: IPrivateContextDecorator): void {
-        this.sendMessage('Надішли мені час старту занять у наступному форматі - 10:40.')
+        this.sendMessage('Надішли мені час старту занять у наступному форматі - 10:40.');
     }
 
     protected override onText(contextDecorator: IPrivateContextDecorator): void {
-        const payload = contextDecorator.payload as IPrivateTextPayload
-        const result = this.validateTimeFormat(payload.text)
+        const payload = contextDecorator.payload as IPrivateTextPayload;
+        const result = this.validateTimeFormat(payload.text);
 
         if(typeof result === 'boolean') {
-            this.generateTiming(payload.text)
+            this.generateTiming(payload.text);
         }else {
-            this.sendMessage(result as string)
+            this.sendMessage(result as string);
         }
     }
 
     private generateTiming(time: string): void {
-        this.sendMessage('generate timing')
+        this.sendMessage('generate timing');
     }
 
     private validateTimeFormat(timeString: string): string | boolean {
@@ -34,7 +34,7 @@ export default class TimingCmdHandler extends PrivateCmdHandler {
         if (timeRegex.test(timeString)) {
             return true;
         } else {
-            return "Невірний формат часу. Формат повинен бути \"HH:mm\", де HH - години (від 00 до 23), а mm - хвилини (від 00 до 59).";
+            return 'Невірний формат часу. Формат повинен бути "HH:mm", де HH - години (від 00 до 23), а mm - хвилини (від 00 до 59).';
         }
     }
     copy(): PrivateCmdHandler {
