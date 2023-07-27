@@ -19,7 +19,6 @@ export default class CenterPhotosDrive extends PhotosSaverDrive {
 
     private async saveImageImmediatelyToDriveFolder(params: PhotoFromUrlNoFolder): Promise<boolean> {
         const folderId = await this.getCurrentMonthFolderId();
-        console.log('folder exists huli');
         return super.savePhotoFromURL({url: params.url, name: params.name, folderId});
     }
 
