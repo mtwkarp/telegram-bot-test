@@ -1,89 +1,73 @@
 import PrivateCmdHandler from '../../PrivateCmdHandler';
-import ReplyMsgCollection from '../../../../db/firestore/collectionManagers/implementations/ReplyMsgCollection';
 import { CMD_NAMES } from '../../../../types/enums';
 import {IPrivateContextDecorator} from '../../../../tglib/tgTypes/contextDecoratorTypes';
-import {IPrivatePhotoPayload} from '../../../../tglib/tgTypes/messagePayload/contextPayloadTypes';
-import {InputMediaPhoto, PhotoSize} from 'typegram';
-import CenterPhotosDrive from '../../../../googleServices/gdrive/CenterPhotosDrive';
+import {
+    IPrivateCbQueryPayload
+} from '../../../../tglib/tgTypes/messagePayload/contextPayloadTypes';
+import {CallbackQuery} from 'typegram';
+import AbstractPhotosLoaderStrategy from './strategies/AbstractPhotosLoaderStrategy';
+import DefaultStrategy from './strategies/DefaultStrategy';
+import DataQuery = CallbackQuery.DataQuery;
+import {Markup} from 'telegraf';
+import SaveToCurrentDayDate from './strategies/SaveToCurrentDayDate';
+import SaveToSpecificDateStrategy from './strategies/SaveToSpecificDateStrategy';
 export default class SavePhotosCommandHandler extends PrivateCmdHandler {
 
-    private drivePhotosSaver: CenterPhotosDrive;
-    private allowResponseOnDocumentLoad: boolean;
-    private uploadedImagesCounter: number;
-    private notLoadedImagesIds: string[];
+    private strategy: AbstractPhotosLoaderStrategy;
     constructor(userId: number) {
         super(userId, CMD_NAMES.SAVE_PHOTO);
-
-        this.uploadedImagesCounter = 0;
-        this.allowResponseOnDocumentLoad = true;
-        this.notLoadedImagesIds = [];
-
-        this.drivePhotosSaver = new CenterPhotosDrive();
+        this.strategy = new DefaultStrategy(userId);
     }
 
     copy() {
         return new SavePhotosCommandHandler(this.id);
     }
 
-    onCommand() {
-        this.sendMessage(ReplyMsgCollection.getInstance().getSavePhotoCmdReply('command_reply'));
+    private setStrategy(updatedStrategy: AbstractPhotosLoaderStrategy): void {
+        this.strategy = updatedStrategy;
     }
 
-    protected override async onPhoto(contextDecorator: IPrivateContextDecorator): Promise<void> {
-        const payload = contextDecorator.payload as IPrivatePhotoPayload;
-        const photo = payload.photo.pop() as PhotoSize;
-        const fileLink = await this.tg.getFileLink(photo.file_id);
-        const name = Math.random() + fileLink.pathname.slice(fileLink.pathname.lastIndexOf('/'));
+    onCommand(): void {
+        const message = 'Виберіть спосіб збереження світлини.';
+        const markup = Markup.inlineKeyboard([
+            [
+                { text: 'Вказати дату.', callback_data: 'choose_date' }
+            ],
+            [
+                { text: 'Зберегти на сьогоднішню дату.', callback_data: 'today' },
 
-        this.uploadedImagesCounter ++;
+            ]
+        ]);
 
-        this.drivePhotosSaver.savePhotoFromUrlToCurrentMonthFolder({url: fileLink.href, name})
-            .then((loadedSuccessfully: boolean) => {
-                this.onImageLoadFinish(loadedSuccessfully, photo.file_id);
-            });
+        this.tg.sendMessage(this.id, message, markup);
     }
 
-    private onImageLoadFinish(loadedSuccessfully: boolean, photoId: string): void {
-        this.uploadedImagesCounter --;
+    protected override onCallbackQuery(contextDecorator: IPrivateContextDecorator) {
+        this.onButtonClick(contextDecorator);
+    }
 
-        if(!loadedSuccessfully) this.notLoadedImagesIds.push(photoId);
+    protected async onButtonClick(contextDecorator: IPrivateContextDecorator): Promise<void> {
+        const payload = contextDecorator.payload as IPrivateCbQueryPayload;
+        const cbQuery = payload.callback_query as DataQuery;
+        const data = cbQuery.data;
 
-        if(this.uploadedImagesCounter === 0) {
-            this.onAllImagesUploadFinish(photoId);
+        if(data === 'choose_date') {
+            this.strategy = new SaveToSpecificDateStrategy(this.id);
+        }else if(data === 'today'){
+            this.setStrategy(new SaveToCurrentDayDate(this.id));
         }
+        console.log(data);
     }
 
-    private onAllImagesUploadFinish(photoId: string): void {
-        if(this.notLoadedImagesIds.length > 0) {
-            this.sendBackNotUploadedImages();
-
-            return;
-        }
-
-        this.sendMessage(ReplyMsgCollection.getInstance().getSavePhotoCmdReply('photos_finished_load'));
+    protected override onPhoto(contextDecorator: IPrivateContextDecorator): void {
+       this.strategy.onPhoto(contextDecorator);
     }
 
-    private async sendBackNotUploadedImages(): Promise<void> {
-        const notLoadedImagesConfigs: InputMediaPhoto[]= [];
-
-        this.notLoadedImagesIds.forEach(imageId => {
-            notLoadedImagesConfigs.push({type: 'photo', media: imageId});
-        });
-
-        this.notLoadedImagesIds = [];
-
-        await this.sendMessage(ReplyMsgCollection.getInstance().getSavePhotoCmdReply('some_photos_not_loaded'));
-        this.tg.sendMediaGroup(this.id, notLoadedImagesConfigs);
+    protected override onDocument(contextDecorator: IPrivateContextDecorator): void {
+        this.strategy.onDocument(contextDecorator);
     }
-    protected override onDocument(contextDecorator: IPrivateContextDecorator) {
-        if(this.allowResponseOnDocumentLoad) {
-            this.sendMessage(ReplyMsgCollection.getInstance().getSavePhotoCmdReply('document_load_reply'));
 
-            this.allowResponseOnDocumentLoad = false;
-
-            setTimeout(() => {
-                this.allowResponseOnDocumentLoad = true;
-            }, 10000);
-        }
+    protected override onText(contextDecorator: IPrivateContextDecorator): void {
+        this.strategy.onText(contextDecorator);
     }
 }
