@@ -81,18 +81,18 @@ export default class CenterPhotosDrive extends PhotosSaverDrive {
     public async savePhotoFromURLToSpecificDate(params: PhotoFromUrlNoFolder, date: string) {
         const month = DateHelper.getMonthNames()[Number(date.split('.')[1])];
         const fullYear = new Date().getFullYear();
-        let monthFolderName = `${month} ${fullYear}`
+        const monthFolderName = `${month} ${fullYear}`;
 
-        let monthFolderId = await this.getFolderId(process.env.PHOTOS_DRIVE_FOLDER_ID as string, monthFolderName)
+        let monthFolderId = await this.getFolderId(process.env.PHOTOS_DRIVE_FOLDER_ID as string, monthFolderName);
 
         if(!monthFolderId)  {
-            monthFolderId = await this.createPhotoStorageFolder(monthFolderName, process.env.PHOTOS_DRIVE_FOLDER_ID as string)
+            monthFolderId = await this.createPhotoStorageFolder(monthFolderName, process.env.PHOTOS_DRIVE_FOLDER_ID as string);
         }
 
-        let dayFolderId = await this.getFolderId(monthFolderId, date)
+        let dayFolderId = await this.getFolderId(monthFolderId, date);
 
         if(!dayFolderId) {
-            dayFolderId = await this.createPhotoStorageFolder(date, monthFolderId)
+            dayFolderId = await this.createPhotoStorageFolder(date, monthFolderId);
         }
 
         return super.savePhotoFromURL({url: params.url, name: params.name, folderId: dayFolderId});
