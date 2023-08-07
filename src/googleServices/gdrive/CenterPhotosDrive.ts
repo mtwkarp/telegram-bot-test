@@ -79,7 +79,7 @@ export default class CenterPhotosDrive extends PhotosSaverDrive {
     }
 
     public async savePhotoFromURLToSpecificDate(params: PhotoFromUrlNoFolder, date: string) {
-        const month = DateHelper.getMonthNames()[Number(date.split('.')[1])];
+        const month = DateHelper.getMonthNames()[Number(date.split('.')[1]) - 1];
         const fullYear = new Date().getFullYear();
         const monthFolderName = `${month} ${fullYear}`;
 
