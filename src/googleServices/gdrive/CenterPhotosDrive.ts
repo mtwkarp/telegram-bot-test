@@ -78,6 +78,42 @@ export default class CenterPhotosDrive extends PhotosSaverDrive {
         return id;
     }
 
+    public async savePhotoFromURLToSpecificDate(params: PhotoFromUrlNoFolder, date: string) {
+        const month = DateHelper.getMonthNames()[Number(date.split('.')[1])];
+        const fullYear = new Date().getFullYear();
+        let monthFolderName = `${month} ${fullYear}`
+
+        let monthFolderId = await this.getFolderId(process.env.PHOTOS_DRIVE_FOLDER_ID as string, monthFolderName)
+
+        if(!monthFolderId)  {
+            monthFolderId = await this.createPhotoStorageFolder(monthFolderName, process.env.PHOTOS_DRIVE_FOLDER_ID as string)
+        }
+
+        let dayFolderId = await this.getFolderId(monthFolderId, date)
+
+        if(!dayFolderId) {
+            dayFolderId = await this.createPhotoStorageFolder(date, monthFolderId)
+        }
+
+        return super.savePhotoFromURL({url: params.url, name: params.name, folderId: dayFolderId});
+    }
+
+    private async getFolderId(folderParent: string, folderName: string): Promise<string> {
+        const query = `mimeType='application/vnd.google-apps.folder' and '${folderParent}' in parents and name='${folderName}'`;
+        const files = await this.drive.files.list({
+            spaces: 'drive',
+            q: query
+        });
+
+        let id = '';
+
+        if(files.data.files?.length === 1) {
+            id = files.data.files[0].id as string;
+        }
+
+        return id;
+    }
+
     private async getCurrentDayFolderId(): Promise<string> {
         const currentMonthFolderId = await this.getCurrentMonthFolderId();
         const query = `mimeType='application/vnd.google-apps.folder' and '${currentMonthFolderId}' in parents and name='${this.currentDayFolderName}'`;

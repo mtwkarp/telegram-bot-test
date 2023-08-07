@@ -31,7 +31,7 @@ export default class SaveToSpecificDateStrategy extends AbstractPhotosLoaderStra
 
             this.uploadedImagesCounter ++;
 
-            this.drivePhotosSaver.savePhotoFromUrlToCurrentDayFolder({url: fileLink.href, name})
+            this.drivePhotosSaver.savePhotoFromURLToSpecificDate({url: fileLink.href, name}, this.date)
                 .then((loadedSuccessfully: boolean) => {
                     this.onImageLoadFinish(loadedSuccessfully, photo.file_id);
                 });

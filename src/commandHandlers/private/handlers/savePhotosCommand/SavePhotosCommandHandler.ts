@@ -31,10 +31,10 @@ export default class SavePhotosCommandHandler extends PrivateCmdHandler {
         const message = 'Виберіть спосіб збереження світлини.';
         const markup = Markup.inlineKeyboard([
             [
-                { text: 'Вказати дату.', callback_data: 'choose_date' }
+                { text: 'Вказати дату', callback_data: 'choose_date' }
             ],
             [
-                { text: 'Зберегти на сьогоднішню дату.', callback_data: 'today' },
+                { text: 'Зберегти на сьогоднішню дату', callback_data: 'today' },
 
             ]
         ]);
@@ -56,7 +56,6 @@ export default class SavePhotosCommandHandler extends PrivateCmdHandler {
         }else if(data === 'today'){
             this.setStrategy(new SaveToCurrentDayDate(this.id));
         }
-        console.log(data);
     }
 
     protected override onPhoto(contextDecorator: IPrivateContextDecorator): void {

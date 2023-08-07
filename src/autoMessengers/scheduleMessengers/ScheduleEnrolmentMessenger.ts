@@ -33,9 +33,11 @@ export default class ScheduleEnrolmentMessenger extends ScheduleMessenger {
 
   setChannelScheduleReminder() {
     const channelScheduleReminder1 = this.timeCollection.getScheduleTime('channel_schedule_reminder_1');
+    const clearPreviousWeekRenderedSchedule = this.timeCollection.getScheduleTime('clear_rendered_schedule_sheets_time');
     const channelScheduleReminder2 = this.timeCollection.getScheduleTime('channel_schedule_reminder_2');
     const timeConfig = this.timeCollection.getTimeConfig('kyiv_time');
 
+    cron.schedule(clearPreviousWeekRenderedSchedule, this.clearPreviousWeekScheduleDays.bind(this), timeConfig);
     cron.schedule(channelScheduleReminder1, this.clearAllPreviousScheduleReplies.bind(this), timeConfig);
     cron.schedule(channelScheduleReminder1, this.sendFirstScheduleStartReminderToChannel.bind(this), timeConfig);
     cron.schedule(channelScheduleReminder2, this.sendScheduleStartReminderToChannel.bind(this), timeConfig);
@@ -66,13 +68,16 @@ export default class ScheduleEnrolmentMessenger extends ScheduleMessenger {
   }
 
   async clearAllPreviousScheduleReplies() {
+    await this.instructorsAvailabilitySheet.clearAllPreviousScheduleReplies();
+
+  }
+
+  async clearPreviousWeekScheduleDays() {
     const renderedScheduleSheetTrips = new RenderedScheduleSheetTrips();
     const renderedScheduleSheetCenter = new RenderedScheduleSheetCenter();
 
     await renderedScheduleSheetCenter.setAllDaysUnworkable();
     await renderedScheduleSheetTrips.setAllDaysUnworkable();
-    await this.instructorsAvailabilitySheet.clearAllPreviousScheduleReplies();
-
   }
 
   async sendFirstScheduleStartReminderToChannel() {
