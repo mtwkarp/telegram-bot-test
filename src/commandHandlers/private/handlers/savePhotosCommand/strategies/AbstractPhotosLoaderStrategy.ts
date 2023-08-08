@@ -11,18 +11,20 @@ export default class AbstractPhotosLoaderStrategy extends PrivateCmdHandler {
     protected allowResponseOnDocumentLoad: boolean;
     protected uploadedImagesCounter: number;
     protected notLoadedImagesIds: string[];
-    protected constructor(userId: number) {
+    private readonly saveFolderId: string;
+    protected constructor(userId: number, saveFolderId:string) {
         super(userId, CMD_NAMES.SAVE_PHOTO);
 
         this.uploadedImagesCounter = 0;
         this.allowResponseOnDocumentLoad = true;
         this.notLoadedImagesIds = [];
+        this.saveFolderId = saveFolderId;
 
-        this.drivePhotosSaver = new CenterPhotosDrive();
+        this.drivePhotosSaver = new CenterPhotosDrive(saveFolderId);
     }
 
     copy() {
-        return new AbstractPhotosLoaderStrategy(this.id);
+        return new AbstractPhotosLoaderStrategy(this.id, this.saveFolderId);
     }
 
     onCommand() {

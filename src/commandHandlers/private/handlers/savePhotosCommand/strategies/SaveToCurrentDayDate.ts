@@ -5,8 +5,8 @@ import {PhotoSize} from 'typegram';
 
 
 export default class SaveToCurrentDayDate extends AbstractPhotosLoaderStrategy {
-    constructor(userId: number) {
-        super(userId);
+    constructor(userId: number, folderId: string) {
+        super(userId, folderId);
 
         this.onInit();
     }

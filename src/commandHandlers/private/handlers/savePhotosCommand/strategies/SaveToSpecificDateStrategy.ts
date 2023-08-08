@@ -10,8 +10,8 @@ import {PhotoSize} from 'typegram';
 export default class SaveToSpecificDateStrategy extends AbstractPhotosLoaderStrategy {
 
     private date: string | null;
-    constructor(userId: number) {
-        super(userId);
+    constructor(userId: number, folderId: string) {
+        super(userId, folderId);
 
         this.date = null;
 
