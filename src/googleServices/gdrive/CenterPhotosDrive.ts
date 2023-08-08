@@ -8,10 +8,12 @@ export default class CenterPhotosDrive extends PhotosSaverDrive {
 
     private existingFolderNames: string[];
     private folderCreationPromise: Promise<string> | null;
-    constructor() {
+    private readonly folderId: string
+    constructor(folderId: string) {
         super();
         this.folderCreationPromise = null;
         this.existingFolderNames = [];
+        this.folderId = folderId
     }
 
     private checkCurrentMonthFolderExistenceLocal(): boolean {
@@ -59,7 +61,7 @@ export default class CenterPhotosDrive extends PhotosSaverDrive {
     // }
 
     private async getCurrentMonthFolderId(): Promise<string> {
-        const query = `mimeType='application/vnd.google-apps.folder' and '${process.env.PHOTOS_DRIVE_FOLDER_ID}' in parents and name='${this.currentMonthFolderName}'`;
+        const query = `mimeType='application/vnd.google-apps.folder' and '${this.folderId}' in parents and name='${this.currentMonthFolderName}'`;
         const files = await this.drive.files.list({
             spaces: 'drive',
             q: query
@@ -83,10 +85,10 @@ export default class CenterPhotosDrive extends PhotosSaverDrive {
         const fullYear = new Date().getFullYear();
         const monthFolderName = `${month} ${fullYear}`;
 
-        let monthFolderId = await this.getFolderId(process.env.PHOTOS_DRIVE_FOLDER_ID as string, monthFolderName);
+        let monthFolderId = await this.getFolderId(this.folderId as string, monthFolderName);
 
         if(!monthFolderId)  {
-            monthFolderId = await this.createPhotoStorageFolder(monthFolderName, process.env.PHOTOS_DRIVE_FOLDER_ID as string);
+            monthFolderId = await this.createPhotoStorageFolder(monthFolderName, this.folderId as string);
         }
 
         let dayFolderId = await this.getFolderId(monthFolderId, date);
@@ -165,7 +167,7 @@ export default class CenterPhotosDrive extends PhotosSaverDrive {
         const fileMetadata = {
             name: this.currentMonthFolderName,
             mimeType: 'application/vnd.google-apps.folder',
-            parents: [process.env.PHOTOS_DRIVE_FOLDER_ID as string]
+            parents: [this.folderId]
         };
 
         try {

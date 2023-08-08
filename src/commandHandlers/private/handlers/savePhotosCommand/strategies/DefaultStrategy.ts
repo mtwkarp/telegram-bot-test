@@ -3,8 +3,8 @@ import {IPrivateContextDecorator} from '../../../../../tglib/tgTypes/contextDeco
 
 
 export default class DefaultStrategy extends AbstractPhotosLoaderStrategy {
-    constructor(userId: number) {
-        super(userId);
+    constructor(userId: number, folderId: string) {
+        super(userId, folderId);
     }
 
     public override async onPhoto(contextDecorator: IPrivateContextDecorator): Promise<void> {
