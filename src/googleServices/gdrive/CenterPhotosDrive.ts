@@ -106,10 +106,12 @@ export default class CenterPhotosDrive extends PhotosSaverDrive {
             spaces: 'drive',
             q: query
         });
-
+// @ts-ignore
+//         console.log(files.data.files[0], folderParent)
         let id = '';
-
-        if(files.data.files?.length === 1) {
+// @ts-ignore
+        if(files.data.files?.length > 0) {
+            // @ts-ignore
             id = files.data.files[0].id as string;
         }
 
@@ -125,8 +127,10 @@ export default class CenterPhotosDrive extends PhotosSaverDrive {
         });
 
         let id = '';
+        // @ts-ignore
 
-        if(files.data.files?.length === 1) {
+        if(files.data.files?.length > 0) {
+            // @ts-ignore
             id = files.data.files[0].id as string;
         }else if(files.data.files?.length === 0) {
             id = await this.createCurrentDayFolder();

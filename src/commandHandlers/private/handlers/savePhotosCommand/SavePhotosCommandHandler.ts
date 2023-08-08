@@ -48,6 +48,7 @@ export default class SavePhotosCommandHandler extends PrivateCmdHandler {
 
         if(this.step === 1) {
             this.level = data === 'ASM' ? process.env.PHOTOS_DRIVE_FOLDER_ASM_ID as string : process.env.PHOTOS_DRIVE_FOLDER_CLS_ID as string;
+
             this.step ++;
 
             this.sendChooseDateMarkup();
