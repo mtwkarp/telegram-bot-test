@@ -11,14 +11,14 @@ export default class AbstractPhotosLoaderStrategy extends PrivateCmdHandler {
     protected allowResponseOnDocumentLoad: boolean;
     protected uploadedImagesCounter: number;
     protected notLoadedImagesIds: string[];
-    private readonly saveFolderId: string
+    private readonly saveFolderId: string;
     protected constructor(userId: number, saveFolderId:string) {
         super(userId, CMD_NAMES.SAVE_PHOTO);
 
         this.uploadedImagesCounter = 0;
         this.allowResponseOnDocumentLoad = true;
         this.notLoadedImagesIds = [];
-        this.saveFolderId = saveFolderId
+        this.saveFolderId = saveFolderId;
 
         this.drivePhotosSaver = new CenterPhotosDrive(saveFolderId);
     }

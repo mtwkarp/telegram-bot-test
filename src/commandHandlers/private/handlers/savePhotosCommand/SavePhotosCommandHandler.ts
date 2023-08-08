@@ -14,12 +14,12 @@ import SaveToSpecificDateStrategy from './strategies/SaveToSpecificDateStrategy'
 export default class SavePhotosCommandHandler extends PrivateCmdHandler {
 
     private strategy: AbstractPhotosLoaderStrategy;
-    private step: number
-    private level: string
+    private step: number;
+    private level: string;
     constructor(userId: number) {
         super(userId, CMD_NAMES.SAVE_PHOTO);
         this.strategy = new DefaultStrategy(userId, '');
-        this.step = 1
+        this.step = 1;
     }
 
     copy() {
@@ -31,10 +31,10 @@ export default class SavePhotosCommandHandler extends PrivateCmdHandler {
     }
 
     onCommand(): void {
-        this.step = 1
-        this.level = ''
+        this.step = 1;
+        this.level = '';
 
-        this.sendChooseLevelMarkup()
+        this.sendChooseLevelMarkup();
     }
 
     protected override onCallbackQuery(contextDecorator: IPrivateContextDecorator) {
@@ -47,10 +47,10 @@ export default class SavePhotosCommandHandler extends PrivateCmdHandler {
         const data = cbQuery.data;
 
         if(this.step === 1) {
-            this.level = data === 'ASM' ? process.env.PHOTOS_DRIVE_FOLDER_ASM_ID as string : process.env.PHOTOS_DRIVE_FOLDER_CLS_ID as string
-            this.step ++
+            this.level = data === 'ASM' ? process.env.PHOTOS_DRIVE_FOLDER_ASM_ID as string : process.env.PHOTOS_DRIVE_FOLDER_CLS_ID as string;
+            this.step ++;
 
-            this.sendChooseDateMarkup()
+            this.sendChooseDateMarkup();
         }else if(this.step === 2){
             if(data === 'choose_date') {
                 this.strategy = new SaveToSpecificDateStrategy(this.id, this.level);

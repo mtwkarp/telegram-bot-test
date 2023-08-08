@@ -8,12 +8,12 @@ export default class CenterPhotosDrive extends PhotosSaverDrive {
 
     private existingFolderNames: string[];
     private folderCreationPromise: Promise<string> | null;
-    private readonly folderId: string
+    private readonly folderId: string;
     constructor(folderId: string) {
         super();
         this.folderCreationPromise = null;
         this.existingFolderNames = [];
-        this.folderId = folderId
+        this.folderId = folderId;
     }
 
     private checkCurrentMonthFolderExistenceLocal(): boolean {
