@@ -51,12 +51,12 @@ export default class CenterPhotosDrive extends PhotosSaverDrive {
         //    return this.saveImageImmediatelyToDriveFolder(params);
         // }
 
-        const loadCallback = async () => {
+        const loadCallback = async() => {
             return this.createDriveFolderAndSaveImage(params)
                 .then(result => onCompleteCallback(result, params.photoId));
-        }
+        };
 
-        this.loadPhoto(loadCallback, onCompleteCallback)
+        this.loadPhoto(loadCallback, onCompleteCallback);
     }
     private async getCurrentMonthFolderId(): Promise<string> {
         const query = `mimeType='application/vnd.google-apps.folder' and '${this.folderId}' in parents and name='${this.currentMonthFolderName}'`;
@@ -79,7 +79,7 @@ export default class CenterPhotosDrive extends PhotosSaverDrive {
     }
 
     public savePhotoFromURLToSpecificDate(params: PhotoFromUrlNoFolder, date: string, onCompleteCallback: (result: boolean, photoId: string) => void) {
-        const loadCallback = async (): Promise<boolean | void> => {
+        const loadCallback = async(): Promise<boolean | void> => {
             const month = DateHelper.getMonthNames()[Number(date.split('.')[1]) - 1];
             const fullYear = new Date().getFullYear();
             const monthFolderName = `${month} ${fullYear}`;
@@ -97,20 +97,20 @@ export default class CenterPhotosDrive extends PhotosSaverDrive {
 
             return super.savePhotoFromURL({url: params.url, name: params.name, folderId: dayFolderId, photoId: params.photoId})
                 .then((result) => {
-                    onCompleteCallback(result, params.photoId)
+                    onCompleteCallback(result, params.photoId);
                 });
-        }
+        };
 
-        this.loadPhoto(loadCallback, onCompleteCallback)
+        this.loadPhoto(loadCallback, onCompleteCallback);
     }
 
     private loadPhoto(loadCallback: () => Promise<boolean | void>, onCompleteCallback: (result: boolean, photoId: string) => void) {
 
         if(!CenterPhotosDrive.queue.length) {
-            CenterPhotosDrive.queue.push({loadCallback, onCompleteCallback})
-            this.startLoad()
+            CenterPhotosDrive.queue.push({loadCallback, onCompleteCallback});
+            this.startLoad();
         }else {
-            CenterPhotosDrive.queue.push({loadCallback, onCompleteCallback})
+            CenterPhotosDrive.queue.push({loadCallback, onCompleteCallback});
         }
     }
 
@@ -127,7 +127,7 @@ export default class CenterPhotosDrive extends PhotosSaverDrive {
                     .catch(() => {
                         CenterPhotosDrive.queue.splice(0,1);
 
-                    })
+                    });
 
 
         }
@@ -230,5 +230,5 @@ export default class CenterPhotosDrive extends PhotosSaverDrive {
         return `${month} ${fullYear}`;
     }
 
-    protected static queue: {loadCallback: () => Promise<boolean | void>, onCompleteCallback: (result: boolean, photoId: string) => void}[] = []
+    protected static queue: {loadCallback: () => Promise<boolean | void>, onCompleteCallback: (result: boolean, photoId: string) => void}[] = [];
 }

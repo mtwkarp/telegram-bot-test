@@ -31,7 +31,7 @@ export default class SaveToSpecificDateStrategy extends AbstractPhotosLoaderStra
 
             this.uploadedImagesCounter ++;
 
-            this.drivePhotosSaver.savePhotoFromURLToSpecificDate({url: fileLink.href, name, photoId: photo.file_id}, this.date, this.onImageLoadFinish.bind(this))
+            this.drivePhotosSaver.savePhotoFromURLToSpecificDate({url: fileLink.href, name, photoId: photo.file_id}, this.date, this.onImageLoadFinish.bind(this));
         }else {
             this.sendMessage('Спочатку вкажи дату в наступному форматі - "21.08"');
         }
