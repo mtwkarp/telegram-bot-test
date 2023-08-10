@@ -23,10 +23,8 @@ export default class SaveToCurrentDayDate extends AbstractPhotosLoaderStrategy {
 
         this.uploadedImagesCounter ++;
 
-        this.drivePhotosSaver.savePhotoFromUrlToCurrentDayFolder({url: fileLink.href, name})
-            .then((loadedSuccessfully: boolean) => {
-                this.onImageLoadFinish(loadedSuccessfully, photo.file_id);
-            });
+        this.drivePhotosSaver.savePhotoFromUrlToCurrentDayFolder({url: fileLink.href, name, photoId: photo.file_id}, this.onImageLoadFinish.bind(this))
+
     }
 
 }

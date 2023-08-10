@@ -22,7 +22,7 @@ export default class CenterPhotosDrive extends PhotosSaverDrive {
 
     private async saveImageImmediatelyToDriveFolder(params: PhotoFromUrlNoFolder): Promise<boolean> {
         const folderId = await this.getCurrentDayFolderId();
-        return super.savePhotoFromURL({url: params.url, name: params.name, folderId});
+        return super.savePhotoFromURL({url: params.url, name: params.name, folderId, photoId: params.photoId});
     }
 
     private async createDriveFolderAndSaveImage(params: PhotoFromUrlNoFolder): Promise<boolean> {
@@ -40,26 +40,24 @@ export default class CenterPhotosDrive extends PhotosSaverDrive {
                 return;
             }
             const folderId = await this.folderCreationPromise;
-            const result = await super.savePhotoFromURL({url: params.url, name: params.name, folderId});
+            const result = await super.savePhotoFromURL({url: params.url, name: params.name, folderId, photoId: params.photoId});
 
             resolve(result);
         });
     }
 
-    async savePhotoFromUrlToCurrentDayFolder(params: PhotoFromUrlNoFolder): Promise<boolean> {
-        if(this.checkCurrentMonthFolderExistenceLocal()) {
-           return this.saveImageImmediatelyToDriveFolder(params);
+    savePhotoFromUrlToCurrentDayFolder(params: PhotoFromUrlNoFolder, onCompleteCallback: (result: boolean, photoId: string) => void): void {
+        // if(this.checkCurrentMonthFolderExistenceLocal()) {
+        //    return this.saveImageImmediatelyToDriveFolder(params);
+        // }
+
+        const loadCallback = async () => {
+            return this.createDriveFolderAndSaveImage(params)
+                .then(result => onCompleteCallback(result, params.photoId));
         }
 
-        return this.createDriveFolderAndSaveImage(params);
+        this.loadPhoto(loadCallback, onCompleteCallback)
     }
-
-    // async savePhotoFromUrlToSpecificDayFolder(params: PhotoFromUrlNoFolder): Promise<boolean> {
-    //
-    //
-    //     return this.createDriveFolderAndSaveImage(params);
-    // }
-
     private async getCurrentMonthFolderId(): Promise<string> {
         const query = `mimeType='application/vnd.google-apps.folder' and '${this.folderId}' in parents and name='${this.currentMonthFolderName}'`;
         const files = await this.drive.files.list({
@@ -80,24 +78,59 @@ export default class CenterPhotosDrive extends PhotosSaverDrive {
         return id;
     }
 
-    public async savePhotoFromURLToSpecificDate(params: PhotoFromUrlNoFolder, date: string) {
-        const month = DateHelper.getMonthNames()[Number(date.split('.')[1]) - 1];
-        const fullYear = new Date().getFullYear();
-        const monthFolderName = `${month} ${fullYear}`;
+    public savePhotoFromURLToSpecificDate(params: PhotoFromUrlNoFolder, date: string, onCompleteCallback: (result: boolean, photoId: string) => void) {
+        const loadCallback = async (): Promise<boolean | void> => {
+            const month = DateHelper.getMonthNames()[Number(date.split('.')[1]) - 1];
+            const fullYear = new Date().getFullYear();
+            const monthFolderName = `${month} ${fullYear}`;
 
-        let monthFolderId = await this.getFolderId(this.folderId as string, monthFolderName);
+            let monthFolderId = await this.getFolderId(this.folderId as string, monthFolderName);
+            if (!monthFolderId) {
+                monthFolderId = await this.createPhotoStorageFolder(monthFolderName, this.folderId as string);
+            }
 
-        if(!monthFolderId)  {
-            monthFolderId = await this.createPhotoStorageFolder(monthFolderName, this.folderId as string);
+            let dayFolderId = await this.getFolderId(monthFolderId, date);
+
+            if (!dayFolderId) {
+                dayFolderId = await this.createPhotoStorageFolder(date, monthFolderId);
+            }
+
+            return super.savePhotoFromURL({url: params.url, name: params.name, folderId: dayFolderId, photoId: params.photoId})
+                .then((result) => {
+                    onCompleteCallback(result, params.photoId)
+                });
         }
 
-        let dayFolderId = await this.getFolderId(monthFolderId, date);
+        this.loadPhoto(loadCallback, onCompleteCallback)
+    }
 
-        if(!dayFolderId) {
-            dayFolderId = await this.createPhotoStorageFolder(date, monthFolderId);
+    private loadPhoto(loadCallback: () => Promise<boolean | void>, onCompleteCallback: (result: boolean, photoId: string) => void) {
+
+        if(!CenterPhotosDrive.queue.length) {
+            CenterPhotosDrive.queue.push({loadCallback, onCompleteCallback})
+            this.startLoad()
+        }else {
+            CenterPhotosDrive.queue.push({loadCallback, onCompleteCallback})
         }
+    }
 
-        return super.savePhotoFromURL({url: params.url, name: params.name, folderId: dayFolderId});
+    private startLoad() {
+        if(CenterPhotosDrive.queue[0]) {
+            const {loadCallback} = CenterPhotosDrive.queue[0];
+
+
+                loadCallback()
+                    .then(() => {
+                        CenterPhotosDrive.queue.splice(0,1);
+                         this.startLoad();
+                    })
+                    .catch(() => {
+                        CenterPhotosDrive.queue.splice(0,1);
+
+                    })
+
+
+        }
     }
 
     private async getFolderId(folderParent: string, folderName: string): Promise<string> {
@@ -106,8 +139,6 @@ export default class CenterPhotosDrive extends PhotosSaverDrive {
             spaces: 'drive',
             q: query
         });
-// @ts-ignore
-//         console.log(files.data.files[0], folderParent)
         let id = '';
 // @ts-ignore
         if(files.data.files?.length > 0) {
@@ -198,4 +229,6 @@ export default class CenterPhotosDrive extends PhotosSaverDrive {
 
         return `${month} ${fullYear}`;
     }
+
+    protected static queue: {loadCallback: () => Promise<boolean | void>, onCompleteCallback: (result: boolean, photoId: string) => void}[] = []
 }

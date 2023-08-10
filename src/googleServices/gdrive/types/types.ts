@@ -3,7 +3,8 @@ import {Readable} from 'stream';
 export type PhotoFromUrlParams = {
     url: string,
     name: string,
-    folderId: string
+    folderId: string,
+    photoId: string
 }
 
 export type PhotoFromUrlNoFolder = Omit<PhotoFromUrlParams, 'folderId'>
